@@ -1,12 +1,18 @@
 import { Routes } from '@angular/router';
 
+import {
+  authGuard
+} from './core/guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () =>
       import(
         './features/auth/pages/login/login.component'
-      ).then(component => component.LoginComponent),
+      ).then(
+        component => component.LoginComponent
+      ),
     title: 'Login | Event Parking'
   },
   {
@@ -14,7 +20,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import(
         './features/auth/pages/register/register.component'
-      ).then(component => component.RegisterComponent),
+      ).then(
+        component => component.RegisterComponent
+      ),
     title: 'Register | Event Parking'
   },
   {
@@ -23,7 +31,8 @@ export const routes: Routes = [
       import(
         './features/auth/pages/forgot-password/forgot-password.component'
       ).then(
-        component => component.ForgotPasswordComponent
+        component =>
+          component.ForgotPasswordComponent
       ),
     title: 'Forgot Password | Event Parking'
   },
@@ -33,7 +42,8 @@ export const routes: Routes = [
       import(
         './features/auth/pages/reset-password/reset-password.component'
       ).then(
-        component => component.ResetPasswordComponent
+        component =>
+          component.ResetPasswordComponent
       ),
     title: 'Reset Password | Event Parking'
   },
@@ -43,9 +53,21 @@ export const routes: Routes = [
       import(
         './features/auth/pages/verify-email/verify-email.component'
       ).then(
-        component => component.VerifyEmailComponent
+        component =>
+          component.VerifyEmailComponent
       ),
     title: 'Verify Email | Event Parking'
+  },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './features/customer/pages/profile/profile.component'
+      ).then(
+        component => component.ProfileComponent
+      ),
+    title: 'My Profile | Event Parking'
   },
   {
     path: '',
@@ -57,4 +79,3 @@ export const routes: Routes = [
     redirectTo: 'login'
   }
 ];
-
