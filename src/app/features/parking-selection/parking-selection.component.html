@@ -1,0 +1,108 @@
+<section class="parking-selection">
+
+  <div class="parking-selection__header">
+    <div>
+      <p class="eyebrow">Parking Selection</p>
+      <h2>Choose a parking slot</h2>
+      <p class="subtitle">
+        Parking is optional. You can select a maximum of one available slot.
+      </p>
+    </div>
+
+    <div class="summary">
+      @if (selectedParkingSlot) {
+        <span>
+          Selected: {{ selectedParkingSlot | slotCode }}
+        </span>
+
+        <strong>
+          Parking Fee: LKR {{ parkingFee }}
+        </strong>
+      } @else {
+        <span>No parking selected</span>
+        <strong>Parking Fee: LKR 0</strong>
+      }
+    </div>
+  </div>
+
+  @if (parkingSlots.length === 0) {
+
+    <div class="empty-state">
+      <h3>No parking slots loaded</h3>
+      <p>
+        Parking availability will appear here once the event slots are loaded.
+      </p>
+    </div>
+
+  } @else {
+
+    <div class="legend">
+      <span>
+        <i class="legend-dot available"></i>
+        Available
+      </span>
+
+      <span>
+        <i class="legend-dot selected"></i>
+        Selected
+      </span>
+
+      <span>
+        <i class="legend-dot unavailable"></i>
+        Unavailable
+      </span>
+    </div>
+
+    <div class="parking-grid">
+
+      @for (slot of parkingSlots; track slot.id) {
+
+        <button
+          type="button"
+          class="parking-slot"
+          [class.parking-slot--selected]="isSlotSelected(slot.id)"
+          [class.parking-slot--unavailable]="!canSelectSlot(slot)"
+          [disabled]="!canSelectSlot(slot)"
+          [attr.data-slot-status]="
+            isSlotSelected(slot.id)
+              ? 'selected'
+              : slot.status.toLowerCase()
+          "
+          [attr.aria-label]="
+            (slot | slotCode) +
+            ', ' +
+            (isSlotSelected(slot.id) ? 'Selected' : slot.status) +
+            ', LKR ' +
+            slot.fee
+          "
+          (click)="selectSlot(slot)"
+        >
+
+          <span class="parking-slot__icon" aria-hidden="true">
+            P
+          </span>
+
+          <span class="parking-slot__code">
+            {{ slot | slotCode }}
+          </span>
+
+          <span class="parking-slot__status">
+            @if (isSlotSelected(slot.id)) {
+              Selected
+            } @else {
+              {{ slot.status }}
+            }
+          </span>
+
+          <span class="parking-slot__fee">
+            LKR {{ slot.fee }}
+          </span>
+
+        </button>
+
+      }
+
+    </div>
+  }
+
+</section>

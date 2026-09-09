@@ -1,0 +1,213 @@
+:host {
+  display: block;
+}
+
+.parking-selection {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.parking-selection__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  opacity: 0.7;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 210px;
+  padding: 14px 18px;
+  border: 1px solid #d7d7d7;
+  border-radius: 12px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+}
+
+.available {
+  background: #ffffff;
+}
+
+.selected {
+  background: #d8f3dc;
+}
+
+.unavailable {
+  background: #e9ecef;
+}
+
+.parking-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  );
+  gap: 12px;
+}
+
+.parking-slot {
+  min-height: 130px;
+  padding: 14px;
+  border: 2px solid #c9c9c9;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.parking-slot:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.1);
+}
+
+.parking-slot:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+.parking-slot--selected {
+  background: #d8f3dc;
+  border-width: 3px;
+}
+
+.parking-slot--unavailable {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.parking-slot[data-slot-status='held'] {
+  background: #fff3bf;
+}
+
+.parking-slot[data-slot-status='reserved'],
+.parking-slot[data-slot-status='occupied'],
+.parking-slot[data-slot-status='booked'] {
+  background: #e9ecef;
+}
+
+.parking-slot__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.parking-slot__code {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.parking-slot__status {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.parking-slot__fee {
+  font-size: 13px;
+}
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  border: 1px dashed #bdbdbd;
+  border-radius: 14px;
+}
+
+.empty-state h3 {
+  margin-top: 0;
+}
+
+.empty-state p {
+  margin-bottom: 0;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .parking-selection {
+    padding: 16px;
+  }
+
+  .parking-selection__header {
+    flex-direction: column;
+  }
+
+  .summary {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .parking-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+    gap: 8px;
+  }
+
+  .parking-slot {
+    min-height: 115px;
+    padding: 8px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+}

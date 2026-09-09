@@ -1,0 +1,69 @@
+<section class="seat-selection">
+
+  <div class="seat-selection__header">
+    <div>
+      <p class="eyebrow">Seat Selection</p>
+      <h2>Choose your seats</h2>
+      <p class="subtitle">
+        Only available seats can be selected.
+      </p>
+    </div>
+
+    <div class="summary">
+      <span>Selected: {{ selectedSeatIds.length }}</span>
+      <strong>Total: LKR {{ ticketTotal }}</strong>
+    </div>
+  </div>
+
+  @if (seats.length === 0) {
+    <div class="empty-state">
+      <h3>No seats loaded</h3>
+      <p>
+        Seat availability will appear here once the event seats are loaded.
+      </p>
+    </div>
+  } @else {
+
+    <div class="legend">
+      <span><i class="legend-dot available"></i> Available</span>
+      <span><i class="legend-dot selected"></i> Selected</span>
+      <span><i class="legend-dot held"></i> Held</span>
+      <span><i class="legend-dot reserved"></i> Reserved</span>
+    </div>
+
+    <div class="seat-grid">
+
+      @for (seat of seats; track seat.id) {
+
+        <button
+          type="button"
+          class="seat"
+          [class.seat--selected]="isSeatSelected(seat.id)"
+          [class.seat--unavailable]="!canSelectSeat(seat)"
+          [disabled]="!canSelectSeat(seat)"
+          [appSeatStatus]="isSeatSelected(seat.id) ? 'selected' : seat.status"
+          (click)="toggleSeat(seat)"
+        >
+          <span class="seat__label">
+            {{ seat | seatLabel }}
+          </span>
+
+          <span class="seat__status">
+            @if (isSeatSelected(seat.id)) {
+              Selected
+            } @else {
+              {{ seat.status }}
+            }
+          </span>
+
+          <span class="seat__price">
+            LKR {{ seat.price }}
+          </span>
+        </button>
+
+      }
+
+    </div>
+  }
+
+</section>
