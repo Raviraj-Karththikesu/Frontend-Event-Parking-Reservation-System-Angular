@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Venue } from '../../../models/venue.model';
 import { VenueService } from '../../../services/venue.service';
@@ -14,6 +15,7 @@ import { VenueService } from '../../../services/venue.service';
 export class VenueListComponent implements OnInit {
 
   private readonly venueService = inject(VenueService);
+  private readonly router = inject(Router);
 
   venues: Venue[] = [];
 
@@ -41,6 +43,20 @@ export class VenueListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  addVenue(): void {
+    this.router.navigate([
+      '/admin/venues/new'
+    ]);
+  }
+
+  editVenue(id: number): void {
+    this.router.navigate([
+      '/admin/venues',
+      id,
+      'edit'
+    ]);
   }
 
   deleteVenue(id: number): void {

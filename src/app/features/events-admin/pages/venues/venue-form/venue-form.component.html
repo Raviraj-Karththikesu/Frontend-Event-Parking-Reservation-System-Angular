@@ -2,11 +2,19 @@
 
   <div class="form-header">
     <p class="eyebrow">Administration</p>
-    <h1>Add Venue</h1>
+    <h1>{{ isEditMode ? 'Edit Venue' : 'Add Venue' }}</h1>
     <p class="subtitle">
-      Enter the venue details below.
+      {{ isEditMode
+        ? 'Update the venue details below.'
+        : 'Enter the venue details below.' }}
     </p>
   </div>
+
+  @if (isLoading) {
+    <div class="message">
+      Loading venue details...
+    </div>
+  }
 
   @if (successMessage) {
     <div class="message success-message">
@@ -117,12 +125,12 @@
       <button
         type="submit"
         class="submit-btn"
-        [disabled]="isSubmitting">
+        [disabled]="isSubmitting || isLoading">
 
         @if (isSubmitting) {
           Saving...
         } @else {
-          Save Venue
+          {{ isEditMode ? 'Update Venue' : 'Save Venue' }}
         }
 
       </button>

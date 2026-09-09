@@ -9,9 +9,12 @@
       </p>
     </div>
 
-    <button type="button" class="add-btn">
-      + Add Venue
-    </button>
+    <button
+  type="button"
+  class="add-btn"
+  (click)="addVenue()">
+  + Add Venue
+</button>
   </div>
 
   <!-- Loading State -->
@@ -76,10 +79,11 @@
 
               <td class="actions">
                 <button
-                  type="button"
-                  class="edit-btn">
-                  Edit
-                </button>
+               type="button"
+               class="edit-btn"
+               (click)="editVenue(venue.id)">
+               Edit
+               </button>
 
                 <button
                 type="button"
