@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Seat } from '../../models/seat';
 import { BookingSelectionStateService } from './services/booking-selection-state.service';
 import { SeatLabelPipe } from './pipes/seat-label.pipe';
 import { SeatStatusDirective } from './directives/seat-status.directive';
+import { SelectionSummaryComponent } from './components/selection-summary/selection-summary.component';
 
 @Component({
   selector: 'app-seat-selection',
   standalone: true,
   imports: [
     SeatLabelPipe,
-    SeatStatusDirective
+    SeatStatusDirective,
+    SelectionSummaryComponent
   ],
   templateUrl: './seat-selection.component.html',
   styleUrl: './seat-selection.component.scss'
 })
-export class SeatSelectionComponent {
+export class SeatSelectionComponent implements OnInit {
 
   seats: Seat[] = [];
 
@@ -23,6 +25,15 @@ export class SeatSelectionComponent {
   constructor(
     private readonly bookingSelectionState: BookingSelectionStateService
   ) {}
+
+  ngOnInit(): void {
+    const savedSelection =
+      this.bookingSelectionState.selection();
+
+    this.selectedSeatIds = [
+      ...savedSelection.seatIds
+    ];
+  }
 
   isSeatSelected(seatId: number): boolean {
     return this.selectedSeatIds.includes(seatId);

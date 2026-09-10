@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ParkingSlot } from '../../models/parking-slot';
 import { BookingSelectionStateService } from '../seat-selection/services/booking-selection-state.service';
 import { SlotCodePipe } from './pipes/slot-code.pipe';
@@ -12,7 +12,7 @@ import { SlotCodePipe } from './pipes/slot-code.pipe';
   templateUrl: './parking-selection.component.html',
   styleUrl: './parking-selection.component.scss'
 })
-export class ParkingSelectionComponent {
+export class ParkingSelectionComponent implements OnInit {
 
   parkingSlots: ParkingSlot[] = [];
 
@@ -21,6 +21,14 @@ export class ParkingSelectionComponent {
   constructor(
     private readonly bookingSelectionState: BookingSelectionStateService
   ) {}
+
+  ngOnInit(): void {
+    const savedSelection =
+      this.bookingSelectionState.selection();
+
+    this.selectedParkingSlotId =
+      savedSelection.parkingSlotId;
+  }
 
   isSlotSelected(slotId: number): boolean {
     return this.selectedParkingSlotId === slotId;
