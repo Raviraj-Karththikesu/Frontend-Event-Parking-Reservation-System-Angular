@@ -1,0 +1,124 @@
+.category-page {
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.subtitle {
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+.add-btn,
+.retry-btn,
+.edit-btn,
+.delete-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-btn {
+  min-width: 130px;
+}
+
+.state-message {
+  padding: 20px;
+  border: 1px solid;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error-message p {
+  margin-top: 0;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+th,
+td {
+  padding: 14px;
+  border-bottom: 1px solid;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+td {
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 8px 12px;
+}
+
+@media (max-width: 768px) {
+  .category-page {
+    padding: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+  }
+
+  .add-btn {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-page {
+    padding: 12px;
+  }
+
+  .state-message {
+    padding: 16px;
+  }
+}
