@@ -1,0 +1,178 @@
+.event-page {
+  padding: 24px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.subtitle {
+  margin-top: 8px;
+  line-height: 1.6;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 28px;
+  padding: 20px;
+  border: 1px solid;
+  border-radius: 12px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.filter-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.filter-btn,
+.clear-btn,
+.retry-btn,
+.details-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.state-message {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.error-message p {
+  margin-top: 0;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  );
+  gap: 20px;
+}
+
+.event-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid;
+  border-radius: 12px;
+}
+
+.event-card-header h2 {
+  margin: 8px 0 0;
+  font-size: 21px;
+}
+
+.category {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.description {
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.event-info {
+  margin: 12px 0 18px;
+}
+
+.event-info p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.details-btn {
+  width: 100%;
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .filters {
+    grid-template-columns: repeat(
+      2,
+      minmax(150px, 1fr)
+    );
+  }
+}
+
+@media (max-width: 600px) {
+  .event-page {
+    padding: 16px;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .filter-actions {
+    grid-column: auto;
+    flex-direction: column;
+  }
+
+  .filter-btn,
+  .clear-btn {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 360px) {
+  .event-page {
+    padding: 12px;
+  }
+
+  .event-card {
+    padding: 16px;
+  }
+}

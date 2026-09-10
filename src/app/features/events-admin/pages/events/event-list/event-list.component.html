@@ -1,0 +1,175 @@
+<section class="event-page">
+
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Events</p>
+      <h1>Event Catalogue</h1>
+      <p class="subtitle">
+        Browse and find events using the filters below.
+      </p>
+    </div>
+  </div>
+
+  <form
+    class="filters"
+    (ngSubmit)="applyFilters()">
+
+    <div class="filter-group">
+      <label for="search">Search</label>
+      <input
+        id="search"
+        type="text"
+        name="search"
+        [(ngModel)]="filter.search"
+        placeholder="Search by event name">
+    </div>
+
+    <div class="filter-group">
+      <label for="venue">Venue</label>
+      <select
+        id="venue"
+        name="venueId"
+        [(ngModel)]="filter.venueId">
+
+        <option [ngValue]="undefined">
+          All Venues
+        </option>
+
+        @for (venue of venues; track venue.id) {
+          <option [ngValue]="venue.id">
+            {{ venue.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="category">Category</label>
+      <select
+        id="category"
+        name="eventCategoryId"
+        [(ngModel)]="filter.eventCategoryId">
+
+        <option [ngValue]="undefined">
+          All Categories
+        </option>
+
+        @for (category of categories; track category.id) {
+          <option [ngValue]="category.id">
+            {{ category.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="date">Date</label>
+      <input
+        id="date"
+        type="date"
+        name="date"
+        [(ngModel)]="filter.date">
+    </div>
+
+    <div class="filter-actions">
+      <button
+        type="submit"
+        class="filter-btn">
+        Apply Filters
+      </button>
+
+      <button
+        type="button"
+        class="clear-btn"
+        (click)="clearFilters()">
+        Clear
+      </button>
+    </div>
+
+  </form>
+
+  @if (isLoading) {
+    <div class="state-message">
+      Loading events...
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="state-message error-message">
+      <p>{{ errorMessage }}</p>
+
+      <button
+        type="button"
+        class="retry-btn"
+        (click)="loadEvents()">
+        Retry
+      </button>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && events.length === 0) {
+    <div class="state-message">
+      No events found for the selected filters.
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && events.length > 0) {
+
+    <div class="event-grid">
+
+      @for (event of events; track event.id) {
+
+        <article class="event-card">
+
+          <div class="event-card-header">
+            <span class="category">
+              {{ event.categoryName | titlecase }}
+            </span>
+
+            <h2>
+              {{ event.name }}
+            </h2>
+          </div>
+
+          <p class="description">
+            {{ event.description || 'No description available.' }}
+          </p>
+
+          <div class="event-info">
+
+            <p>
+              <strong>Venue:</strong>
+              {{ event.venueName }}
+            </p>
+
+            <p>
+              <strong>Start:</strong>
+              {{ event.startDateTime | date:'medium' }}
+            </p>
+
+            <p>
+              <strong>Ticket:</strong>
+              {{ event.ticketPrice | currency:'LKR':'symbol':'1.2-2' }}
+            </p>
+
+            <p>
+              <strong>Capacity:</strong>
+              {{ event.capacity | number }}
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="details-btn"
+            (click)="openEvent(event.id)">
+            View Details
+          </button>
+
+        </article>
+      }
+
+    </div>
+  }
+
+</section>
