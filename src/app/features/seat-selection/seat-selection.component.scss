@@ -204,3 +204,43 @@ h2 {
     font-size: 24px;
   }
 }
+.loading-state,
+.error-state {
+  margin: 24px 0;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.loading-state {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+}
+
+.error-state {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+}
+
+.loading-state h3,
+.error-state h3 {
+  margin: 0 0 8px;
+}
+
+.loading-state p,
+.error-state p {
+  margin: 0;
+}
+
+.error-state h3,
+.error-state p {
+  color: #991b1b;
+}
+
+@media (max-width: 360px) {
+  .loading-state,
+  .error-state {
+    padding: 16px;
+    font-size: 14px;
+  }
+}

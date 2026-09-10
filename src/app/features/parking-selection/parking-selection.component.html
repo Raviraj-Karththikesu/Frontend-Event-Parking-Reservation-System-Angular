@@ -25,12 +25,28 @@
     </div>
   </div>
 
-  @if (parkingSlots.length === 0) {
+  @if (isLoading) {
+
+    <div class="loading-state" role="status">
+      <h3>Loading parking slots...</h3>
+      <p>
+        Please wait while parking availability is being loaded.
+      </p>
+    </div>
+
+  } @else if (errorMessage) {
+
+    <div class="error-state" role="alert">
+      <h3>Unable to load parking slots</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+  } @else if (parkingSlots.length === 0) {
 
     <div class="empty-state">
-      <h3>No parking slots loaded</h3>
+      <h3>No parking slots available</h3>
       <p>
-        Parking availability will appear here once the event slots are loaded.
+        No parking availability is currently available for this event.
       </p>
     </div>
 
@@ -78,7 +94,10 @@
           (click)="selectSlot(slot)"
         >
 
-          <span class="parking-slot__icon" aria-hidden="true">
+          <span
+            class="parking-slot__icon"
+            aria-hidden="true"
+          >
             P
           </span>
 

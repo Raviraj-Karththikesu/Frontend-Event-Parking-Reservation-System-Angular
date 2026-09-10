@@ -16,6 +16,10 @@ export class ParkingSelectionComponent implements OnInit {
 
   parkingSlots: ParkingSlot[] = [];
 
+  isLoading = false;
+
+  errorMessage = '';
+
   selectedParkingSlotId: number | null = null;
 
   constructor(

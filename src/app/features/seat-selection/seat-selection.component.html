@@ -1,4 +1,3 @@
-
 <section class="seat-selection">
 
   <div class="seat-selection__header">
@@ -16,20 +15,51 @@
     </div>
   </div>
 
-  @if (seats.length === 0) {
+  @if (isLoading) {
+
+    <div class="loading-state" role="status">
+      <h3>Loading seats...</h3>
+      <p>Please wait while seat availability is being loaded.</p>
+    </div>
+
+  } @else if (errorMessage) {
+
+    <div class="error-state" role="alert">
+      <h3>Unable to load seats</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+
+  } @else if (seats.length === 0) {
+
     <div class="empty-state">
-      <h3>No seats loaded</h3>
+      <h3>No seats available</h3>
       <p>
-        Seat availability will appear here once the event seats are loaded.
+        No seat availability is currently available for this event.
       </p>
     </div>
+
   } @else {
 
     <div class="legend">
-      <span><i class="legend-dot available"></i> Available</span>
-      <span><i class="legend-dot selected"></i> Selected</span>
-      <span><i class="legend-dot held"></i> Held</span>
-      <span><i class="legend-dot reserved"></i> Reserved</span>
+      <span>
+        <i class="legend-dot available"></i>
+        Available
+      </span>
+
+      <span>
+        <i class="legend-dot selected"></i>
+        Selected
+      </span>
+
+      <span>
+        <i class="legend-dot held"></i>
+        Held
+      </span>
+
+      <span>
+        <i class="legend-dot reserved"></i>
+        Reserved
+      </span>
     </div>
 
     <div class="seat-grid">
@@ -66,6 +96,7 @@
 
     </div>
   }
+
   <app-selection-summary></app-selection-summary>
 
 </section>

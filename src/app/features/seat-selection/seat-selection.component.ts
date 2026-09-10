@@ -20,6 +20,10 @@ export class SeatSelectionComponent implements OnInit {
 
   seats: Seat[] = [];
 
+  isLoading = false;
+
+  errorMessage = '';
+
   selectedSeatIds: number[] = [];
 
   constructor(
