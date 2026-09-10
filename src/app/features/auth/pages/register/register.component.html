@@ -1,0 +1,388 @@
+<main
+  class="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100"
+>
+  <div
+    class="absolute -left-32 top-20 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl"
+  ></div>
+
+  <div
+    class="absolute -bottom-32 right-0 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl"
+  ></div>
+
+  <div
+    class="relative grid min-h-screen lg:grid-cols-[0.8fr_1.2fr]"
+  >
+    <section
+      class="hidden flex-col justify-between border-r border-white/10 p-12 lg:flex"
+    >
+      <a
+        routerLink="/"
+        class="flex items-center gap-3"
+      >
+        <span
+          class="grid h-12 w-12 place-items-center rounded-2xl bg-cyan-400 font-black text-slate-950"
+        >
+          EP
+        </span>
+
+        <span class="text-xl font-semibold">
+          EventPark
+        </span>
+      </a>
+
+      <div>
+        <p
+          class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400"
+        >
+          Create your account
+        </p>
+
+        <h1
+          class="mt-5 text-5xl font-bold leading-tight"
+        >
+          Your next unforgettable event starts here.
+        </h1>
+
+        <ul
+          class="mt-8 space-y-4 text-slate-300"
+        >
+          <li class="flex items-center gap-3">
+            <span
+              class="grid h-7 w-7 place-items-center rounded-full bg-cyan-400/15 text-cyan-300"
+            >
+              ✓
+            </span>
+            Reserve preferred event seats
+          </li>
+
+          <li class="flex items-center gap-3">
+            <span
+              class="grid h-7 w-7 place-items-center rounded-full bg-cyan-400/15 text-cyan-300"
+            >
+              ✓
+            </span>
+            Secure parking before arrival
+          </li>
+
+          <li class="flex items-center gap-3">
+            <span
+              class="grid h-7 w-7 place-items-center rounded-full bg-cyan-400/15 text-cyan-300"
+            >
+              ✓
+            </span>
+            Manage all bookings in one place
+          </li>
+        </ul>
+      </div>
+
+      <p class="text-sm text-slate-500">
+        Fast, secure and convenient reservations.
+      </p>
+    </section>
+
+    <section
+      class="flex items-center justify-center px-5 py-12 sm:px-10"
+    >
+      <div class="w-full max-w-2xl">
+        <a
+          routerLink="/"
+          class="mb-10 flex items-center gap-3 lg:hidden"
+        >
+          <span
+            class="grid h-11 w-11 place-items-center rounded-xl bg-cyan-400 font-black text-slate-950"
+          >
+            EP
+          </span>
+
+          <span class="text-xl font-semibold">
+            EventPark
+          </span>
+        </a>
+
+        @if (registrationComplete()) {
+          <div
+            class="rounded-3xl border border-emerald-400/20 bg-white/5 p-8 text-center shadow-2xl backdrop-blur-xl sm:p-12"
+          >
+            <div
+              class="mx-auto grid h-20 w-20 place-items-center rounded-full bg-emerald-400/15 text-4xl text-emerald-300"
+            >
+              ✓
+            </div>
+
+            <h2 class="mt-6 text-3xl font-bold">
+              Account created successfully
+            </h2>
+
+            <p
+              class="mx-auto mt-4 max-w-lg leading-7 text-slate-400"
+            >
+              We sent an email verification link to
+              <strong class="text-white">
+                {{ registeredEmail() }}
+              </strong>.
+              Verify your email before signing in.
+            </p>
+
+            <a
+              routerLink="/login"
+              class="mt-8 inline-flex rounded-xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-cyan-300"
+            >
+              Continue to login
+            </a>
+
+            <button
+              type="button"
+              class="mt-5 block w-full text-sm font-medium text-slate-400 hover:text-white"
+              (click)="createAnotherAccount()"
+            >
+              Create another account
+            </button>
+          </div>
+        } @else {
+          <div>
+            <p
+              class="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-400"
+            >
+              Join EventPark
+            </p>
+
+            <h2 class="mt-3 text-4xl font-bold">
+              Create your account
+            </h2>
+
+            <p class="mt-3 text-slate-400">
+              Complete the details below to get
+              started.
+            </p>
+
+            @if (errorMessage()) {
+              <div
+                class="mt-6 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+                role="alert"
+              >
+                {{ errorMessage() }}
+              </div>
+            }
+
+            <form
+              class="mt-8 space-y-5"
+              [formGroup]="registerForm"
+              (ngSubmit)="submit()"
+              novalidate
+            >
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label
+                    for="fullName"
+                    class="mb-2 block text-sm font-medium"
+                  >
+                    Full name
+                  </label>
+
+                  <input
+                    id="fullName"
+                    type="text"
+                    formControlName="fullName"
+                    autocomplete="name"
+                    placeholder="Enter your full name"
+                    class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10"
+                  />
+
+                  @if (
+                    fullNameControl.touched &&
+                    fullNameControl.invalid
+                  ) {
+                    <p class="mt-2 text-sm text-red-300">
+                      Enter a valid full name.
+                    </p>
+                  }
+                </div>
+
+                <div>
+                  <label
+                    for="phoneNumber"
+                    class="mb-2 block text-sm font-medium"
+                  >
+                    Phone number
+                    <span class="text-slate-500">
+                      (optional)
+                    </span>
+                  </label>
+
+                  <input
+                    id="phoneNumber"
+                    type="tel"
+                    formControlName="phoneNumber"
+                    autocomplete="tel"
+                    placeholder="+94 77 123 4567"
+                    class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10"
+                  />
+
+                  @if (
+                    phoneNumberControl.touched &&
+                    phoneNumberControl.invalid
+                  ) {
+                    <p class="mt-2 text-sm text-red-300">
+                      Enter a valid phone number.
+                    </p>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label
+                  for="registerEmail"
+                  class="mb-2 block text-sm font-medium"
+                >
+                  Email address
+                </label>
+
+                <input
+                  id="registerEmail"
+                  type="email"
+                  formControlName="email"
+                  autocomplete="email"
+                  placeholder="you@example.com"
+                  class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10"
+                />
+
+                @if (
+                  emailControl.touched &&
+                  emailControl.invalid
+                ) {
+                  <p class="mt-2 text-sm text-red-300">
+                    Enter a valid email address.
+                  </p>
+                }
+              </div>
+
+              <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                  <label
+                    for="registerPassword"
+                    class="mb-2 block text-sm font-medium"
+                  >
+                    Password
+                  </label>
+
+                  <div class="relative">
+                    <input
+                      id="registerPassword"
+                      [type]="
+                        showPassword()
+                          ? 'text'
+                          : 'password'
+                      "
+                      formControlName="password"
+                      autocomplete="new-password"
+                      placeholder="Create password"
+                      class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 pr-20 outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10"
+                    />
+
+                    <button
+                      type="button"
+                      class="absolute inset-y-0 right-4 text-sm text-slate-400 hover:text-white"
+                      (click)="togglePassword()"
+                    >
+                      {{
+                        showPassword()
+                          ? 'Hide'
+                          : 'Show'
+                      }}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    for="confirmPassword"
+                    class="mb-2 block text-sm font-medium"
+                  >
+                    Confirm password
+                  </label>
+
+                  <div class="relative">
+                    <input
+                      id="confirmPassword"
+                      [type]="
+                        showConfirmPassword()
+                          ? 'text'
+                          : 'password'
+                      "
+                      formControlName="confirmPassword"
+                      autocomplete="new-password"
+                      placeholder="Repeat password"
+                      class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 pr-20 outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10"
+                    />
+
+                    <button
+                      type="button"
+                      class="absolute inset-y-0 right-4 text-sm text-slate-400 hover:text-white"
+                      (click)="toggleConfirmPassword()"
+                    >
+                      {{
+                        showConfirmPassword()
+                          ? 'Hide'
+                          : 'Show'
+                      }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              @if (
+                passwordControl.touched &&
+                passwordControl.invalid
+              ) {
+                <p class="text-sm text-red-300">
+                  Use at least 8 characters with uppercase,
+                  lowercase, number and special character.
+                </p>
+              }
+
+              @if (
+                confirmPasswordControl.touched &&
+                registerForm.hasError(
+                  'passwordMismatch'
+                )
+              ) {
+                <p class="text-sm text-red-300">
+                  Passwords do not match.
+                </p>
+              }
+
+              <button
+                type="submit"
+                [disabled]="isSubmitting()"
+                class="flex w-full items-center justify-center rounded-xl bg-cyan-400 px-5 py-3.5 font-bold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                @if (isSubmitting()) {
+                  <span
+                    class="mr-3 h-5 w-5 animate-spin rounded-full border-2 border-slate-950/30 border-t-slate-950"
+                  ></span>
+
+                  Creating account...
+                } @else {
+                  Create account
+                }
+              </button>
+            </form>
+
+            <p
+              class="mt-7 text-center text-sm text-slate-400"
+            >
+              Already have an account?
+
+              <a
+  routerLink="/login"
+  class="font-semibold text-cyan-400 hover:text-cyan-300"
+>
+  Sign in
+</a>
+            </p>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+</main>
