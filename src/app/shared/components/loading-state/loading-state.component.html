@@ -1,0 +1,23 @@
+<section
+  class="flex min-h-48 flex-col items-center
+         justify-center gap-4 rounded-2xl
+         border border-slate-800 bg-slate-900/60
+         p-8 text-center"
+  role="status"
+  aria-live="polite"
+>
+  <div
+    class="size-11 animate-spin rounded-full
+           border-4 border-slate-700
+           border-t-cyan-400"
+    aria-hidden="true"
+  ></div>
+
+  <p class="font-medium text-slate-300">
+    {{ message }}
+  </p>
+
+  <span class="sr-only">
+    {{ message }}
+  </span>
+</section>
