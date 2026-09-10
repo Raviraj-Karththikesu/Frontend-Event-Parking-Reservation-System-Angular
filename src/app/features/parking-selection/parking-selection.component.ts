@@ -48,20 +48,34 @@ export class ParkingSelectionComponent implements OnInit {
       return;
     }
 
-    // Clicking the selected slot again removes the optional parking choice.
     if (this.isSlotSelected(slot.id)) {
       this.selectedParkingSlotId = null;
       this.bookingSelectionState.clearParking();
       return;
     }
 
-    // Only one parking slot can be selected.
     this.selectedParkingSlotId = slot.id;
 
     this.bookingSelectionState.setParking(
       slot.id,
       slot.fee
     );
+  }
+
+  removeInvalidSelection(): void {
+    if (this.selectedParkingSlotId === null) {
+      return;
+    }
+
+    const selectedSlot =
+      this.parkingSlots.find(
+        slot => slot.id === this.selectedParkingSlotId
+      );
+
+    if (!selectedSlot || !this.canSelectSlot(selectedSlot)) {
+      this.selectedParkingSlotId = null;
+      this.bookingSelectionState.clearParking();
+    }
   }
 
   get selectedParkingSlot(): ParkingSlot | null {

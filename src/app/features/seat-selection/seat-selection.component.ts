@@ -66,6 +66,19 @@ export class SeatSelectionComponent implements OnInit {
     this.updateSelectionState();
   }
 
+  removeInvalidSelections(): void {
+    const availableSeatIds = this.seats
+      .filter(seat => this.canSelectSeat(seat))
+      .map(seat => seat.id);
+
+    this.selectedSeatIds =
+      this.selectedSeatIds.filter(
+        seatId => availableSeatIds.includes(seatId)
+      );
+
+    this.updateSelectionState();
+  }
+
   get ticketTotal(): number {
     return this.seats
       .filter(seat => this.selectedSeatIds.includes(seat.id))
