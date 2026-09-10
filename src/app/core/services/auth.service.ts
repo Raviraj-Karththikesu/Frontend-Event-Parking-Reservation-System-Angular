@@ -13,7 +13,8 @@ import {
   LoginRequest,
   MessageResponse,
   RegisterCustomerRequest,
-  ResetPasswordRequest
+  ResetPasswordRequest,
+  UpdateCustomerProfileRequest
 } from '../models/auth.model';
 import { ApiService } from './api.service';
 
@@ -74,6 +75,43 @@ export class AuthService {
     return this.apiService.get<CurrentUser>(
       'auth/me'
     );
+  }
+
+  getMyProfile(): Observable<CustomerResponse> {
+    return this.apiService.get<CustomerResponse>(
+      'customers/me'
+    );
+  }
+
+  updateMyProfile(
+    request: UpdateCustomerProfileRequest
+  ): Observable<CustomerResponse> {
+    return this.apiService
+      .put<
+        CustomerResponse,
+        UpdateCustomerProfileRequest
+      >(
+        'customers/me',
+        request
+      )
+      .pipe(
+        tap(profile => {
+          const session = this.currentUserState();
+
+          if (!session) {
+            return;
+          }
+
+          this.saveSession({
+            ...session,
+            fullName: profile.fullName,
+            email: profile.email,
+            role: profile.role,
+            status: profile.status,
+            emailVerified: profile.emailVerified
+          });
+        })
+      );
   }
 
   verifyEmail(

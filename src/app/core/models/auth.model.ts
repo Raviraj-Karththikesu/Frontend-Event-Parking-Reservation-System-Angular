@@ -42,6 +42,11 @@ export interface CustomerResponse {
   updatedAt: string | null;
 }
 
+export interface UpdateCustomerProfileRequest {
+  fullName: string;
+  phoneNumber: string | null;
+}
+
 export interface ResetPasswordRequest {
   token: string;
   newPassword: string;
