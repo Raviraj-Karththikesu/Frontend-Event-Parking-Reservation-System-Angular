@@ -4,26 +4,33 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
+export type ApiQueryParams = Record<
+  string,
+  string | number | boolean
+>;
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = environment.apiUrl;
 
-  get<T>(
+  private readonly baseUrl =
+    environment.apiUrl.replace(/\/+$/, '');
+
+  get<TResponse>(
     endpoint: string,
-    params?: Record<string, string | number | boolean>
-  ): Observable<T> {
-    return this.http.get<T>(
+    params?: ApiQueryParams
+  ): Observable<TResponse> {
+    return this.http.get<TResponse>(
       this.buildUrl(endpoint),
       { params }
     );
   }
 
-  post<TResponse, TBody = unknown>(
+  post<TResponse, TRequest = unknown>(
     endpoint: string,
-    body: TBody
+    body: TRequest
   ): Observable<TResponse> {
     return this.http.post<TResponse>(
       this.buildUrl(endpoint),
@@ -31,9 +38,9 @@ export class ApiService {
     );
   }
 
-  put<TResponse, TBody = unknown>(
+  put<TResponse, TRequest = unknown>(
     endpoint: string,
-    body: TBody
+    body: TRequest
   ): Observable<TResponse> {
     return this.http.put<TResponse>(
       this.buildUrl(endpoint),
@@ -41,9 +48,9 @@ export class ApiService {
     );
   }
 
-  patch<TResponse, TBody = unknown>(
+  patch<TResponse, TRequest = unknown>(
     endpoint: string,
-    body: TBody
+    body: TRequest
   ): Observable<TResponse> {
     return this.http.patch<TResponse>(
       this.buildUrl(endpoint),
@@ -60,9 +67,12 @@ export class ApiService {
   }
 
   private buildUrl(endpoint: string): string {
-    const cleanEndpoint =
-      endpoint.replace(/^\/+/, '');
+    const cleanEndpoint = endpoint
+      .trim()
+      .replace(/^\/+/, '');
 
-    return `${this.apiUrl}/${cleanEndpoint}`;
+    return cleanEndpoint
+      ? `${this.baseUrl}/${cleanEndpoint}`
+      : this.baseUrl;
   }
 }
