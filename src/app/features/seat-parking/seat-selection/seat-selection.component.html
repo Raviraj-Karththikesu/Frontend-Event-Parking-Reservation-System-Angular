@@ -99,4 +99,15 @@
 
   <app-selection-summary></app-selection-summary>
 
+  <div class="seat-selection__actions">
+    <button
+      type="button"
+      class="continue-button"
+      [disabled]="selectedSeatIds.length === 0"
+      (click)="goToParking()"
+    >
+      Continue to Parking
+    </button>
+  </div>
+
 </section>

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { getApiErrorMessage } from '../../../core/utils/api-error.util';
 import { Seat } from '../models/seat';
@@ -22,6 +22,7 @@ import { SeatService } from './services/seat.service';
 })
 export class SeatSelectionComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly seatService = inject(SeatService);
   private readonly bookingSelectionState =
     inject(BookingSelectionStateService);
@@ -108,6 +109,21 @@ export class SeatSelectionComponent implements OnInit {
       );
 
     this.updateSelectionState();
+  }
+
+  goToParking(): void {
+    if (
+      this.eventId === null ||
+      this.selectedSeatIds.length === 0
+    ) {
+      return;
+    }
+
+    this.router.navigate([
+      '/events',
+      this.eventId,
+      'parking'
+    ]);
   }
 
   get ticketTotal(): number {
