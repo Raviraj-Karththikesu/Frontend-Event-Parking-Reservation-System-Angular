@@ -1,0 +1,141 @@
+<section class="venue-form-page">
+
+  <div class="form-header">
+    <p class="eyebrow">Administration</p>
+    <h1>{{ isEditMode ? 'Edit Venue' : 'Add Venue' }}</h1>
+    <p class="subtitle">
+      {{ isEditMode
+        ? 'Update the venue details below.'
+        : 'Enter the venue details below.' }}
+    </p>
+  </div>
+
+  @if (isLoading) {
+    <div class="message">
+      Loading venue details...
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="message success-message">
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="message error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <form
+    #venueForm="ngForm"
+    (ngSubmit)="submit(venueForm)"
+    novalidate>
+
+    <!-- Venue Name -->
+    <div class="form-group">
+      <label for="name">Venue Name</label>
+
+      <input
+        id="name"
+        type="text"
+        name="name"
+        [(ngModel)]="venue.name"
+        #name="ngModel"
+        required
+        minlength="2"
+        maxlength="100"
+        placeholder="Enter venue name">
+
+      @if (name.invalid && name.touched) {
+        <div class="validation-message">
+          @if (name.errors?.['required']) {
+            <span>Venue name is required.</span>
+          }
+
+          @if (name.errors?.['minlength']) {
+            <span>
+              Venue name must contain at least 2 characters.
+            </span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Address -->
+    <div class="form-group">
+      <label for="address">Address</label>
+
+      <textarea
+        id="address"
+        name="address"
+        [(ngModel)]="venue.address"
+        #address="ngModel"
+        required
+        minlength="5"
+        maxlength="250"
+        rows="4"
+        placeholder="Enter venue address">
+      </textarea>
+
+      @if (address.invalid && address.touched) {
+        <div class="validation-message">
+          @if (address.errors?.['required']) {
+            <span>Address is required.</span>
+          }
+
+          @if (address.errors?.['minlength']) {
+            <span>
+              Address must contain at least 5 characters.
+            </span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Capacity -->
+    <div class="form-group">
+      <label for="capacity">Capacity</label>
+
+      <input
+        id="capacity"
+        type="number"
+        name="capacity"
+        [(ngModel)]="venue.capacity"
+        #capacity="ngModel"
+        required
+        min="1"
+        placeholder="Enter venue capacity">
+
+      @if (capacity.invalid && capacity.touched) {
+        <div class="validation-message">
+          @if (capacity.errors?.['required']) {
+            <span>Capacity is required.</span>
+          }
+
+          @if (capacity.errors?.['min']) {
+            <span>Capacity must be at least 1.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="isSubmitting || isLoading">
+
+        @if (isSubmitting) {
+          Saving...
+        } @else {
+          {{ isEditMode ? 'Update Venue' : 'Save Venue' }}
+        }
+
+      </button>
+    </div>
+
+  </form>
+
+</section>

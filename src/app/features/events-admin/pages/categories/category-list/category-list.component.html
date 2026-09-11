@@ -1,0 +1,109 @@
+<section class="category-page">
+
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Category Management</h1>
+      <p class="subtitle">
+        Manage event categories used across the system.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="add-btn"
+      (click)="addCategory()">
+      Add Category
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="state-message">
+      Loading categories...
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="state-message error-message">
+      <p>{{ errorMessage }}</p>
+
+      <button
+        type="button"
+        class="retry-btn"
+        (click)="loadCategories()">
+        Retry
+      </button>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && categories.length === 0) {
+    <div class="state-message">
+      No categories found.
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && categories.length > 0) {
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Category Name</th>
+            <th>Description</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (category of categories; track category.id; let i = $index) {
+
+            <tr>
+
+              <td>{{ i + 1 }}</td>
+
+              <td>
+                {{ category.name | titlecase }}
+              </td>
+
+              <td>
+                {{ category.description || 'No description' }}
+              </td>
+
+              <td>
+                {{ category.createdAt | date:'mediumDate' }}
+              </td>
+
+              <td class="actions">
+
+                <button
+                  type="button"
+                  class="edit-btn"
+                  (click)="editCategory(category.id)">
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="delete-btn"
+                  (click)="deleteCategory(category.id)">
+                  Delete
+                </button>
+
+              </td>
+
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+</section>

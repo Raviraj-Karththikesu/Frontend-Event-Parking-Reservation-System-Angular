@@ -1,0 +1,104 @@
+<section class="event-detail-page">
+
+  <button
+    type="button"
+    class="back-btn"
+    (click)="backToEvents()">
+    ← Back to Events
+  </button>
+
+  @if (isLoading) {
+    <div class="state-message">
+      Loading event details...
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="state-message error-message">
+      <p>{{ errorMessage }}</p>
+
+      <button
+        type="button"
+        class="retry-btn"
+        (click)="retry()">
+        Retry
+      </button>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && event) {
+
+    <article class="event-detail-card">
+
+      <div class="event-header">
+        <span class="category">
+          {{ event.categoryName | titlecase }}
+        </span>
+
+        <h1>{{ event.name }}</h1>
+
+        <p class="venue">
+          {{ event.venueName }}
+        </p>
+      </div>
+
+      <div class="event-description">
+        <h2>About this event</h2>
+
+        <p>
+          {{ event.description || 'No description available.' }}
+        </p>
+      </div>
+
+      <div class="event-information">
+
+        <div class="info-item">
+          <span>Start Date & Time</span>
+          <strong>
+            {{ event.startDateTime | date:'medium' }}
+          </strong>
+        </div>
+
+        <div class="info-item">
+          <span>End Date & Time</span>
+          <strong>
+            {{ event.endDateTime | date:'medium' }}
+          </strong>
+        </div>
+
+        <div class="info-item">
+          <span>Ticket Price</span>
+          <strong>
+            {{ event.ticketPrice |
+              currency:'LKR':'symbol':'1.2-2' }}
+          </strong>
+        </div>
+
+        <div class="info-item">
+          <span>Parking Fee</span>
+          <strong>
+            {{ event.parkingFee |
+              currency:'LKR':'symbol':'1.2-2' }}
+          </strong>
+        </div>
+
+        <div class="info-item">
+          <span>Capacity</span>
+          <strong>
+            {{ event.capacity | number }}
+          </strong>
+        </div>
+
+        <div class="info-item">
+          <span>Venue</span>
+          <strong>
+            {{ event.venueName }}
+          </strong>
+        </div>
+
+      </div>
+
+    </article>
+  }
+
+</section>
