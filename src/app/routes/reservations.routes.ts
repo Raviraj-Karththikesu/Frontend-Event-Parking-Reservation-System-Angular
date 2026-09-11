@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
+import { APP_ROLES } from '../core/constants/app-roles';
 import { authGuard } from '../core/guards/auth.guard';
+import { roleGuard } from '../core/guards/role.guard';
 
 export const reservationRoutes: Routes = [
   {
@@ -21,6 +23,24 @@ export const reservationRoutes: Routes = [
         '../features/seat-parking/parking-selection/parking-selection.component'
       ).then(
         component => component.ParkingSelectionComponent
+      )
+  },
+  {
+    path: 'admin/events/:eventId/seats',
+    canActivate: [
+      authGuard,
+      roleGuard
+    ],
+    data: {
+      roles: [
+        APP_ROLES.admin
+      ]
+    },
+    loadComponent: () =>
+      import(
+        '../features/seat-parking/admin-seat-management/admin-seat-management.component'
+      ).then(
+        component => component.AdminSeatManagementComponent
       )
   }
 ];
