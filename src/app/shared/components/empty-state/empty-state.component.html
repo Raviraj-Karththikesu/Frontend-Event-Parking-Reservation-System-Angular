@@ -1,0 +1,70 @@
+<section
+  class="flex min-h-48 flex-col items-center
+         justify-center rounded-2xl border
+         border-dashed border-slate-700
+         bg-slate-900/40 p-8 text-center"
+>
+  <div
+    class="flex size-14 items-center justify-center
+           rounded-full bg-slate-800
+           text-slate-400"
+    aria-hidden="true"
+  >
+    <svg
+      class="size-7"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M20.25 8.511c.884.284 1.5
+           1.128 1.5 2.097v4.286c0 1.136-.847
+           2.1-1.98 2.193-.34.027-.68.052-1.02
+           .072v3.091l-3-3c-1.354 0-2.694-.055
+           -4.02-.163a2.115 2.115 0 0
+           1-.825-.242m9.345-8.334a2.126
+           2.126 0 0 0-.476-.095 48.64 48.64
+           0 0 0-8.048 0c-1.131.094-1.976
+           1.057-1.976 2.192v4.286c0
+           .837.46 1.58 1.155 1.951m9.345-8.334
+           V6.637c0-1.621-1.152-3.026-2.76-3.235
+           A48.455 48.455 0 0 0 11.25 3
+           c-2.115 0-4.198.137-6.24.402
+           C3.402 3.611 2.25 5.016 2.25
+           6.637v4.007c0 1.621 1.152 3.026
+           2.76 3.235.577.075 1.157.14
+           1.74.194V18l3.75-3.75"
+      />
+    </svg>
+  </div>
+
+  <h2 class="mt-4 text-xl font-bold text-white">
+    {{ title }}
+  </h2>
+
+  <p class="mt-2 max-w-lg leading-6 text-slate-400">
+    {{ message }}
+  </p>
+
+  @if (showAction) {
+    <button
+      type="button"
+      class="mt-6 inline-flex min-h-11 items-center
+             justify-center rounded-xl bg-cyan-500
+             px-5 py-2.5 font-semibold
+             text-slate-950 transition
+             hover:bg-cyan-400
+             focus-visible:outline-none
+             focus-visible:ring-2
+             focus-visible:ring-cyan-300
+             focus-visible:ring-offset-2
+             focus-visible:ring-offset-slate-900"
+      (click)="performAction()"
+    >
+      {{ actionLabel }}
+    </button>
+  }
+</section>

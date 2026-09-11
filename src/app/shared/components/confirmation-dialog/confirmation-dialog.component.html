@@ -1,0 +1,131 @@
+@if (isOpen) {
+  <div
+    class="fixed inset-0 z-50 flex items-center
+           justify-center bg-slate-950/80
+           px-4 py-8 backdrop-blur-sm"
+    (click)="cancel()"
+  >
+    <section
+      class="w-full max-w-md rounded-3xl border
+             border-slate-700 bg-slate-900 p-6
+             text-white shadow-2xl shadow-black/40
+             sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirmation-title"
+      aria-describedby="confirmation-message"
+      (click)="stopPropagation($event)"
+    >
+      <div
+        class="flex size-12 items-center justify-center
+               rounded-full"
+        [class.bg-red-400/10]="danger"
+        [class.text-red-300]="danger"
+        [class.bg-cyan-400/10]="!danger"
+        [class.text-cyan-300]="!danger"
+        aria-hidden="true"
+      >
+        <svg
+          class="size-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M11.25 9.75h1.5v5.25h-1.5
+               V9.75Zm0 7.5h1.5v1.5h-1.5
+               v-1.5ZM12 2.25a9.75 9.75 0 1 0
+               0 19.5 9.75 9.75 0 0 0
+               0-19.5Z"
+          />
+        </svg>
+      </div>
+
+      <h2
+        id="confirmation-title"
+        class="mt-5 text-2xl font-bold"
+      >
+        {{ title }}
+      </h2>
+
+      <p
+        id="confirmation-message"
+        class="mt-3 leading-7 text-slate-400"
+      >
+        {{ message }}
+      </p>
+
+      <div
+        class="mt-8 flex flex-col-reverse gap-3
+               sm:flex-row sm:justify-end"
+      >
+        <button
+          type="button"
+          class="min-h-11 rounded-xl border
+                 border-slate-700 px-5 py-2.5
+                 font-semibold text-slate-200
+                 transition hover:bg-slate-800
+                 disabled:cursor-not-allowed
+                 disabled:opacity-60"
+          [disabled]="isProcessing"
+          (click)="cancel()"
+        >
+          {{ cancelLabel }}
+        </button>
+
+        @if (danger) {
+          <button
+            type="button"
+            class="inline-flex min-h-11 items-center
+                   justify-center gap-2 rounded-xl
+                   bg-red-500 px-5 py-2.5
+                   font-semibold text-white transition
+                   hover:bg-red-400
+                   disabled:cursor-not-allowed
+                   disabled:opacity-60"
+            [disabled]="isProcessing"
+            (click)="confirm()"
+          >
+            @if (isProcessing) {
+              <span
+                class="size-4 animate-spin rounded-full
+                       border-2 border-white/40
+                       border-t-white"
+                aria-hidden="true"
+              ></span>
+            }
+
+            {{ confirmLabel }}
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="inline-flex min-h-11 items-center
+                   justify-center gap-2 rounded-xl
+                   bg-cyan-500 px-5 py-2.5
+                   font-semibold text-slate-950
+                   transition hover:bg-cyan-400
+                   disabled:cursor-not-allowed
+                   disabled:opacity-60"
+            [disabled]="isProcessing"
+            (click)="confirm()"
+          >
+            @if (isProcessing) {
+              <span
+                class="size-4 animate-spin rounded-full
+                       border-2 border-slate-950/40
+                       border-t-slate-950"
+                aria-hidden="true"
+              ></span>
+            }
+
+            {{ confirmLabel }}
+          </button>
+        }
+      </div>
+    </section>
+  </div>
+}

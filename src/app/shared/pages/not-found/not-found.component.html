@@ -1,0 +1,62 @@
+<main
+  class="relative flex min-h-screen items-center
+         justify-center overflow-hidden bg-slate-950
+         px-4 py-12 text-white"
+>
+  <div
+    class="absolute left-1/2 top-1/2 size-96
+           -translate-x-1/2 -translate-y-1/2
+           rounded-full bg-cyan-500/10 blur-3xl"
+    aria-hidden="true"
+  ></div>
+
+  <section
+    class="relative w-full max-w-xl rounded-3xl
+           border border-slate-800 bg-slate-900/90
+           p-8 text-center shadow-2xl
+           shadow-black/30 sm:p-12"
+    aria-labelledby="not-found-title"
+  >
+    <p
+      class="bg-gradient-to-r from-cyan-300
+             to-blue-400 bg-clip-text text-7xl
+             font-black tracking-tight
+             text-transparent sm:text-8xl"
+      aria-hidden="true"
+    >
+      404
+    </p>
+
+    <h1
+      id="not-found-title"
+      class="mt-5 text-3xl font-bold tracking-tight
+             sm:text-4xl"
+    >
+      Page not found
+    </h1>
+
+    <p
+      class="mx-auto mt-4 max-w-md leading-7
+             text-slate-400"
+    >
+      The page you requested does not exist or may
+      have been moved. Check the address or return
+      to the application.
+    </p>
+
+    <a
+      routerLink="/profile"
+      class="mt-8 inline-flex min-h-12 items-center
+             justify-center rounded-xl bg-cyan-500
+             px-6 py-3 font-semibold text-slate-950
+             transition hover:bg-cyan-400
+             focus-visible:outline-none
+             focus-visible:ring-2
+             focus-visible:ring-cyan-300
+             focus-visible:ring-offset-2
+             focus-visible:ring-offset-slate-900"
+    >
+      Return to application
+    </a>
+  </section>
+</main>
