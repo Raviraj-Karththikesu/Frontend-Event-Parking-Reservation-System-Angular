@@ -1,0 +1,429 @@
+<section
+  class="min-h-screen bg-slate-950 text-slate-100"
+>
+  <header
+    class="border-b border-white/10 bg-slate-950/90
+           backdrop-blur"
+  >
+    <div
+      class="mx-auto flex max-w-7xl items-center
+             justify-between px-5 py-4 sm:px-8"
+    >
+      <div class="flex items-center gap-3">
+        <div
+          class="flex h-11 w-11 items-center justify-center
+                 rounded-2xl bg-gradient-to-br from-cyan-400
+                 to-blue-600 text-lg font-black text-slate-950"
+        >
+          EP
+        </div>
+
+        <div>
+          <p class="font-bold text-white">
+            Event Parking
+          </p>
+          <p class="text-xs text-slate-400">
+            Customer account
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        (click)="logout()"
+        class="rounded-xl border border-white/10 px-4 py-2
+               text-sm font-semibold text-slate-300
+               transition hover:border-red-400/50
+               hover:bg-red-500/10 hover:text-red-300"
+      >
+        Sign out
+      </button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-5 py-10 sm:px-8">
+    @if (isLoading) {
+      <div
+        class="flex min-h-[60vh] flex-col items-center
+               justify-center gap-5"
+      >
+        <div
+          class="h-12 w-12 animate-spin rounded-full
+                 border-4 border-slate-700
+                 border-t-cyan-400"
+        ></div>
+
+        <p class="text-slate-400">
+          Loading your profile...
+        </p>
+      </div>
+    } @else if (errorMessage && !profile) {
+      <div
+        class="mx-auto max-w-lg rounded-3xl border
+               border-red-400/20 bg-red-500/10 p-8
+               text-center"
+      >
+        <h1 class="text-2xl font-bold text-white">
+          Profile unavailable
+        </h1>
+
+        <p class="mt-3 text-red-200">
+          {{ errorMessage }}
+        </p>
+
+        <button
+          type="button"
+          (click)="loadProfile()"
+          class="mt-6 rounded-xl bg-cyan-400 px-6 py-3
+                 font-bold text-slate-950 transition
+                 hover:bg-cyan-300"
+        >
+          Try again
+        </button>
+      </div>
+    } @else if (profile) {
+      <section
+        class="overflow-hidden rounded-3xl border
+               border-white/10 bg-slate-900 shadow-2xl
+               shadow-cyan-950/20"
+      >
+        <div
+          class="h-36 bg-gradient-to-r from-cyan-500
+                 via-blue-600 to-violet-600"
+        ></div>
+
+        <div
+          class="-mt-16 flex flex-col gap-5 px-6 pb-8
+                 sm:flex-row sm:items-end
+                 sm:justify-between sm:px-10"
+        >
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
+            <div
+              class="flex h-32 w-32 items-center justify-center
+                     rounded-3xl border-4 border-slate-900
+                     bg-slate-800 text-4xl font-black
+                     text-cyan-300 shadow-xl"
+            >
+              {{ initials }}
+            </div>
+
+            <div class="pb-1">
+              <h1 class="text-3xl font-black text-white">
+                {{ profile.fullName }}
+              </h1>
+
+              <p class="mt-1 text-slate-400">
+                {{ profile.email }}
+              </p>
+
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span
+                  class="rounded-full bg-blue-500/10
+                         px-3 py-1 text-xs font-bold
+                         text-blue-300"
+                >
+                  {{ profile.role }}
+                </span>
+
+                <span
+                  class="rounded-full bg-emerald-500/10
+                         px-3 py-1 text-xs font-bold
+                         text-emerald-300"
+                >
+                  {{ profile.status }}
+                </span>
+
+                @if (profile.emailVerified) {
+                  <span
+                    class="rounded-full bg-cyan-500/10
+                           px-3 py-1 text-xs font-bold
+                           text-cyan-300"
+                  >
+                    Email verified
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      @if (successMessage) {
+        <div
+          class="mt-6 rounded-2xl border
+                 border-emerald-400/20
+                 bg-emerald-500/10 px-5 py-4
+                 text-emerald-200"
+          role="status"
+        >
+          {{ successMessage }}
+        </div>
+      }
+
+      @if (errorMessage) {
+        <div
+          class="mt-6 rounded-2xl border border-red-400/20
+                 bg-red-500/10 px-5 py-4 text-red-200"
+          role="alert"
+        >
+          {{ errorMessage }}
+        </div>
+      }
+
+      <div class="mt-8 grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
+        <section
+          class="rounded-3xl border border-white/10
+                 bg-slate-900 p-6 sm:p-8"
+        >
+          <div>
+            <p
+              class="text-sm font-bold uppercase tracking-[0.2em]
+                     text-cyan-400"
+            >
+              Personal details
+            </p>
+
+            <h2 class="mt-2 text-2xl font-black text-white">
+              Edit your profile
+            </h2>
+
+            <p class="mt-2 text-sm text-slate-400">
+              Keep your contact information accurate.
+            </p>
+          </div>
+
+          <form
+            class="mt-8 space-y-6"
+            [formGroup]="profileForm"
+            (ngSubmit)="saveProfile()"
+            novalidate
+          >
+            <div>
+              <label
+                for="fullName"
+                class="mb-2 block text-sm font-semibold
+                       text-slate-300"
+              >
+                Full name
+              </label>
+
+              <input
+                id="fullName"
+                type="text"
+                formControlName="fullName"
+                autocomplete="name"
+                maxlength="100"
+                class="w-full rounded-2xl border
+                       border-white/10 bg-slate-950 px-4 py-3.5
+                       text-white outline-none transition
+                       placeholder:text-slate-600
+                       focus:border-cyan-400
+                       focus:ring-4 focus:ring-cyan-400/10"
+              >
+
+              @if (
+                profileForm.controls.fullName.touched &&
+                profileForm.controls.fullName.invalid
+              ) {
+                <p class="mt-2 text-sm text-red-300">
+                  Full name must contain between 2 and 100
+                  characters.
+                </p>
+              }
+            </div>
+
+            <div>
+              <label
+                for="email"
+                class="mb-2 block text-sm font-semibold
+                       text-slate-300"
+              >
+                Email address
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                [value]="profile.email"
+                readonly
+                class="w-full cursor-not-allowed rounded-2xl
+                       border border-white/5 bg-slate-800/60
+                       px-4 py-3.5 text-slate-400"
+              >
+
+              <p class="mt-2 text-xs text-slate-500">
+                Your verified email address cannot be changed
+                here.
+              </p>
+            </div>
+
+            <div>
+              <label
+                for="phoneNumber"
+                class="mb-2 block text-sm font-semibold
+                       text-slate-300"
+              >
+                Phone number
+                <span class="font-normal text-slate-500">
+                  (optional)
+                </span>
+              </label>
+
+              <input
+                id="phoneNumber"
+                type="tel"
+                formControlName="phoneNumber"
+                autocomplete="tel"
+                maxlength="20"
+                placeholder="+94 77 123 4567"
+                class="w-full rounded-2xl border
+                       border-white/10 bg-slate-950 px-4 py-3.5
+                       text-white outline-none transition
+                       placeholder:text-slate-600
+                       focus:border-cyan-400
+                       focus:ring-4 focus:ring-cyan-400/10"
+              >
+
+              @if (
+                profileForm.controls.phoneNumber.touched &&
+                profileForm.controls.phoneNumber.invalid
+              ) {
+                <p class="mt-2 text-sm text-red-300">
+                  Enter a valid phone number with a maximum of
+                  20 characters.
+                </p>
+              }
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                type="submit"
+                [disabled]="
+                  isSaving ||
+                  profileForm.invalid ||
+                  profileForm.pristine
+                "
+                class="rounded-2xl bg-gradient-to-r
+                       from-cyan-400 to-blue-500 px-7 py-3.5
+                       font-black text-slate-950 transition
+                       hover:from-cyan-300 hover:to-blue-400
+                       disabled:cursor-not-allowed
+                       disabled:opacity-50"
+              >
+                @if (isSaving) {
+                  Saving changes...
+                } @else {
+                  Save changes
+                }
+              </button>
+
+              @if (profileForm.dirty) {
+                <span class="text-sm text-amber-300">
+                  You have unsaved changes
+                </span>
+              }
+            </div>
+          </form>
+        </section>
+
+        <aside class="space-y-6">
+          <section
+            class="rounded-3xl border border-white/10
+                   bg-slate-900 p-6"
+          >
+            <h2 class="text-xl font-black text-white">
+              Account information
+            </h2>
+
+            <dl class="mt-6 space-y-5">
+              <div
+                class="flex items-center justify-between gap-4
+                       border-b border-white/5 pb-4"
+              >
+                <dt class="text-sm text-slate-400">
+                  Customer ID
+                </dt>
+                <dd class="font-bold text-white">
+                  #{{ profile.customerId }}
+                </dd>
+              </div>
+
+              <div
+                class="flex items-center justify-between gap-4
+                       border-b border-white/5 pb-4"
+              >
+                <dt class="text-sm text-slate-400">
+                  Role
+                </dt>
+                <dd class="font-bold text-white">
+                  {{ profile.role }}
+                </dd>
+              </div>
+
+              <div
+                class="flex items-center justify-between gap-4
+                       border-b border-white/5 pb-4"
+              >
+                <dt class="text-sm text-slate-400">
+                  Account status
+                </dt>
+                <dd class="font-bold text-emerald-300">
+                  {{ profile.status }}
+                </dd>
+              </div>
+
+              <div
+                class="flex items-center justify-between gap-4
+                       border-b border-white/5 pb-4"
+              >
+                <dt class="text-sm text-slate-400">
+                  Email
+                </dt>
+                <dd
+                  class="font-bold"
+                  [class.text-emerald-300]="
+                    profile.emailVerified
+                  "
+                  [class.text-amber-300]="
+                    !profile.emailVerified
+                  "
+                >
+                  {{
+                    profile.emailVerified
+                      ? 'Verified'
+                      : 'Not verified'
+                  }}
+                </dd>
+              </div>
+
+              <div
+                class="flex items-center justify-between gap-4"
+              >
+                <dt class="text-sm text-slate-400">
+                  Member since
+                </dt>
+                <dd class="font-bold text-white">
+                  {{ profile.createdAt | date:'mediumDate' }}
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <section
+            class="rounded-3xl border border-cyan-400/15
+                   bg-cyan-500/5 p-6"
+          >
+            <h2 class="font-black text-cyan-200">
+              Account security
+            </h2>
+
+            <p class="mt-2 text-sm leading-6 text-slate-400">
+              Your profile is protected using JWT
+              authentication and verified email access.
+            </p>
+          </section>
+        </aside>
+      </div>
+    }
+  </main>
+</section>
