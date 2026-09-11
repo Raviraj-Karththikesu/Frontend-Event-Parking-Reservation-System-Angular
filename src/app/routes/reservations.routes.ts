@@ -42,5 +42,23 @@ export const reservationRoutes: Routes = [
       ).then(
         component => component.AdminSeatManagementComponent
       )
+  },
+  {
+    path: 'admin/events/:eventId/parking',
+    canActivate: [
+      authGuard,
+      roleGuard
+    ],
+    data: {
+      roles: [
+        APP_ROLES.admin
+      ]
+    },
+    loadComponent: () =>
+      import(
+        '../features/seat-parking/admin-parking-management/admin-parking-management.component'
+      ).then(
+        component => component.AdminParkingManagementComponent
+      )
   }
 ];
