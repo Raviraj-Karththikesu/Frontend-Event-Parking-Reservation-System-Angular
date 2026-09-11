@@ -1,0 +1,139 @@
+<section class="admin-events-page">
+
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Manage Events</h1>
+      <p class="subtitle">
+        Create, update and manage system events.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="add-btn"
+      (click)="addEvent()">
+      + Add Event
+    </button>
+  </div>
+
+  @if (successMessage) {
+    <div class="message success-message">
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="message error-message">
+      <p>{{ errorMessage }}</p>
+
+      <button
+        type="button"
+        class="retry-btn"
+        (click)="loadEvents()">
+        Retry
+      </button>
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="state-message">
+      Loading events...
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && events.length === 0) {
+    <div class="state-message">
+      <p>No events are available.</p>
+
+      <button
+        type="button"
+        class="add-btn"
+        (click)="addEvent()">
+        Create First Event
+      </button>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && events.length > 0) {
+
+    <div class="table-wrapper">
+
+      <table class="events-table">
+
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Venue</th>
+            <th>Category</th>
+            <th>Start</th>
+            <th>Ticket Price</th>
+            <th>Capacity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (event of events; track event.id) {
+
+            <tr>
+              <td>
+                <strong>
+                  {{ event.name }}
+                </strong>
+              </td>
+
+              <td>
+                {{ event.venueName }}
+              </td>
+
+              <td>
+                {{ event.categoryName | titlecase }}
+              </td>
+
+              <td>
+                {{ event.startDateTime | date:'medium' }}
+              </td>
+
+              <td>
+                {{
+                  event.ticketPrice |
+                  currency:'LKR':'symbol':'1.2-2'
+                }}
+              </td>
+
+              <td>
+                {{ event.capacity | number }}
+              </td>
+
+              <td>
+                <div class="actions">
+
+                  <button
+                    type="button"
+                    class="edit-btn"
+                    (click)="editEvent(event.id)">
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    class="delete-btn"
+                    (click)="deleteEvent(event)">
+                    Delete
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+</section>

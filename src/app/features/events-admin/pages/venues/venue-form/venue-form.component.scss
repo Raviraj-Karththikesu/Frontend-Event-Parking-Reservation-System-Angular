@@ -1,0 +1,114 @@
+:host {
+  display: block;
+}
+
+.venue-form-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.form-header {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  opacity: 0.7;
+}
+
+form {
+  display: grid;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-weight: 600;
+}
+
+input,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgba(120, 120, 120, 0.35);
+  border-radius: 10px;
+  font: inherit;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: currentColor;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.validation-message {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.message {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border: 1px solid rgba(120, 120, 120, 0.25);
+  border-radius: 10px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@media (max-width: 700px) {
+  .venue-form-page {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
+  .form-actions {
+    display: block;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}
