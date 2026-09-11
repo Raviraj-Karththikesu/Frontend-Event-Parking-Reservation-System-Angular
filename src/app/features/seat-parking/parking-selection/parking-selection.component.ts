@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ParkingSlot } from '../../models/parking-slot';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { getApiErrorMessage } from '../../../core/utils/api-error.util';
+import { ParkingSlot } from '../models/parking-slot';
 import { BookingSelectionStateService } from '../seat-selection/services/booking-selection-state.service';
 import { SlotCodePipe } from './pipes/slot-code.pipe';
+import { ParkingService } from './services/parking.service';
 
 @Component({
   selector: 'app-parking-selection',
@@ -13,6 +17,10 @@ import { SlotCodePipe } from './pipes/slot-code.pipe';
   styleUrl: './parking-selection.component.scss'
 })
 export class ParkingSelectionComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly parkingService = inject(ParkingService);
+  private readonly bookingSelectionState =
+    inject(BookingSelectionStateService);
 
   parkingSlots: ParkingSlot[] = [];
 
@@ -22,16 +30,38 @@ export class ParkingSelectionComponent implements OnInit {
 
   selectedParkingSlotId: number | null = null;
 
-  constructor(
-    private readonly bookingSelectionState: BookingSelectionStateService
-  ) {}
+  eventId: number | null = null;
 
   ngOnInit(): void {
+    const routeEventId =
+      Number(this.route.snapshot.paramMap.get('eventId'));
+
+    if (!Number.isInteger(routeEventId) || routeEventId <= 0) {
+      this.errorMessage = 'A valid event ID is required.';
+      return;
+    }
+
+    this.eventId = routeEventId;
+
     const savedSelection =
       this.bookingSelectionState.selection();
 
+    if (
+      savedSelection.eventId !== null &&
+      savedSelection.eventId !== routeEventId
+    ) {
+      this.bookingSelectionState.clearSelection();
+    }
+
+    this.bookingSelectionState.setEvent(routeEventId);
+
+    const currentSelection =
+      this.bookingSelectionState.selection();
+
     this.selectedParkingSlotId =
-      savedSelection.parkingSlotId;
+      currentSelection.parkingSlotId;
+
+    this.loadParkingSlots();
   }
 
   isSlotSelected(slotId: number): boolean {
@@ -43,7 +73,6 @@ export class ParkingSelectionComponent implements OnInit {
   }
 
   selectSlot(slot: ParkingSlot): void {
-
     if (!this.canSelectSlot(slot)) {
       return;
     }
@@ -88,5 +117,34 @@ export class ParkingSelectionComponent implements OnInit {
 
   get parkingFee(): number {
     return this.selectedParkingSlot?.fee ?? 0;
+  }
+
+  private loadParkingSlots(): void {
+    if (this.eventId === null) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.parkingService
+      .getParkingSlotsByEvent(this.eventId)
+      .subscribe({
+        next: parkingSlots => {
+          this.parkingSlots = parkingSlots;
+          this.removeInvalidSelection();
+          this.isLoading = false;
+        },
+        error: error => {
+          this.parkingSlots = [];
+
+          this.errorMessage = getApiErrorMessage(
+            error,
+            'Unable to load parking slots for this event.'
+          );
+
+          this.isLoading = false;
+        }
+      });
   }
 }

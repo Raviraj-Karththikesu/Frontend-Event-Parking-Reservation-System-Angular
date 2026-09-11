@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ParkingSlot } from '../../../models/parking-slot';
+import { ParkingSlot } from '../../models/parking-slot';
 
 @Pipe({
   name: 'slotCode',

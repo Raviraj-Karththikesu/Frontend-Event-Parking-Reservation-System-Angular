@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Seat } from '../../../models/seat';
+import { Seat } from '../../models/seat';
 
 @Pipe({
   name: 'seatLabel',

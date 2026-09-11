@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { BookingSelection } from '../../../models/booking-selection';
+import { BookingSelection } from '../../models/booking-selection';
 
 const INITIAL_SELECTION: BookingSelection = {
   eventId: null,
