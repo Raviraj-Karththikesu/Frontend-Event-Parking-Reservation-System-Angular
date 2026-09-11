@@ -14,7 +14,7 @@ import {
 export class CategoryService {
 
   private readonly api = inject(ApiService);
-  private readonly endpoint = 'api/Categories';
+  private readonly endpoint = 'Categories';
 
   getAll(): Observable<Category[]> {
     return this.api.get<Category[]>(

@@ -16,7 +16,7 @@ import {
 export class EventService {
 
   private readonly api = inject(ApiService);
-  private readonly endpoint = 'api/Events';
+  private readonly endpoint = 'Events';
 
   getAll(filter?: EventFilter): Observable<EventItem[]> {
     const params: Record<string, string | number | boolean> = {};

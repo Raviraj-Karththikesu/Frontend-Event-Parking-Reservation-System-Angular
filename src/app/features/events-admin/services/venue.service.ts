@@ -13,7 +13,7 @@ import {
 })
 export class VenueService {
   private readonly api = inject(ApiService);
-  private readonly endpoint = 'api/Venues';
+  private readonly endpoint = 'Venues';
 
   getAll(): Observable<Venue[]> {
     return this.api.get<Venue[]>(this.endpoint);
