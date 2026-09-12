@@ -10,6 +10,10 @@ import {
 
 export const eventRoutes: Routes = [
 
+  // =========================
+  // PUBLIC EVENTS
+  // =========================
+
   // Public Event Catalogue
   {
     path: 'events',
@@ -33,6 +37,10 @@ export const eventRoutes: Routes = [
       ),
     title: 'Event Details | Event Parking'
   },
+
+  // =========================
+  // ADMIN EVENTS
+  // =========================
 
   // Admin Event List
   {
@@ -80,5 +88,110 @@ export const eventRoutes: Routes = [
         component => component.AdminEventFormComponent
       ),
     title: 'Edit Event | Event Parking'
+  },
+
+  // =========================
+  // ADMIN CATEGORIES
+  // =========================
+
+  // Admin Category List
+  {
+    path: 'admin/categories',
+    canActivate: [roleGuard],
+    data: {
+      roles: [APP_ROLES.admin]
+    },
+    loadComponent: () =>
+      import(
+        '../features/events-admin/pages/categories/category-list/category-list.component'
+      ).then(
+        component => component.CategoryListComponent
+      ),
+    title: 'Manage Categories | Event Parking'
+  },
+
+  // Admin Create Category
+  {
+    path: 'admin/categories/new',
+    canActivate: [roleGuard],
+    data: {
+      roles: [APP_ROLES.admin]
+    },
+    loadComponent: () =>
+      import(
+        '../features/events-admin/pages/categories/category-form/category-form.component'
+      ).then(
+        component => component.CategoryFormComponent
+      ),
+    title: 'Create Category | Event Parking'
+  },
+
+  // Admin Edit Category
+  {
+    path: 'admin/categories/:id/edit',
+    canActivate: [roleGuard],
+    data: {
+      roles: [APP_ROLES.admin]
+    },
+    loadComponent: () =>
+      import(
+        '../features/events-admin/pages/categories/category-form/category-form.component'
+      ).then(
+        component => component.CategoryFormComponent
+      ),
+    title: 'Edit Category | Event Parking'
+  },
+
+  // =========================
+  // ADMIN VENUES
+  // =========================
+
+  // Admin Venue List
+  {
+    path: 'admin/venues',
+    canActivate: [roleGuard],
+    data: {
+      roles: [APP_ROLES.admin]
+    },
+    loadComponent: () =>
+      import(
+        '../features/events-admin/pages/venues/venue-list/venue-list.component'
+      ).then(
+        component => component.VenueListComponent
+      ),
+    title: 'Manage Venues | Event Parking'
+  },
+
+  // Admin Create Venue
+  {
+    path: 'admin/venues/new',
+    canActivate: [roleGuard],
+    data: {
+      roles: [APP_ROLES.admin]
+    },
+    loadComponent: () =>
+      import(
+        '../features/events-admin/pages/venues/venue-form/venue-form.component'
+      ).then(
+        component => component.VenueFormComponent
+      ),
+    title: 'Create Venue | Event Parking'
+  },
+
+  // Admin Edit Venue
+  {
+    path: 'admin/venues/:id/edit',
+    canActivate: [roleGuard],
+    data: {
+      roles: [APP_ROLES.admin]
+    },
+    loadComponent: () =>
+      import(
+        '../features/events-admin/pages/venues/venue-form/venue-form.component'
+      ).then(
+        component => component.VenueFormComponent
+      ),
+    title: 'Edit Venue | Event Parking'
   }
+
 ];

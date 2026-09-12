@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 
 import {
   CreateVenueRequest,
@@ -24,6 +24,7 @@ export class VenueFormComponent implements OnInit {
 
   private readonly venueService = inject(VenueService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   venue: CreateVenueRequest = {
     name: '',
@@ -39,6 +40,10 @@ export class VenueFormComponent implements OnInit {
 
   successMessage = '';
   errorMessage = '';
+
+  goBack(): void {
+    this.router.navigate(['/admin/venues']);
+  }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');

@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
+
 
 import {
   CreateCategoryRequest,
@@ -24,6 +25,7 @@ export class CategoryFormComponent implements OnInit {
 
   private readonly categoryService = inject(CategoryService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   category: CreateCategoryRequest = {
     name: '',
@@ -38,6 +40,11 @@ export class CategoryFormComponent implements OnInit {
 
   successMessage = '';
   errorMessage = '';
+
+
+  goBack(): void {
+    this.router.navigate(['/admin/categories']);
+  }
 
   ngOnInit(): void {
     const idParam =
