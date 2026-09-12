@@ -48,12 +48,12 @@ export const API_ENDPOINTS = {
 
   parkingSlots: {
     byEvent: (eventId: number) =>
-      `events/${eventId}/parkingslots`,
+      `events/${eventId}/parking-slots`,
     byId: (
       eventId: number,
       parkingSlotId: number
     ) =>
-      `events/${eventId}/parkingslots/${parkingSlotId}`
+      `events/${eventId}/parking-slots/${parkingSlotId}`
   },
 
   bookings: {
