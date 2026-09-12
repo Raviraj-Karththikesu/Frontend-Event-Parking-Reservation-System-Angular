@@ -31,70 +31,135 @@
     <article class="event-detail-card">
 
       <div class="event-header">
+
         <span class="category">
           {{ event.categoryName | titlecase }}
         </span>
 
-        <h1>{{ event.name }}</h1>
+        <h1>
+          {{ event.name }}
+        </h1>
 
         <p class="venue">
           {{ event.venueName }}
         </p>
+
       </div>
 
       <div class="event-description">
-        <h2>About this event</h2>
+
+        <h2>
+          About this event
+        </h2>
 
         <p>
-          {{ event.description || 'No description available.' }}
+          {{
+            event.description ||
+            'No description available.'
+          }}
         </p>
+
       </div>
 
       <div class="event-information">
 
         <div class="info-item">
-          <span>Start Date & Time</span>
+
+          <span>
+            Start Date & Time
+          </span>
+
           <strong>
-            {{ event.startDateTime | date:'medium' }}
+            {{
+              event.startDateTime
+                | date:'medium'
+            }}
           </strong>
+
         </div>
 
         <div class="info-item">
-          <span>End Date & Time</span>
+
+          <span>
+            End Date & Time
+          </span>
+
           <strong>
-            {{ event.endDateTime | date:'medium' }}
+            {{
+              event.endDateTime
+                | date:'medium'
+            }}
           </strong>
+
         </div>
 
         <div class="info-item">
-          <span>Ticket Price</span>
+
+          <span>
+            Ticket Price
+          </span>
+
           <strong>
-            {{ event.ticketPrice |
-              currency:'LKR':'symbol':'1.2-2' }}
+            {{
+              event.ticketPrice
+                | currency:'LKR':'symbol':'1.2-2'
+            }}
           </strong>
+
         </div>
 
         <div class="info-item">
-          <span>Parking Fee</span>
+
+          <span>
+            Parking Fee
+          </span>
+
           <strong>
-            {{ event.parkingFee |
-              currency:'LKR':'symbol':'1.2-2' }}
+            {{
+              event.parkingFee
+                | currency:'LKR':'symbol':'1.2-2'
+            }}
           </strong>
+
         </div>
 
         <div class="info-item">
-          <span>Capacity</span>
+
+          <span>
+            Capacity
+          </span>
+
           <strong>
-            {{ event.capacity | number }}
+            {{
+              event.capacity
+                | number
+            }}
           </strong>
+
         </div>
 
         <div class="info-item">
-          <span>Venue</span>
+
+          <span>
+            Venue
+          </span>
+
           <strong>
             {{ event.venueName }}
           </strong>
+
         </div>
+
+      </div>
+
+      <div class="event-actions">
+
+        <button
+          type="button"
+          class="book-btn"
+          (click)="bookEvent()">
+          Book This Event
+        </button>
 
       </div>
 

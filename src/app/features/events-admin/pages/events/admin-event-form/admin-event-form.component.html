@@ -1,17 +1,32 @@
 <section class="admin-event-form-page">
 
   <div class="page-header">
+
     <div>
-      <p class="eyebrow">Administration</p>
+      <p class="eyebrow">
+        Administration
+      </p>
 
       <h1>
         {{ isEditMode ? 'Edit Event' : 'Create Event' }}
       </h1>
 
       <p class="subtitle">
-        Enter the event details below.
+        {{
+          isEditMode
+            ? 'Update the event details below.'
+            : 'Enter the event details below.'
+        }}
       </p>
     </div>
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
+      ← Back to Events
+    </button>
+
   </div>
 
   @if (isLoading) {

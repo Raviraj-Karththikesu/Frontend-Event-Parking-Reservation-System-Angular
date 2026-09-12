@@ -1,27 +1,41 @@
 .event-detail-page {
-  max-width: 1000px;
+  max-width: 1050px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 32px 24px;
 }
 
 .back-btn,
 .retry-btn {
   padding: 10px 16px;
-  border: none;
+  border: 1px solid #334155;
   border-radius: 8px;
+  background: #0f172a;
+  color: #e2e8f0;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .back-btn {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
+}
+
+.back-btn:hover,
+.retry-btn:hover {
+  background: #1e293b;
+  border-color: #475569;
+  transform: translateY(-1px);
 }
 
 .state-message {
-  padding: 20px;
-  border: 1px solid;
-  border-radius: 10px;
+  padding: 24px;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #0f172a;
   text-align: center;
 }
 
@@ -30,48 +44,55 @@
 }
 
 .event-detail-card {
-  padding: 28px;
-  border: 1px solid;
-  border-radius: 14px;
+  padding: 32px;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  background: #020617;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
 }
 
 .event-header {
-  padding-bottom: 20px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid;
+  padding-bottom: 22px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid #334155;
 }
 
 .category {
   display: inline-block;
   margin-bottom: 10px;
+  color: #22d3ee;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .event-header h1 {
   margin: 0;
-  font-size: 32px;
+  color: #f8fafc;
+  font-size: 34px;
   line-height: 1.2;
 }
 
 .venue {
   margin: 10px 0 0;
+  color: #cbd5e1;
   font-size: 16px;
 }
 
 .event-description {
-  margin-bottom: 26px;
+  margin-bottom: 28px;
 }
 
 .event-description h2 {
-  margin-bottom: 10px;
-  font-size: 20px;
+  margin: 0 0 10px;
+  color: #f8fafc;
+  font-size: 21px;
 }
 
 .event-description p {
   margin: 0;
+  color: #cbd5e1;
   line-height: 1.7;
 }
 
@@ -87,39 +108,98 @@
 .info-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 16px;
-  border: 1px solid;
-  border-radius: 10px;
+  gap: 7px;
+  padding: 18px;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #0f172a;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.info-item:hover {
+  border-color: #475569;
+  transform: translateY(-2px);
 }
 
 .info-item span {
+  color: #94a3b8;
   font-size: 13px;
 }
 
 .info-item strong {
+  color: #f8fafc;
   font-size: 15px;
 }
 
+/* Booking Action */
+
+.event-actions {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #334155;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.book-btn {
+  min-width: 190px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  background: #22d3ee;
+  color: #020617;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.book-btn:hover {
+  background: #67e8f9;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(34, 211, 238, 0.22);
+}
+
+.book-btn:active {
+  transform: translateY(0);
+}
+
+/* Tablet / Mobile */
+
 @media (max-width: 700px) {
+
   .event-detail-page {
-    padding: 16px;
+    padding: 20px 16px;
   }
 
   .event-detail-card {
-    padding: 20px;
+    padding: 22px;
   }
 
   .event-header h1 {
-    font-size: 26px;
+    font-size: 27px;
   }
 
   .event-information {
     grid-template-columns: 1fr;
   }
+
+  .event-actions {
+    justify-content: stretch;
+  }
+
+  .book-btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 360px) {
+
   .event-detail-page {
     padding: 12px;
   }
@@ -133,7 +213,8 @@
   }
 
   .back-btn,
-  .retry-btn {
+  .retry-btn,
+  .book-btn {
     width: 100%;
   }
 }

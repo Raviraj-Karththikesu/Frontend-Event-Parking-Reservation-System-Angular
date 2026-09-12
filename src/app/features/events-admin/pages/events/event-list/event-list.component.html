@@ -26,6 +26,7 @@
 
     <div class="filter-group">
       <label for="venue">Venue</label>
+
       <select
         id="venue"
         name="venueId"
@@ -40,11 +41,13 @@
             {{ venue.name }}
           </option>
         }
+
       </select>
     </div>
 
     <div class="filter-group">
       <label for="category">Category</label>
+
       <select
         id="category"
         name="eventCategoryId"
@@ -59,11 +62,13 @@
             {{ category.name }}
           </option>
         }
+
       </select>
     </div>
 
     <div class="filter-group">
       <label for="date">Date</label>
+
       <input
         id="date"
         type="date"
@@ -72,6 +77,7 @@
     </div>
 
     <div class="filter-actions">
+
       <button
         type="submit"
         class="filter-btn">
@@ -84,6 +90,7 @@
         (click)="clearFilters()">
         Clear
       </button>
+
     </div>
 
   </form>
@@ -96,7 +103,10 @@
 
   @if (errorMessage) {
     <div class="state-message error-message">
-      <p>{{ errorMessage }}</p>
+
+      <p>
+        {{ errorMessage }}
+      </p>
 
       <button
         type="button"
@@ -104,6 +114,7 @@
         (click)="loadEvents()">
         Retry
       </button>
+
     </div>
   }
 
@@ -122,6 +133,7 @@
         <article class="event-card">
 
           <div class="event-card-header">
+
             <span class="category">
               {{ event.categoryName | titlecase }}
             </span>
@@ -129,6 +141,7 @@
             <h2>
               {{ event.name }}
             </h2>
+
           </div>
 
           <p class="description">
@@ -149,7 +162,10 @@
 
             <p>
               <strong>Ticket:</strong>
-              {{ event.ticketPrice | currency:'LKR':'symbol':'1.2-2' }}
+              {{
+                event.ticketPrice |
+                currency:'LKR':'symbol':'1.2-2'
+              }}
             </p>
 
             <p>
@@ -167,9 +183,11 @@
           </button>
 
         </article>
+
       }
 
     </div>
+
   }
 
 </section>

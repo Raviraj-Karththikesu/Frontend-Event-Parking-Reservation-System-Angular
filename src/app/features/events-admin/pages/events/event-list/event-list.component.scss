@@ -1,26 +1,31 @@
 .event-page {
-  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
 }
 
 .page-header {
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
 .eyebrow {
   margin: 0 0 6px;
+  color: #22d3ee;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 h1 {
   margin: 0;
-  font-size: 30px;
+  color: #f8fafc;
+  font-size: 32px;
 }
 
 .subtitle {
-  margin-top: 8px;
+  margin: 8px 0 0;
+  color: #94a3b8;
   line-height: 1.6;
 }
 
@@ -29,10 +34,11 @@ h1 {
   grid-template-columns: repeat(4, minmax(150px, 1fr));
   gap: 16px;
   align-items: end;
-  margin-bottom: 28px;
-  padding: 20px;
-  border: 1px solid;
-  border-radius: 12px;
+  margin-bottom: 30px;
+  padding: 22px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #020617;
 }
 
 .filter-group {
@@ -42,8 +48,9 @@ h1 {
 }
 
 .filter-group label {
+  color: #e2e8f0;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 650;
 }
 
 .filter-group input,
@@ -51,16 +58,25 @@ h1 {
   width: 100%;
   box-sizing: border-box;
   padding: 11px 12px;
-  border: 1px solid;
+  border: 1px solid #334155;
   border-radius: 8px;
+  outline: none;
+  background: #0f172a;
+  color: #f8fafc;
   font: inherit;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
 }
 
 .filter-actions {
   grid-column: 1 / -1;
   display: flex;
-  gap: 10px;
   justify-content: flex-end;
+  gap: 10px;
 }
 
 .filter-btn,
@@ -68,19 +84,51 @@ h1 {
 .retry-btn,
 .details-btn {
   padding: 10px 16px;
-  border: none;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.filter-btn,
+.details-btn {
+  border: none;
+  background: #22d3ee;
+  color: #020617;
+}
+
+.filter-btn:hover,
+.details-btn:hover {
+  background: #67e8f9;
+}
+
+.clear-btn,
+.retry-btn {
+  border: 1px solid #475569;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.clear-btn:hover,
+.retry-btn:hover {
+  background: #1e293b;
 }
 
 .state-message {
-  padding: 20px;
   margin-bottom: 20px;
-  border: 1px solid;
+  padding: 20px;
+  border: 1px solid #334155;
   border-radius: 10px;
+  background: #0f172a;
+  color: #cbd5e1;
   text-align: center;
+}
+
+.error-message {
+  border-color: #7f1d1d;
+  background: rgba(127, 29, 29, 0.18);
+  color: #fecaca;
 }
 
 .error-message p {
@@ -89,43 +137,65 @@ h1 {
 
 .event-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(280px, 1fr)
-  );
+  grid-template-columns:
+    repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
 }
 
 .event-card {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  border: 1px solid;
-  border-radius: 12px;
+  padding: 22px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #020617;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-3px);
+  border-color: #475569;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22);
+}
+
+.category {
+  color: #22d3ee;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .event-card-header h2 {
   margin: 8px 0 0;
+  color: #f8fafc;
   font-size: 21px;
 }
 
-.category {
-  font-size: 13px;
-  font-weight: 600;
-}
-
 .description {
-  line-height: 1.6;
   flex-grow: 1;
+  color: #cbd5e1;
+  line-height: 1.6;
 }
 
 .event-info {
   margin: 12px 0 18px;
+  padding-top: 12px;
+  border-top: 1px solid #1e293b;
 }
 
 .event-info p {
   margin: 8px 0;
+  color: #cbd5e1;
   line-height: 1.5;
+}
+
+.event-info strong {
+  color: #f8fafc;
 }
 
 .details-btn {
@@ -135,16 +205,14 @@ h1 {
 
 @media (max-width: 900px) {
   .filters {
-    grid-template-columns: repeat(
-      2,
-      minmax(150px, 1fr)
-    );
+    grid-template-columns:
+      repeat(2, minmax(150px, 1fr));
   }
 }
 
 @media (max-width: 600px) {
   .event-page {
-    padding: 16px;
+    padding: 20px 16px;
   }
 
   .filters {
@@ -163,7 +231,7 @@ h1 {
   }
 
   h1 {
-    font-size: 24px;
+    font-size: 26px;
   }
 }
 
