@@ -10,51 +10,80 @@ function parseJwt(token: string): any | null {
       .replace(/-/g, '+')
       .replace(/_/g, '/');
 
-    return JSON.parse(atob(normalized));
+    const padded =
+      normalized +
+      '='.repeat((4 - normalized.length % 4) % 4);
+
+    return JSON.parse(atob(padded));
   } catch {
     return null;
   }
 }
 
 export function getCurrentCustomerId(): number | null {
-  const directId = localStorage.getItem('customerId');
+
+  // Current project authentication session
+  const storedSession =
+    localStorage.getItem('eventParkingAuth');
+
+  if (storedSession) {
+    try {
+      const session =
+        JSON.parse(storedSession);
+
+      const customerId =
+        Number(session?.customerId);
+
+      if (
+        Number.isFinite(customerId) &&
+        customerId > 0
+      ) {
+        return customerId;
+      }
+
+      // Fallback: read customer id from JWT
+      if (session?.accessToken) {
+        const payload =
+          parseJwt(session.accessToken);
+
+        const value =
+          payload?.customerId ??
+          payload?.nameid ??
+          payload?.sub ??
+          payload?.[
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+          ];
+
+        const tokenCustomerId =
+          Number(value);
+
+        if (
+          Number.isFinite(tokenCustomerId) &&
+          tokenCustomerId > 0
+        ) {
+          return tokenCustomerId;
+        }
+      }
+
+    } catch {
+      return null;
+    }
+  }
+
+  // Backward-compatible fallback
+  const directId =
+    localStorage.getItem('customerId');
 
   if (directId) {
     const id = Number(directId);
 
-    if (!Number.isNaN(id)) {
+    if (
+      Number.isFinite(id) &&
+      id > 0
+    ) {
       return id;
     }
   }
 
-  const token =
-    localStorage.getItem('token') ??
-    localStorage.getItem('accessToken') ??
-    localStorage.getItem('authToken');
-
-  if (!token) {
-    return null;
-  }
-
-  const payload = parseJwt(token);
-
-  if (!payload) {
-    return null;
-  }
-
-  const value =
-    payload.customerId ??
-    payload.nameid ??
-    payload.sub ??
-    payload[
-      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
-    ];
-
-  if (!value) {
-    return null;
-  }
-
-  const id = Number(value);
-
-  return Number.isNaN(id) ? null : id;
+  return null;
 }
