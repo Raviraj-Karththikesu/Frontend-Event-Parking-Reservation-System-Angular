@@ -1,0 +1,204 @@
+<section class="admin-parking-management">
+
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Admin Parking Management</p>
+      <h2>Manage Event Parking</h2>
+      <p class="subtitle">
+        Generate parking slots, edit parking details, and remove slots for this event.
+      </p>
+    </div>
+
+    @if (eventId !== null) {
+      <div class="event-badge">
+        Event ID: {{ eventId }}
+      </div>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <div class="message message--error" role="alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="message message--success" role="status">
+      {{ successMessage }}
+    </div>
+  }
+
+  <section class="panel">
+    <h3>Generate Parking Layout</h3>
+
+    <form
+      class="form-grid"
+      [formGroup]="generateForm"
+      (ngSubmit)="generateParkingLayout()"
+    >
+      <label>
+        Total Slots
+        <input
+          type="number"
+          formControlName="totalSlots"
+          min="1"
+          max="500"
+        >
+      </label>
+
+      <label>
+        Zone
+        <input
+          type="text"
+          formControlName="zone"
+          placeholder="A"
+        >
+      </label>
+
+      <label>
+        Fee
+        <input
+          type="number"
+          formControlName="fee"
+          min="0"
+          step="0.01"
+        >
+      </label>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          [disabled]="isLoading"
+        >
+          Generate Parking Layout
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Existing Parking Slots</h3>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="loadParkingSlots()"
+        [disabled]="isLoading"
+      >
+        Refresh
+      </button>
+    </div>
+
+    @if (isLoading) {
+      <div class="state-box">
+        Loading parking slots...
+      </div>
+    } @else if (parkingSlots.length === 0) {
+      <div class="state-box">
+        No parking slots available for this event.
+      </div>
+    } @else {
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Slot Number</th>
+              <th>Zone</th>
+              <th>Fee</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (slot of parkingSlots; track slot.id) {
+              <tr>
+                <td>{{ slot.id }}</td>
+                <td>{{ slot.slotNumber }}</td>
+                <td>{{ slot.zone }}</td>
+                <td>LKR {{ slot.fee }}</td>
+                <td>{{ slot.status }}</td>
+                <td class="actions-cell">
+                  <button
+                    type="button"
+                    class="secondary-button"
+                    (click)="startEdit(slot)"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    class="danger-button"
+                    (click)="deleteParkingSlot(slot)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  @if (editingParkingSlotId !== null) {
+    <section class="panel">
+      <h3>Edit Parking Slot</h3>
+
+      <form
+        class="form-grid"
+        [formGroup]="editForm"
+        (ngSubmit)="saveParkingSlot()"
+      >
+        <label>
+          Slot Number
+          <input
+            type="text"
+            formControlName="slotNumber"
+          >
+        </label>
+
+        <label>
+          Zone
+          <input
+            type="text"
+            formControlName="zone"
+          >
+        </label>
+
+        <label>
+          Fee
+          <input
+            type="number"
+            formControlName="fee"
+            min="0"
+            step="0.01"
+          >
+        </label>
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            [disabled]="isLoading"
+          >
+            Save Changes
+          </button>
+
+          <button
+            type="button"
+            class="secondary-button"
+            (click)="cancelEdit()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+</section>

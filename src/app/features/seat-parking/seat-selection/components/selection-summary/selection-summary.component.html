@@ -1,0 +1,23 @@
+<section class="selection-summary">
+  <h3>Selection Summary</h3>
+
+  <div class="summary-row">
+    <span>Selected Seats</span>
+    <strong>{{ seatCount }}</strong>
+  </div>
+
+  <div class="summary-row">
+    <span>Ticket Total</span>
+    <strong>LKR {{ selection().ticketTotal }}</strong>
+  </div>
+
+  <div class="summary-row">
+    <span>Parking Fee</span>
+    <strong>LKR {{ selection().parkingFee }}</strong>
+  </div>
+
+  <div class="summary-row summary-row--total">
+    <span>Grand Total</span>
+    <strong>LKR {{ selection().grandTotal }}</strong>
+  </div>
+</section>
