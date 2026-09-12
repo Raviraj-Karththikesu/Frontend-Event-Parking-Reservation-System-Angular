@@ -38,6 +38,18 @@ export class EventDetailComponent implements OnInit {
     this.loadEvent(id);
   }
 
+  bookEvent(): void {
+  if (!this.event) {
+    return;
+  }
+
+  this.router.navigate([
+    '/events',
+    this.event.id,
+    'seats'
+  ]);
+}
+
   loadEvent(id: number): void {
     this.isLoading = true;
     this.errorMessage = '';

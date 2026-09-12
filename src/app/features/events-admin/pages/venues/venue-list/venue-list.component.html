@@ -1,58 +1,107 @@
 <section class="venue-page">
 
+  <!-- Page Header -->
   <div class="page-header">
+
     <div>
-      <p class="eyebrow">Administration</p>
-      <h1>Venue Management</h1>
+      <p class="eyebrow">
+        Administration
+      </p>
+
+      <h1>
+        Venue Management
+      </h1>
+
       <p class="subtitle">
         View and manage all event venues.
       </p>
     </div>
 
     <button
-  type="button"
-  class="add-btn"
-  (click)="addVenue()">
-  + Add Venue
-</button>
+      type="button"
+      class="add-btn"
+      (click)="addVenue()">
+      + Add Venue
+    </button>
+
   </div>
+
 
   <!-- Loading State -->
   @if (isLoading) {
+
     <div class="state-box">
+
       <div class="spinner"></div>
-      <p>Loading venues...</p>
+
+      <p>
+        Loading venues...
+      </p>
+
     </div>
+
   }
+
 
   <!-- Error State -->
   @else if (errorMessage) {
-    <div class="state-box error-state">
-      <h3>Something went wrong</h3>
-      <p>{{ errorMessage }}</p>
 
-      <button type="button" (click)="loadVenues()">
+    <div class="state-box error-state">
+
+      <h3>
+        Something went wrong
+      </h3>
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+      <button
+        type="button"
+        class="retry-btn"
+        (click)="loadVenues()">
         Try Again
       </button>
+
     </div>
+
   }
+
 
   <!-- Empty State -->
   @else if (venues.length === 0) {
+
     <div class="state-box">
-      <h3>No venues found</h3>
+
+      <h3>
+        No venues found
+      </h3>
+
       <p>
         There are currently no venues available.
       </p>
+
+      <button
+        type="button"
+        class="add-btn"
+        (click)="addVenue()">
+        + Create First Venue
+      </button>
+
     </div>
+
   }
 
-  <!-- Data State -->
+
+  <!-- Venue Table -->
   @else {
+
     <div class="table-container">
 
       <table>
+
         <thead>
+
           <tr>
             <th>#</th>
             <th>Venue Name</th>
@@ -60,44 +109,69 @@
             <th>Capacity</th>
             <th>Actions</th>
           </tr>
+
         </thead>
 
         <tbody>
-          @for (venue of venues; track venue.id; let i = $index) {
+
+          @for (
+            venue of venues;
+            track venue.id;
+            let i = $index
+          ) {
+
             <tr>
-              <td>{{ i + 1 }}</td>
 
               <td>
-                <strong>{{ venue.name | titlecase }}</strong>
+                {{ i + 1 }}
               </td>
 
-              <td>{{ venue.address }}</td>
+              <td>
+                <strong>
+                  {{ venue.name | titlecase }}
+                </strong>
+              </td>
+
+              <td>
+                {{ venue.address }}
+              </td>
 
               <td>
                 {{ venue.capacity | number }}
               </td>
 
-              <td class="actions">
-                <button
-               type="button"
-               class="edit-btn"
-               (click)="editVenue(venue.id)">
-               Edit
-               </button>
+              <td>
 
-                <button
-                type="button"
-                class="delete-btn"
-                (click)="deleteVenue(venue.id)">
-                 Delete
-                </button>
+                <div class="actions">
+
+                  <button
+                    type="button"
+                    class="edit-btn"
+                    (click)="editVenue(venue.id)">
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    class="delete-btn"
+                    (click)="deleteVenue(venue.id)">
+                    Delete
+                  </button>
+
+                </div>
+
               </td>
+
             </tr>
+
           }
+
         </tbody>
+
       </table>
 
     </div>
+
   }
 
 </section>
