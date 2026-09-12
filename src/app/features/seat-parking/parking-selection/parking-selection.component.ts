@@ -1,9 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { getApiErrorMessage } from '../../../core/utils/api-error.util';
 import { ParkingSlot } from '../models/parking-slot';
 import { BookingSelectionStateService } from '../seat-selection/services/booking-selection-state.service';
+import { SeatService } from '../seat-selection/services/seat.service';
 import { SlotCodePipe } from './pipes/slot-code.pipe';
 import { ParkingService } from './services/parking.service';
 
@@ -18,7 +19,9 @@ import { ParkingService } from './services/parking.service';
 })
 export class ParkingSelectionComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly parkingService = inject(ParkingService);
+  private readonly seatService = inject(SeatService);
   private readonly bookingSelectionState =
     inject(BookingSelectionStateService);
 
@@ -117,6 +120,82 @@ export class ParkingSelectionComponent implements OnInit {
 
   get parkingFee(): number {
     return this.selectedParkingSlot?.fee ?? 0;
+  }
+
+  continueToCheckout(): void {
+    if (this.eventId === null) {
+      this.errorMessage = 'Event information is missing.';
+      return;
+    }
+
+    const selection =
+      this.bookingSelectionState.selection();
+
+    if (selection.seatIds.length === 0) {
+      this.errorMessage =
+        'Please select at least one seat before checkout.';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.seatService
+      .getSeatsByEvent(this.eventId)
+      .subscribe({
+        next: seats => {
+          const selectedSeats = seats
+            .filter(seat =>
+              selection.seatIds.includes(seat.id)
+            )
+            .map(seat => ({
+              seatId: seat.id,
+              seatNumber: seat.seatNumber,
+              price: seat.price
+            }));
+
+          if (selectedSeats.length === 0) {
+            this.errorMessage =
+              'Selected seat information could not be loaded.';
+            this.isLoading = false;
+            return;
+          }
+
+          const selectedParking =
+            this.selectedParkingSlot
+              ? {
+                  parkingSlotId:
+                    this.selectedParkingSlot.id,
+                  slotNumber:
+                    this.selectedParkingSlot.slotNumber,
+                  zone:
+                    this.selectedParkingSlot.zone ?? null,
+                  fee:
+                    this.selectedParkingSlot.fee
+                }
+              : null;
+
+          this.isLoading = false;
+
+          this.router.navigate(
+            ['/booking/checkout'],
+            {
+              state: {
+                eventId: this.eventId,
+                seats: selectedSeats,
+                parking: selectedParking
+              }
+            }
+          );
+        },
+        error: error => {
+          this.errorMessage = getApiErrorMessage(
+            error,
+            'Unable to prepare checkout.'
+          );
+          this.isLoading = false;
+        }
+      });
   }
 
   private loadParkingSlots(): void {
