@@ -1,0 +1,114 @@
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <section class="footer-brand">
+        <a
+          class="brand"
+          routerLink="/events"
+          aria-label="EventPark home"
+        >
+          <span class="brand-logo">EP</span>
+
+          <span class="brand-name">
+            Event<span>Park</span>
+          </span>
+        </a>
+
+        <p>
+          Discover events, reserve your preferred
+          seats and secure parking before arriving.
+        </p>
+
+        <div
+          class="technology-list"
+          aria-label="Technologies used"
+        >
+          <span>Angular</span>
+          <span>ASP.NET Core</span>
+          <span>SQL Server</span>
+        </div>
+      </section>
+
+      <section class="footer-section">
+        <h2>Explore</h2>
+
+        <nav aria-label="Footer explore links">
+          <a routerLink="/events">
+            Browse Events
+          </a>
+
+          @if (isCustomer()) {
+            <a routerLink="/dashboard">
+              Dashboard
+            </a>
+
+            <a routerLink="/bookings">
+              My Bookings
+            </a>
+          }
+
+          @if (isAdmin()) {
+            <a routerLink="/admin/dashboard">
+              Admin Dashboard
+            </a>
+
+            <a routerLink="/admin/events">
+              Manage Events
+            </a>
+          }
+        </nav>
+      </section>
+
+      <section class="footer-section">
+        <h2>Account</h2>
+
+        <nav aria-label="Footer account links">
+          @if (!isLoggedIn()) {
+            <a routerLink="/login">
+              Sign in
+            </a>
+
+            <a routerLink="/register">
+              Create Account
+            </a>
+          } @else {
+            <a routerLink="/profile">
+              My Profile
+            </a>
+
+            @if (isCustomer()) {
+              <a routerLink="/notifications">
+                Notifications
+              </a>
+            }
+          }
+        </nav>
+      </section>
+
+      <section class="footer-section project-section">
+        <h2>EventPark</h2>
+
+        <p>
+          A secure event, seat and parking
+          reservation platform built for a smooth
+          booking experience.
+        </p>
+
+        <span class="project-label">
+          Event &amp; Parking Reservation System
+        </span>
+      </section>
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        &copy; {{ currentYear }} EventPark.
+        All rights reserved.
+      </p>
+
+      <p>
+        Secure bookings. Simple experiences.
+      </p>
+    </div>
+  </div>
+</footer>

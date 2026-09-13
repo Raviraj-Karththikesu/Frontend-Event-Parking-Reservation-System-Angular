@@ -1,0 +1,316 @@
+<header class="site-header">
+  <div class="navbar-container">
+    <a
+      class="brand"
+      routerLink="/events"
+      (click)="closeMobileMenu()"
+      aria-label="EventPark home"
+    >
+      <span class="brand-logo">EP</span>
+
+      <span class="brand-text">
+        Event<span>Park</span>
+      </span>
+    </a>
+
+    <nav
+      class="desktop-navigation"
+      aria-label="Main navigation"
+    >
+      @if (!isLoggedIn()) {
+        <a
+          routerLink="/events"
+          routerLinkActive="active"
+        >
+          Events
+        </a>
+      }
+
+      @if (isCustomer()) {
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="active"
+        >
+          Dashboard
+        </a>
+
+        <a
+          routerLink="/events"
+          routerLinkActive="active"
+        >
+          Events
+        </a>
+
+        <a
+          routerLink="/bookings"
+          routerLinkActive="active"
+        >
+          My Bookings
+        </a>
+
+        <a
+          routerLink="/notifications"
+          routerLinkActive="active"
+        >
+          Notifications
+        </a>
+      }
+
+      @if (isAdmin()) {
+        <a
+          routerLink="/admin/dashboard"
+          routerLinkActive="active"
+        >
+          Dashboard
+        </a>
+
+        <a
+          routerLink="/admin/events"
+          routerLinkActive="active"
+        >
+          Events
+        </a>
+
+        <a
+          routerLink="/admin/venues"
+          routerLinkActive="active"
+        >
+          Venues
+        </a>
+
+        <a
+          routerLink="/admin/categories"
+          routerLinkActive="active"
+        >
+          Categories
+        </a>
+      }
+    </nav>
+
+    <div class="desktop-actions">
+      @if (!isLoggedIn()) {
+        <a
+          class="login-link"
+          routerLink="/login"
+        >
+          Sign in
+        </a>
+
+        <a
+          class="register-link"
+          routerLink="/register"
+        >
+          Create account
+        </a>
+      } @else {
+        <a
+          class="user-summary"
+          routerLink="/profile"
+          aria-label="Open profile"
+        >
+          <span class="user-avatar">
+            {{ userInitial() }}
+          </span>
+
+          <span class="user-details">
+            <span class="user-name">
+              {{ currentUser()?.fullName }}
+            </span>
+
+            <span class="user-role">
+              {{ currentUser()?.role }}
+            </span>
+          </span>
+        </a>
+
+        <button
+          class="logout-button"
+          type="button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
+      }
+    </div>
+
+    <button
+      class="mobile-menu-button"
+      type="button"
+      [attr.aria-expanded]="mobileMenuOpen()"
+      [attr.aria-label]="
+        mobileMenuOpen()
+          ? 'Close navigation menu'
+          : 'Open navigation menu'
+      "
+      (click)="toggleMobileMenu()"
+    >
+      @if (mobileMenuOpen()) {
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M6 6L18 18M18 6L6 18"
+          />
+        </svg>
+      } @else {
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M4 7H20M4 12H20M4 17H20"
+          />
+        </svg>
+      }
+    </button>
+  </div>
+
+  @if (mobileMenuOpen()) {
+    <nav
+      class="mobile-navigation"
+      aria-label="Mobile navigation"
+    >
+      @if (isLoggedIn()) {
+        <a
+          class="mobile-user-summary"
+          routerLink="/profile"
+          (click)="closeMobileMenu()"
+        >
+          <span class="user-avatar">
+            {{ userInitial() }}
+          </span>
+
+          <span class="user-details">
+            <span class="user-name">
+              {{ currentUser()?.fullName }}
+            </span>
+
+            <span class="user-role">
+              {{ currentUser()?.role }}
+            </span>
+          </span>
+        </a>
+      }
+
+      @if (!isLoggedIn()) {
+        <a
+          routerLink="/events"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Events
+        </a>
+
+        <a
+          routerLink="/login"
+          (click)="closeMobileMenu()"
+        >
+          Sign in
+        </a>
+
+        <a
+          class="mobile-primary-link"
+          routerLink="/register"
+          (click)="closeMobileMenu()"
+        >
+          Create account
+        </a>
+      }
+
+      @if (isCustomer()) {
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Dashboard
+        </a>
+
+        <a
+          routerLink="/events"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Events
+        </a>
+
+        <a
+          routerLink="/bookings"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          My Bookings
+        </a>
+
+        <a
+          routerLink="/notifications"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Notifications
+        </a>
+
+        <a
+          routerLink="/profile"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          My Profile
+        </a>
+      }
+
+      @if (isAdmin()) {
+        <a
+          routerLink="/admin/dashboard"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Dashboard
+        </a>
+
+        <a
+          routerLink="/admin/events"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Manage Events
+        </a>
+
+        <a
+          routerLink="/admin/venues"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Manage Venues
+        </a>
+
+        <a
+          routerLink="/admin/categories"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          Manage Categories
+        </a>
+
+        <a
+          routerLink="/profile"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+        >
+          My Profile
+        </a>
+      }
+
+      @if (isLoggedIn()) {
+        <button
+          class="mobile-logout-button"
+          type="button"
+          (click)="logout()"
+        >
+          Logout
+        </button>
+      }
+    </nav>
+  }
+</header>
