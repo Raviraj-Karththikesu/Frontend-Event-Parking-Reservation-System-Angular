@@ -248,18 +248,22 @@ export class AdminEventFormComponent implements OnInit {
     request: CreateEventRequest
   ): void {
     this.eventService.create(request).subscribe({
-      next: () => {
+      next: (createdEvent) => {
         this.isSaving = false;
+
         this.successMessage =
-          'Event created successfully.';
+          'Event created successfully. Continue by setting up seats.';
 
         this.router.navigate([
-          '/admin/events'
+          '/admin/events',
+          createdEvent.id,
+          'seats'
         ]);
       },
 
       error: () => {
         this.isSaving = false;
+
         this.errorMessage =
           'Unable to create event. Please check the entered details.';
       }
@@ -276,6 +280,7 @@ export class AdminEventFormComponent implements OnInit {
     ).subscribe({
       next: () => {
         this.isSaving = false;
+
         this.successMessage =
           'Event updated successfully.';
 
@@ -286,6 +291,7 @@ export class AdminEventFormComponent implements OnInit {
 
       error: () => {
         this.isSaving = false;
+
         this.errorMessage =
           'Unable to update event. Please check the entered details.';
       }

@@ -36,9 +36,9 @@ h1 {
 
 .add-btn,
 .edit-btn,
+.manage-btn,
 .delete-btn,
 .retry-btn {
-  border: none;
   border-radius: 9px;
   padding: 10px 16px;
   font: inherit;
@@ -53,6 +53,7 @@ h1 {
 }
 
 .add-btn {
+  border: none;
   background: #22d3ee;
   color: #020617;
 }
@@ -74,6 +75,18 @@ h1 {
   border-color: #475569;
 }
 
+.manage-btn {
+  border: 1px solid #0e7490;
+  background: rgba(14, 116, 144, 0.18);
+  color: #a5f3fc;
+}
+
+.manage-btn:hover {
+  background: rgba(14, 116, 144, 0.32);
+  border-color: #22d3ee;
+  transform: translateY(-1px);
+}
+
 .delete-btn {
   border: 1px solid #7f1d1d;
   background: rgba(127, 29, 29, 0.2);
@@ -86,6 +99,7 @@ h1 {
 
 .retry-btn {
   margin-top: 10px;
+  border: none;
   background: #334155;
   color: #f8fafc;
 }
@@ -132,7 +146,7 @@ h1 {
 
 .events-table {
   width: 100%;
-  min-width: 900px;
+  min-width: 1050px;
   border-collapse: collapse;
 }
 
@@ -199,7 +213,7 @@ h1 {
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .admin-events-page {
     padding: 12px;
   }
@@ -210,6 +224,7 @@ h1 {
   }
 
   .edit-btn,
+  .manage-btn,
   .delete-btn {
     width: 100%;
   }

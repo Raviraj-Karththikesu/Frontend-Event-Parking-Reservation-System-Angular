@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { EventItem } from '../../../models/event.model';
 import { EventService } from '../../../services/event.service';
@@ -9,7 +9,8 @@ import { EventService } from '../../../services/event.service';
   selector: 'app-admin-event-list',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './admin-event-list.component.html',
   styleUrl: './admin-event-list.component.scss'
