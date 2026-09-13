@@ -5,7 +5,7 @@ export interface NotificationResponse {
 
   customerId: number;
 
-  type?: string;
+  type?: string | number;
 
   title?: string;
 

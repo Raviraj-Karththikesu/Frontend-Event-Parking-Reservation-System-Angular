@@ -44,6 +44,8 @@ h2 {
   padding: 14px 18px;
   border: 1px solid #d7d7d7;
   border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
 }
 
 .legend {
@@ -96,9 +98,13 @@ h2 {
 .seat {
   min-height: 100px;
   padding: 12px;
+
   border: 2px solid #c9c9c9;
   border-radius: 12px;
+
   background: #ffffff;
+  color: #0f172a;
+
   cursor: pointer;
 
   display: flex;
@@ -109,22 +115,30 @@ h2 {
 
   transition:
     transform 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .seat:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.1);
+  border-color: #22d3ee;
+
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.12);
 }
 
 .seat:focus-visible {
-  outline: 3px solid currentColor;
+  outline: 3px solid rgba(34, 211, 238, 0.35);
   outline-offset: 3px;
 }
 
 .seat--selected {
   background: #d8f3dc;
-  border-width: 3px;
+  border: 3px solid #22c55e;
+
+  box-shadow:
+    0 8px 18px rgba(34, 197, 94, 0.14);
 }
 
 .seat--unavailable {
@@ -159,8 +173,11 @@ h2 {
 .empty-state {
   padding: 40px 20px;
   text-align: center;
+
   border: 1px dashed #bdbdbd;
   border-radius: 14px;
+
+  background: #ffffff;
 }
 
 .empty-state h3 {
@@ -171,6 +188,113 @@ h2 {
   margin-bottom: 0;
   opacity: 0.7;
 }
+
+.loading-state,
+.error-state {
+  margin: 24px 0;
+  padding: 20px;
+
+  border-radius: 12px;
+  text-align: center;
+}
+
+.loading-state {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+}
+
+.error-state {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+}
+
+.loading-state h3,
+.error-state h3 {
+  margin: 0 0 8px;
+}
+
+.loading-state p,
+.error-state p {
+  margin: 0;
+}
+
+.error-state h3,
+.error-state p {
+  color: #991b1b;
+}
+
+/* =========================
+   ACTION / CONTINUE BUTTON
+   ========================= */
+
+.seat-selection__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+
+.continue-button {
+  min-width: 220px;
+  padding: 14px 24px;
+
+  border: 2px solid #22d3ee;
+  border-radius: 12px;
+
+  background: #22d3ee;
+  color: #06111f;
+
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 20px rgba(34, 211, 238, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.continue-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  background: #67e8f9;
+  border-color: #67e8f9;
+
+  box-shadow:
+    0 12px 26px rgba(34, 211, 238, 0.28);
+}
+
+.continue-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.continue-button:focus-visible {
+  outline: 3px solid rgba(34, 211, 238, 0.35);
+  outline-offset: 3px;
+}
+
+.continue-button:disabled {
+  background: #cbd5e1;
+  border-color: #cbd5e1;
+  color: #64748b;
+
+  cursor: not-allowed;
+  opacity: 0.7;
+
+  box-shadow: none;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
 
 @media (max-width: 600px) {
 
@@ -203,74 +327,21 @@ h2 {
   h2 {
     font-size: 24px;
   }
-}
-.loading-state,
-.error-state {
-  margin: 24px 0;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-}
 
-.loading-state {
-  background: #f3f4f6;
-  border: 1px solid #d1d5db;
-}
-
-.error-state {
-  background: #fff1f2;
-  border: 1px solid #fecdd3;
-}
-
-.loading-state h3,
-.error-state h3 {
-  margin: 0 0 8px;
-}
-
-.loading-state p,
-.error-state p {
-  margin: 0;
-}
-
-.error-state h3,
-.error-state p {
-  color: #991b1b;
-}
-
-@media (max-width: 360px) {
-  .loading-state,
-  .error-state {
-    padding: 16px;
-    font-size: 14px;
-  }
-}
-.seat-selection__actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 24px;
-}
-
-.continue-button {
-  min-width: 220px;
-  padding: 12px 20px;
-  border: 0;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.continue-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-@media (max-width: 600px) {
   .seat-selection__actions {
     justify-content: stretch;
   }
 
   .continue-button {
     width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+
+  .loading-state,
+  .error-state {
+    padding: 16px;
+    font-size: 14px;
   }
 }
