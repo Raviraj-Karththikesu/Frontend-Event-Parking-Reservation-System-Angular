@@ -101,41 +101,127 @@ import { BookingStatusPipe }
 
     </div>
   `,
-  styles: [`
-    .page {
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding:20px;
-      background:#f5f7fb;
-    }
+ styles: [`
+  .page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
 
+    background: #f4f6fa;
+  }
+
+  .card {
+    width: min(560px, 100%);
+    padding: 32px;
+
+    background: #ffffff;
+    color: #111827;
+
+    border-radius: 18px;
+
+    box-shadow:
+      0 10px 35px rgba(0, 0, 0, 0.10);
+  }
+
+  h1 {
+    margin: 0 0 22px;
+
+    color: #111827;
+
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 10px 0;
+
+    color: #4b5563;
+
+    font-size: 16px;
+  }
+
+  p strong {
+    color: #111827;
+  }
+
+  .timer {
+    margin: 22px 0;
+    padding: 16px 18px;
+
+    background: #eff6ff;
+    color: #1e3a8a;
+
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+
+    font-size: 18px;
+  }
+
+  .timer strong {
+    color: #1d4ed8;
+  }
+
+  .expired {
+    margin: 20px 0;
+    padding: 14px 16px;
+
+    background: #fee2e2;
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+
+    font-weight: 600;
+  }
+
+  button {
+    width: 100%;
+
+    margin-top: 18px;
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #1d4ed8;
+  }
+
+  a {
+    display: inline-block;
+
+    margin-top: 18px;
+
+    color: #2563eb;
+
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
     .card {
-      width:min(550px,100%);
-      background:white;
-      padding:30px;
-      border-radius:16px;
-      box-shadow:0 8px 30px rgba(0,0,0,.08);
+      padding: 24px;
     }
 
-    .timer {
-      padding:15px;
-      margin:20px 0;
-      border-radius:10px;
-      background:#f4f4f4;
-      font-size:18px;
+    h1 {
+      font-size: 25px;
     }
-
-    .expired {
-      color:#b00020;
-    }
-
-    button,
-    a {
-      display:block;
-      margin-top:15px;
-    }
-  `]
+  }
+`]
 })
 export class BookingSuccessComponent
   implements OnInit, OnDestroy {
@@ -189,23 +275,26 @@ export class BookingSuccessComponent
 
   startTimer(): void {
 
-    if (!this.booking?.holdExpiresAt) {
-      return;
-    }
-
-    this.updateRemainingTime();
-
-    this.timer = setInterval(
-      () => this.updateRemainingTime(),
-      1000
-    );
+  if (!this.booking) {
+    return;
   }
 
-  updateRemainingTime(): void {
+  // Prefer server-calculated remaining time.
+  // This avoids browser/server clock differences.
+  if (
+    this.booking.remainingHoldSeconds !== undefined &&
+    this.booking.remainingHoldSeconds !== null
+  ) {
 
-    if (!this.booking?.holdExpiresAt) {
-      return;
-    }
+    this.remainingSeconds =
+      Math.max(
+        0,
+        Number(
+          this.booking.remainingHoldSeconds
+        )
+      );
+
+  } else if (this.booking.holdExpiresAt) {
 
     const expiry =
       new Date(
@@ -222,15 +311,32 @@ export class BookingSuccessComponent
           (expiry - now) / 1000
         )
       );
+  }
+
+  if (this.remainingSeconds <= 0) {
+    return;
+  }
+
+  this.timer = setInterval(() => {
+
+    if (this.remainingSeconds > 0) {
+
+      this.remainingSeconds--;
+
+    }
 
     if (
-      this.remainingSeconds === 0
-      && this.timer
+      this.remainingSeconds <= 0 &&
+      this.timer
     ) {
 
       clearInterval(this.timer);
+
+      this.remainingSeconds = 0;
     }
-  }
+
+  }, 1000);
+}
 
   get formattedTime(): string {
 

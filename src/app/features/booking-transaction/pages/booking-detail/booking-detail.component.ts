@@ -123,26 +123,155 @@ import { BookingStatusPipe }
 
     </div>
   `,
-  styles: [`
-    .page {
-      padding:40px 16px;
-      background:#f5f7fb;
-      min-height:100vh;
+ styles: [`
+  .page {
+    min-height: 100vh;
+    padding: 40px 16px;
+    background: #f4f6fa;
+  }
+
+  .card {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 32px;
+
+    background: #ffffff;
+    color: #111827;
+
+    border-radius: 18px;
+
+    box-shadow:
+      0 10px 35px rgba(0, 0, 0, 0.10);
+  }
+
+  h1 {
+    margin: 0 0 24px;
+
+    color: #111827;
+
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  h2 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+
+    color: #1f2937;
+
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 10px 0;
+
+    color: #4b5563;
+
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  p strong {
+    color: #111827;
+  }
+
+  ul {
+    margin: 10px 0 20px;
+    padding-left: 22px;
+  }
+
+  li {
+    margin: 8px 0;
+
+    color: #374151;
+
+    font-size: 15px;
+  }
+
+  button {
+    display: inline-block;
+
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 12px 18px;
+
+    border: none;
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  button:first-of-type {
+    background: #2563eb;
+  }
+
+  button:first-of-type:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  button:last-of-type {
+    background: #dc2626;
+  }
+
+  button:last-of-type:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+  }
+
+  a {
+    display: inline-block;
+
+    margin-top: 20px;
+    padding: 12px 18px;
+
+    border-radius: 9px;
+
+    background: #059669;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  a:hover {
+    background: #047857;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      padding: 24px;
     }
 
-    .card {
-      max-width:650px;
-      margin:auto;
-      padding:28px;
-      background:white;
-      border-radius:16px;
+    h1 {
+      font-size: 25px;
     }
 
     button,
     a {
-      margin:10px 10px 0 0;
+      width: 100%;
+      margin-right: 0;
+      text-align: center;
     }
-  `]
+  }
+`]
 })
 export class BookingDetailComponent
   implements OnInit {

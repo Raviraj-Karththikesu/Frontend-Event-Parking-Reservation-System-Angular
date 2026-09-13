@@ -5,8 +5,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 
-import { RouterLink }
-  from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { BookingService }
   from '../../services/booking.service';
@@ -23,74 +22,118 @@ import { getCurrentCustomerId }
 @Component({
   selector: 'app-booking-history',
   standalone: true,
+
   imports: [
     CommonModule,
     RouterLink,
     BookingStatusPipe
   ],
+
   template: `
     <div class="page">
 
       <h1>My Bookings</h1>
 
-      <p *ngIf="loading">
-        Loading...
+      <!-- Loading -->
+      <p
+        class="loading"
+        *ngIf="loading">
+
+        Loading bookings...
+
       </p>
 
+
+      <!-- Error -->
       <p
         class="error"
         *ngIf="error">
+
         {{ error }}
+
       </p>
 
+
+      <!-- Booking Cards -->
       <div
         class="booking"
         *ngFor="let booking of bookings">
 
-        <div>
+        <div class="booking-info">
 
           <h3>
             {{ booking.bookingNumber }}
           </h3>
 
           <p>
-            {{ booking.eventName || ('Event #' + booking.eventId) }}
+            <strong>Event:</strong>
+
+            {{
+              booking.eventName ||
+              ('Event #' + booking.eventId)
+            }}
           </p>
 
           <p>
-            Status:
+            <strong>Status:</strong>
+
             {{ booking.status | bookingStatus }}
+          </p>
+
+          <p *ngIf="booking.totalAmount != null">
+            <strong>Total:</strong>
+
+            Rs.
+            {{
+              booking.totalAmount
+                | number:'1.2-2'
+            }}
           </p>
 
         </div>
 
+
         <div class="actions">
 
+          <!-- Details -->
           <a
+            *ngIf="getBookingId(booking) !== null"
             [routerLink]="[
               '/bookings',
-              booking.id
+              getBookingId(booking)
             ]">
 
             Details
 
           </a>
 
+
+          <!-- Payment -->
           <a
-            *ngIf="booking.status === 'Pending'"
+            class="pay-button"
+            *ngIf="
+              booking.status?.toLowerCase() === 'pending'
+              &&
+              getBookingId(booking) !== null
+            "
             [routerLink]="[
               '/payment',
-              booking.id
+              getBookingId(booking)
             ]">
 
-            Pay
+            Pay Now
 
           </a>
 
+
+          <!-- Cancel -->
           <button
+            class="cancel-button"
+            type="button"
             *ngIf="
-              booking.status === 'Pending'
-              || booking.status === 'Confirmed'
+              booking.status?.toLowerCase() === 'pending'
+              ||
+              booking.status?.toLowerCase() === 'confirmed'
             "
             (click)="cancel(booking)">
 
@@ -102,45 +145,245 @@ import { getCurrentCustomerId }
 
       </div>
 
-      <p
+
+      <!-- Empty State -->
+      <div
+        class="empty-state"
         *ngIf="
           !loading
-          && !error
-          && bookings.length === 0
+          &&
+          !error
+          &&
+          bookings.length === 0
         ">
 
-        No bookings found.
+        <h2>No bookings found</h2>
 
-      </p>
+        <p>
+          You have not created any bookings yet.
+        </p>
+
+      </div>
 
     </div>
   `,
+
   styles: [`
     .page {
-      max-width:1000px;
-      margin:auto;
-      padding:35px 16px;
+      min-height: 100vh;
+      max-width: 1000px;
+
+      margin: 0 auto;
+      padding: 40px 16px;
+
+      color: #ffffff;
     }
+
+
+    h1 {
+      margin: 0 0 28px;
+
+      color: #ffffff;
+
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+
+    .loading {
+      color: #e5e7eb;
+      font-size: 16px;
+    }
+
 
     .booking {
-      display:flex;
-      justify-content:space-between;
-      gap:20px;
-      margin:15px 0;
-      padding:20px;
-      background:#fff;
-      border-radius:12px;
-      box-shadow:0 3px 15px rgba(0,0,0,.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 24px;
+
+      margin: 18px 0;
+      padding: 24px 26px;
+
+      background: #ffffff;
+      color: #111827;
+
+      border-radius: 14px;
+
+      box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.12);
     }
+
+
+    .booking-info {
+      flex: 1;
+    }
+
+
+    .booking h3 {
+      margin: 0 0 12px;
+
+      color: #111827;
+
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+
+    .booking p {
+      margin: 7px 0;
+
+      color: #4b5563;
+
+      font-size: 15px;
+    }
+
+
+    .booking p strong {
+      color: #111827;
+    }
+
 
     .actions {
-      display:flex;
-      align-items:center;
-      gap:12px;
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
     }
 
+
+    .actions a {
+      display: inline-block;
+
+      padding: 10px 16px;
+
+      background: #2563eb;
+      color: #ffffff;
+
+      text-decoration: none;
+
+      border-radius: 8px;
+
+      font-weight: 600;
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+
+    .actions a:hover {
+      background: #1d4ed8;
+
+      transform:
+        translateY(-1px);
+    }
+
+
+    .actions .pay-button {
+      background: #059669;
+    }
+
+
+    .actions .pay-button:hover {
+      background: #047857;
+    }
+
+
+    .cancel-button {
+      padding: 10px 16px;
+
+      border: none;
+      border-radius: 8px;
+
+      background: #dc2626;
+      color: #ffffff;
+
+      cursor: pointer;
+
+      font-weight: 600;
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+
+    .cancel-button:hover {
+      background: #b91c1c;
+
+      transform:
+        translateY(-1px);
+    }
+
+
     .error {
-      color:#b00020;
+      padding: 14px 16px;
+
+      background: #fee2e2;
+      color: #b91c1c;
+
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+
+      font-weight: 600;
+    }
+
+
+    .empty-state {
+      margin-top: 30px;
+      padding: 40px 25px;
+
+      text-align: center;
+
+      background: #ffffff;
+      color: #111827;
+
+      border-radius: 14px;
+
+      box-shadow:
+        0 5px 20px
+        rgba(0, 0, 0, 0.10);
+    }
+
+
+    .empty-state h2 {
+      margin: 0 0 10px;
+
+      color: #111827;
+    }
+
+
+    .empty-state p {
+      margin: 0;
+
+      color: #6b7280;
+    }
+
+
+    @media (max-width: 700px) {
+
+      .booking {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+
+      .actions {
+        width: 100%;
+      }
+
+
+      .actions a,
+      .cancel-button {
+        flex: 1;
+
+        text-align: center;
+      }
     }
   `]
 })
@@ -153,18 +396,59 @@ export class BookingHistoryComponent
 
   error = '';
 
+
   constructor(
     private bookingService: BookingService
   ) {}
+
 
   ngOnInit(): void {
     this.loadBookings();
   }
 
+
+  /*
+   * Backend currently returns bookingId.
+   * Some frontend models may use id.
+   *
+   * This helper supports both.
+   */
+  getBookingId(
+    booking: BookingResponse
+  ): number | null {
+
+    const id =
+      booking.id ??
+      booking.bookingId;
+
+    if (
+      id === undefined ||
+      id === null
+    ) {
+      return null;
+    }
+
+    const numericId =
+      Number(id);
+
+    if (
+      Number.isNaN(numericId) ||
+      numericId <= 0
+    ) {
+      return null;
+    }
+
+    return numericId;
+  }
+
+
   loadBookings(): void {
+
+    this.error = '';
 
     const customerId =
       getCurrentCustomerId();
+
 
     if (!customerId) {
 
@@ -176,7 +460,9 @@ export class BookingHistoryComponent
       return;
     }
 
+
     this.loading = true;
+
 
     this.bookingService
       .getCustomerBookings(customerId)
@@ -184,10 +470,14 @@ export class BookingHistoryComponent
 
         next: result => {
 
-          this.bookings = result;
+          this.bookings =
+            Array.isArray(result)
+              ? result
+              : [];
 
           this.loading = false;
         },
+
 
         error: err => {
 
@@ -195,32 +485,57 @@ export class BookingHistoryComponent
 
           this.error =
             err?.error?.message ??
+            err?.error?.title ??
             'Unable to load bookings.';
         }
       });
   }
 
+
   cancel(
     booking: BookingResponse
   ): void {
 
-    if (!confirm(
-      `Cancel booking ${booking.bookingNumber}?`
-    )) {
+    const bookingId =
+      this.getBookingId(booking);
+
+
+    if (!bookingId) {
+
+      alert(
+        'Booking ID was not found.'
+      );
+
       return;
     }
 
+
+    const confirmed =
+      confirm(
+        `Cancel booking ${booking.bookingNumber}?`
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
     this.bookingService
-      .cancelBooking(booking.id)
+      .cancelBooking(bookingId)
       .subscribe({
 
-        next: () =>
-          this.loadBookings(),
+        next: () => {
+
+          this.loadBookings();
+        },
+
 
         error: err => {
 
           alert(
             err?.error?.message ??
+            err?.error?.title ??
             'Unable to cancel booking.'
           );
         }

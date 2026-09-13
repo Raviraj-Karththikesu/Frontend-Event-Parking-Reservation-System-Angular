@@ -45,9 +45,13 @@ export interface ReceiptResponse {
 
   paymentId?: number;
 
-  bookingId: number;
+  bookingId?: number;
 
   bookingNumber?: string;
+
+  customerId?: number;
+
+  eventId?: number;
 
   customerName?: string;
 
@@ -61,7 +65,11 @@ export interface ReceiptResponse {
 
   parkingAmount?: number;
 
-  totalAmount: number;
+  totalAmount?: number;
+
+  amountPaid?: number;
+
+  paymentStatus?: string;
 
   paidAt?: string;
 }

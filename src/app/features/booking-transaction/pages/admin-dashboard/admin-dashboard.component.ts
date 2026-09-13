@@ -83,41 +83,120 @@ import { AdminDashboard }
 
     </div>
   `,
-  styles: [`
+styles: [`
+  .page {
+    min-height: 100vh;
+    max-width: 1200px;
+
+    margin: 0 auto;
+    padding: 40px 20px;
+
+    color: #ffffff;
+  }
+
+  h1 {
+    margin: 0 0 30px;
+
+    color: #ffffff;
+
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .dashboard {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(240px, 1fr)
+      );
+
+    gap: 22px;
+  }
+
+  .stat {
+    min-height: 140px;
+
+    padding: 28px;
+
+    background: #ffffff;
+    color: #111827;
+
+    border-radius: 16px;
+
+    box-shadow:
+      0 8px 25px
+      rgba(0, 0, 0, 0.12);
+
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .stat:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 12px 30px
+      rgba(0, 0, 0, 0.16);
+  }
+
+  .stat span {
+    display: block;
+
+    color: #4b5563;
+
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .stat strong {
+    display: block;
+
+    margin-top: 18px;
+
+    color: #111827;
+
+    font-size: 34px;
+    font-weight: 800;
+  }
+
+  .error {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+
+    background: #fee2e2;
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
     .page {
-      max-width:1200px;
-      margin:auto;
-      padding:35px 16px;
+      padding: 28px 16px;
+    }
+
+    h1 {
+      font-size: 25px;
     }
 
     .dashboard {
-      display:grid;
-      grid-template-columns:
-        repeat(auto-fit,minmax(220px,1fr));
-      gap:20px;
+      grid-template-columns: 1fr;
     }
 
     .stat {
-      padding:25px;
-      border-radius:14px;
-      background:white;
-      box-shadow:0 5px 20px rgba(0,0,0,.08);
-    }
-
-    .stat span,
-    .stat strong {
-      display:block;
+      min-height: 120px;
     }
 
     .stat strong {
-      font-size:28px;
-      margin-top:12px;
+      font-size: 30px;
     }
-
-    .error {
-      color:#b00020;
-    }
-  `]
+  }
+`]
 })
 export class AdminDashboardComponent
   implements OnInit {

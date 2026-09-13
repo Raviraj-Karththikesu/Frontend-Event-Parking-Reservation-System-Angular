@@ -66,16 +66,19 @@ import { ReceiptResponse }
 
         <hr>
 
-        <h2>
-          Total:
-          Rs.
-          {{ receipt.totalAmount | number:'1.2-2' }}
-        </h2>
+       <h2>
+  Total:
+  Rs. {{ receiptTotal | number:'1.2-2' }}
+</h2>
 
         <p *ngIf="receipt.paidAt">
           Paid:
           {{ receipt.paidAt | date:'medium' }}
         </p>
+        <p *ngIf="receipt.paymentStatus">
+  Payment Status:
+  <strong>{{ receipt.paymentStatus }}</strong>
+</p>
 
         <button
           type="button"
@@ -97,37 +100,160 @@ import { ReceiptResponse }
 
     </div>
   `,
-  styles: [`
-    .page {
-      padding:40px 16px;
-      min-height:100vh;
-      background:#f5f7fb;
+styles: [`
+  .page {
+    min-height: 100vh;
+    padding: 40px 16px;
+
+    background: #f4f6fa;
+  }
+
+  .receipt {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 36px;
+
+    background: #ffffff;
+    color: #111827;
+
+    border-radius: 18px;
+
+    box-shadow:
+      0 10px 35px
+      rgba(0, 0, 0, 0.10);
+  }
+
+  h1 {
+    margin: 0 0 24px;
+
+    color: #111827;
+
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  h2 {
+    margin-top: 22px;
+
+    color: #111827;
+
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 10px 0;
+
+    color: #4b5563;
+
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  p strong {
+    color: #111827;
+  }
+
+  hr {
+    margin: 22px 0;
+
+    border: none;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  button {
+    display: inline-block;
+
+    margin-top: 22px;
+    margin-right: 12px;
+    padding: 12px 18px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+  }
+
+  a {
+    display: inline-block;
+
+    margin-top: 22px;
+    padding: 12px 18px;
+
+    border-radius: 9px;
+
+    background: #059669;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  a:hover {
+    background: #047857;
+
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 600px) {
+    .receipt {
+      padding: 24px;
     }
 
-    .receipt {
-      max-width:650px;
-      margin:auto;
-      background:white;
-      padding:35px;
-      border-radius:16px;
+    h1 {
+      font-size: 25px;
     }
 
     button,
     a {
-      margin:15px 10px 0 0;
+      width: 100%;
+      margin-right: 0;
+      text-align: center;
+    }
+  }
+
+  @media print {
+    .page {
+      padding: 0;
+      background: #ffffff;
     }
 
-    @media print {
-      button,
-      a {
-        display:none;
-      }
+    .receipt {
+      max-width: none;
 
-      .page {
-        background:white;
-      }
+      box-shadow: none;
+
+      border-radius: 0;
     }
-  `]
+
+    button,
+    a {
+      display: none;
+    }
+  }
+`]
 })
 export class ReceiptComponent
   implements OnInit {
@@ -169,4 +295,12 @@ export class ReceiptComponent
   printReceipt(): void {
     window.print();
   }
+  get receiptTotal(): number {
+
+  return Number(
+    this.receipt?.amountPaid ??
+    this.receipt?.totalAmount ??
+    0
+  );
+}
 }
