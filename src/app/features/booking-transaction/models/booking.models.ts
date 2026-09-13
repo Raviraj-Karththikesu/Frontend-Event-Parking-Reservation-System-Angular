@@ -25,7 +25,9 @@ export interface CreateBookingRequest {
 }
 
 export interface BookingResponse {
-  id: number;
+  id?: number;
+  bookingId?: number;
+
   bookingNumber: string;
 
   customerId: number;
@@ -37,9 +39,15 @@ export interface BookingResponse {
 
   holdExpiresAt?: string | null;
 
+  remainingHoldSeconds?: number;
+
   totalAmount?: number;
 
   createdAt?: string;
+
+  seatIds?: number[];
+
+  parkingSlotId?: number | null;
 
   seats?: SelectedSeat[];
 

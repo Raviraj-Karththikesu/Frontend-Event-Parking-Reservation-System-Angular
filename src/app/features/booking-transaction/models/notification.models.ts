@@ -1,7 +1,11 @@
 export interface NotificationResponse {
-  id: number;
+  id?: number;
+
+  notificationId?: number;
 
   customerId: number;
+
+  type?: string;
 
   title?: string;
 

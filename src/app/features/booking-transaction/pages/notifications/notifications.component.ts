@@ -164,24 +164,44 @@ export class NotificationsComponent
   }
 
   markRead(
-    item: NotificationResponse
-  ): void {
+  item: NotificationResponse
+): void {
 
-    this.notificationService
-      .markAsRead(item.id)
-      .subscribe({
+  const notificationId =
+    item.id ??
+    item.notificationId;
 
-        next: () => {
-          item.isRead = true;
-        },
+  if (!notificationId) {
 
-        error: err => {
+    alert(
+      'Notification ID was not found.'
+    );
 
-          alert(
-            err?.error?.message ??
-            'Unable to update notification.'
-          );
-        }
-      });
+    return;
   }
+
+  this.notificationService
+    .markAsRead(notificationId)
+    .subscribe({
+
+      next: () => {
+
+        item.isRead = true;
+      },
+
+      error: err => {
+
+        console.error(
+          'Mark notification as read failed:',
+          err
+        );
+
+        alert(
+          err?.error?.message ??
+          err?.error?.title ??
+          'Unable to update notification.'
+        );
+      }
+    });
+}
 }

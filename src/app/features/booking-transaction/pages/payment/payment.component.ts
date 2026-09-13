@@ -78,38 +78,124 @@ import { PaymentInfo }
 
     </div>
   `,
-  styles: [`
-    .page {
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      background:#f5f7fb;
-      padding:20px;
+styles: [`
+  .page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+
+    padding: 24px;
+
+    background: #f4f6fa;
+  }
+
+  .card {
+    width: min(500px, 100%);
+
+    padding: 36px 32px;
+
+    background: #ffffff;
+    color: #111827;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    box-shadow:
+      0 10px 35px
+      rgba(0, 0, 0, 0.10);
+  }
+
+  h1 {
+    margin: 0 0 20px;
+
+    color: #111827;
+
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 10px 0;
+
+    color: #4b5563;
+
+    font-size: 16px;
+  }
+
+  .amount {
+    margin: 28px 0;
+
+    color: #111827;
+
+    font-size: 36px;
+    font-weight: 800;
+  }
+
+  button {
+    width: 100%;
+
+    margin-top: 24px;
+    padding: 14px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  button:hover:not(:disabled) {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+  }
+
+  button:disabled {
+    background: #9ca3af;
+    color: #f9fafb;
+
+    cursor: not-allowed;
+
+    opacity: 0.75;
+  }
+
+  .error {
+    margin-top: 18px;
+    padding: 12px 14px;
+
+    background: #fee2e2;
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      padding: 28px 22px;
     }
 
-    .card {
-      width:min(500px,100%);
-      background:white;
-      padding:30px;
-      border-radius:16px;
-      text-align:center;
+    h1 {
+      font-size: 25px;
     }
 
     .amount {
-      font-size:32px;
-      font-weight:bold;
-      margin:25px 0;
+      font-size: 30px;
     }
-
-    button {
-      width:100%;
-      padding:14px;
-    }
-
-    .error {
-      color:#b00020;
-    }
-  `]
+  }
+`]
 })
 export class PaymentComponent
   implements OnInit {
