@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import {
+  Routes
+} from '@angular/router';
 
 import {
   authRoutes
@@ -20,10 +22,27 @@ import {
 } from './routes/system.routes';
 
 export const routes: Routes = [
+  // Authentication pages use their own
+  // full-screen layout.
   ...authRoutes,
-  ...customerRoutes,
-  ...eventRoutes,
-  ...reservationRoutes,
-  ...bookingRoutes,
-  ...systemRoutes
+
+  // All application pages use the shared
+  // Navbar, main content area and Footer.
+  {
+    path: '',
+    loadComponent: () =>
+      import(
+        './shared/layouts/app-shell/app-shell.component'
+      ).then(
+        component =>
+          component.AppShellComponent
+      ),
+    children: [
+      ...eventRoutes,
+      ...customerRoutes,
+      ...reservationRoutes,
+      ...bookingRoutes,
+      ...systemRoutes
+    ]
+  }
 ];

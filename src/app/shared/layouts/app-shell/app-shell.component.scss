@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.app-content {
+  position: relative;
+  flex: 1 0 auto;
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 2000;
+  padding: 0.7rem 1rem;
+  color: #020617;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+  background: #22d3ee;
+  border-radius: 10px;
+  box-shadow:
+    0 10px 30px rgba(2, 6, 23, 0.3);
+  transform: translateY(-160%);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+app-navbar,
+app-footer {
+  display: block;
+  flex-shrink: 0;
+}

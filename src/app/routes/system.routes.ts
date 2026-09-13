@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import {
+  Routes
+} from '@angular/router';
 
 import {
   authGuard
@@ -7,18 +9,21 @@ import {
 export const systemRoutes: Routes = [
   {
     path: 'forbidden',
-    canActivate: [authGuard],
+    canActivate: [
+      authGuard
+    ],
     loadComponent: () =>
       import(
         '../shared/pages/forbidden/forbidden.component'
       ).then(
-        component => component.ForbiddenComponent
+        component =>
+          component.ForbiddenComponent
       ),
     title: 'Access Denied | Event Parking'
   },
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'events',
     pathMatch: 'full'
   },
   {
@@ -27,7 +32,8 @@ export const systemRoutes: Routes = [
       import(
         '../shared/pages/not-found/not-found.component'
       ).then(
-        component => component.NotFoundComponent
+        component =>
+          component.NotFoundComponent
       ),
     title: 'Page Not Found | Event Parking'
   }

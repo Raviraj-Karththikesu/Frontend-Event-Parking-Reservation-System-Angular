@@ -1,0 +1,276 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: block;
+}
+
+.site-header {
+  color: #f8fafc;
+  background: #020817;
+  border-bottom: 1px solid #1e293b;
+  box-shadow: 0 8px 24px rgb(2 8 23 / 18%);
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: min(100% - 3rem, 1440px);
+  min-height: 76px;
+  margin: 0 auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo,
+.user-avatar {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  font-weight: 800;
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  color: #02111d;
+  background: #22d3ee;
+  border-radius: 13px;
+  box-shadow: 0 8px 22px rgb(34 211 238 / 22%);
+}
+
+.brand-text {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.brand-text span {
+  color: #22d3ee;
+}
+
+.desktop-navigation {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.desktop-navigation a {
+  padding: 0.65rem 0.8rem;
+  color: #94a3b8;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 9px;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.desktop-navigation a:hover,
+.desktop-navigation a.active {
+  color: #f8fafc;
+  background: #172033;
+}
+
+.desktop-navigation a.active {
+  box-shadow: inset 0 -2px #22d3ee;
+}
+
+.desktop-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.login-link,
+.register-link,
+.logout-button {
+  padding: 0.68rem 1rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+.login-link {
+  color: #cbd5e1;
+}
+
+.login-link:hover {
+  color: #22d3ee;
+}
+
+.register-link {
+  color: #02111d;
+  background: #22d3ee;
+}
+
+.register-link:hover {
+  background: #67e8f9;
+}
+
+.user-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 10px;
+}
+
+.user-summary:hover {
+  background: #111c30;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  color: #082f49;
+  background: #67e8f9;
+  border-radius: 50%;
+}
+
+.user-details {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.user-name {
+  overflow: hidden;
+  max-width: 135px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-role {
+  color: #7dd3fc;
+  font-size: 0.72rem;
+}
+
+.logout-button {
+  color: #fda4af;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #4c1d2c;
+}
+
+.logout-button:hover {
+  color: #fff;
+  background: #be123c;
+  border-color: #be123c;
+}
+
+.mobile-menu-button {
+  display: none;
+  width: 42px;
+  height: 42px;
+  margin-left: auto;
+  color: #e2e8f0;
+  cursor: pointer;
+  background: #111c30;
+  border: 1px solid #26344d;
+  border-radius: 10px;
+}
+
+.mobile-menu-button svg {
+  width: 23px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.mobile-navigation {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .navbar-container {
+    width: min(100% - 2rem, 1440px);
+  }
+
+  .desktop-navigation,
+  .desktop-actions {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .mobile-navigation {
+    display: grid;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem 1rem;
+    background: #020817;
+    border-top: 1px solid #1e293b;
+  }
+
+  .mobile-navigation a,
+  .mobile-logout-button {
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    color: #cbd5e1;
+    font: inherit;
+    font-size: 0.94rem;
+    font-weight: 600;
+    text-align: left;
+    border-radius: 9px;
+  }
+
+  .mobile-navigation a:hover,
+  .mobile-navigation a.active {
+    color: #fff;
+    background: #172033;
+  }
+
+  .mobile-primary-link {
+    color: #082f49 !important;
+    background: #22d3ee;
+  }
+
+  .mobile-user-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.35rem;
+    border: 1px solid #1e3a5f;
+  }
+
+  .mobile-logout-button {
+    color: #fda4af;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #4c1d2c;
+  }
+}
+
+@media (max-width: 520px) {
+  .navbar-container {
+    min-height: 68px;
+  }
+
+  .brand-logo {
+    width: 39px;
+    height: 39px;
+  }
+
+  .brand-text {
+    font-size: 1.05rem;
+  }
+}

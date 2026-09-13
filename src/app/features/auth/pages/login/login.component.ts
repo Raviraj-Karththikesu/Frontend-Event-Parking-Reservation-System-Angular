@@ -76,7 +76,9 @@ export class LoginComponent {
   }
 
   togglePassword(): void {
-    this.showPassword.update(value => !value);
+    this.showPassword.update(
+      value => !value
+    );
   }
 
   submit(): void {
@@ -103,7 +105,7 @@ export class LoginComponent {
               .get('returnUrl');
 
           void this.router.navigateByUrl(
-            returnUrl || '/profile'
+            this.getRedirectUrl(returnUrl)
           );
         },
         error: (
@@ -114,6 +116,24 @@ export class LoginComponent {
           );
         }
       });
+  }
+
+  private getRedirectUrl(
+    returnUrl: string | null
+  ): string {
+    const isSafeReturnUrl =
+      returnUrl?.startsWith('/') &&
+      !returnUrl.startsWith('//');
+
+    if (returnUrl && isSafeReturnUrl) {
+      return returnUrl;
+    }
+
+    if (this.authService.isAdmin()) {
+      return '/admin/dashboard';
+    }
+
+    return '/dashboard';
   }
 
   private getErrorMessage(
