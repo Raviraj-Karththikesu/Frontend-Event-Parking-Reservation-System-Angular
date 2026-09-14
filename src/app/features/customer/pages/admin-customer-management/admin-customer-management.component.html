@@ -1,290 +1,476 @@
 <section class="customer-page">
+
+  <!-- PAGE HEADER -->
   <header class="page-header">
-    <div>
-      <p class="eyebrow">
+
+    <div class="heading-copy">
+
+      <span class="eyebrow">
         ADMINISTRATION
+      </span>
+
+      <h1>
+        Customer Management
+      </h1>
+
+      <p>
+        Search customer accounts, review booking activity
+        and manage customer access across EventPark.
       </p>
 
-      <h1>Customer Management</h1>
-
-      <p class="page-description">
-        Search customer accounts, review booking activity,
-        and manage account access.
-      </p>
     </div>
 
     <button
-      class="refresh-button"
       type="button"
+      class="refresh-button"
       [disabled]="isLoading()"
-      (click)="loadCustomers()"
-    >
+      (click)="loadCustomers()">
+
+      <span
+        class="refresh-icon"
+        [class.spinning]="isLoading()">
+        ↻
+      </span>
+
       {{
         isLoading()
           ? 'Refreshing...'
           : 'Refresh'
       }}
+
     </button>
+
   </header>
 
+
+  <!-- SUMMARY -->
+  <section
+    class="summary-grid"
+    aria-label="Customer account summary">
+
+    <article class="summary-card">
+
+      <div class="summary-icon blue">
+        CU
+      </div>
+
+      <div>
+        <span>Total Customers</span>
+
+        <strong>
+          {{ totalCustomers() }}
+        </strong>
+
+        <small>
+          Registered customer accounts
+        </small>
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon green">
+        AC
+      </div>
+
+      <div>
+        <span>Active Accounts</span>
+
+        <strong>
+          {{ activeCustomers() }}
+        </strong>
+
+        <small>
+          Customers with account access
+        </small>
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon red">
+        DA
+      </div>
+
+      <div>
+        <span>Deactivated</span>
+
+        <strong>
+          {{ deactivatedCustomers() }}
+        </strong>
+
+        <small>
+          Restricted customer accounts
+        </small>
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon cyan">
+        EM
+      </div>
+
+      <div>
+        <span>Email Verified</span>
+
+        <strong>
+          {{ verifiedCustomers() }}
+        </strong>
+
+        <small>
+          Verified email addresses
+        </small>
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- SUCCESS MESSAGE -->
   @if (successMessage()) {
+
     <div
       class="message success-message"
-      role="status"
-    >
-      <span>
-        {{ successMessage() }}
+      role="status">
+
+      <span class="message-icon">
+        ✓
       </span>
+
+      <div class="message-copy">
+
+        <strong>
+          Account updated
+        </strong>
+
+        <p>
+          {{ successMessage() }}
+        </p>
+
+      </div>
 
       <button
         type="button"
+        class="message-close"
         aria-label="Dismiss success message"
-        (click)="dismissSuccessMessage()"
-      >
+        (click)="dismissSuccessMessage()">
+
         ×
+
       </button>
+
     </div>
+
   }
 
-  <section
-    class="summary-grid"
-    aria-label="Customer account summary"
-  >
-    <article class="summary-card">
-      <span class="summary-label">
-        Total Customers
-      </span>
 
-      <strong>
-        {{ totalCustomers() }}
-      </strong>
-    </article>
-
-    <article class="summary-card active-card">
-      <span class="summary-label">
-        Active Accounts
-      </span>
-
-      <strong>
-        {{ activeCustomers() }}
-      </strong>
-    </article>
-
-    <article class="summary-card deactivated-card">
-      <span class="summary-label">
-        Deactivated
-      </span>
-
-      <strong>
-        {{ deactivatedCustomers() }}
-      </strong>
-    </article>
-
-    <article class="summary-card verified-card">
-      <span class="summary-label">
-        Email Verified
-      </span>
-
-      <strong>
-        {{ verifiedCustomers() }}
-      </strong>
-    </article>
-  </section>
-
+  <!-- CUSTOMER PANEL -->
   <section class="customer-panel">
+
+    <!-- TOOLBAR -->
     <div class="panel-header">
+
       <div>
-        <h2>Customer Accounts</h2>
+
+        <span class="section-label">
+          CUSTOMER DIRECTORY
+        </span>
+
+        <h2>
+          Customer Accounts
+        </h2>
 
         <p>
-          View and manage registered customer accounts.
+          Review registered customers and manage
+          their EventPark account access.
         </p>
+
       </div>
+
 
       <form
         class="search-form"
         role="search"
-        (ngSubmit)="submitSearch()"
-      >
+        (ngSubmit)="submitSearch()">
+
         <label
-          class="visually-hidden"
-          for="customer-search"
-        >
-          Search customers
+          class="search-box"
+          for="customer-search">
+
+          <span class="search-icon">
+            ⌕
+          </span>
+
+          <input
+            id="customer-search"
+            type="search"
+            placeholder="Search name, email or phone..."
+            autocomplete="off"
+            [formControl]="searchControl">
+
         </label>
 
-        <input
-          id="customer-search"
-          type="search"
-          placeholder="Search name, email or phone"
-          autocomplete="off"
-          [formControl]="searchControl"
-        />
 
         @if (searchControl.value) {
+
           <button
             class="clear-search-button"
             type="button"
-            (click)="clearSearch()"
-          >
+            (click)="clearSearch()">
+
             Clear
+
           </button>
+
         }
+
 
         <button
           class="search-button"
           type="submit"
-          [disabled]="isLoading()"
-        >
+          [disabled]="isLoading()">
+
           Search
+
         </button>
+
       </form>
+
     </div>
 
+
+    <!-- ERROR -->
     @if (errorMessage()) {
+
       <div
-        class="panel-message error-message"
-        role="alert"
-      >
-        <p>
-          {{ errorMessage() }}
-        </p>
+        class="panel-state error-state"
+        role="alert">
+
+        <span class="state-icon">
+          !
+        </span>
+
+        <div>
+
+          <h3>
+            Unable to load customers
+          </h3>
+
+          <p>
+            {{ errorMessage() }}
+          </p>
+
+        </div>
 
         <button
           type="button"
-          (click)="loadCustomers()"
-        >
-          Try again
+          (click)="loadCustomers()">
+
+          Try Again
+
         </button>
+
       </div>
-    } @else if (isLoading()) {
+
+    }
+
+
+    <!-- LOADING -->
+    @else if (isLoading()) {
+
       <div
-        class="panel-message loading-message"
-        role="status"
-      >
+        class="panel-state loading-state"
+        role="status">
+
         <span class="spinner"></span>
 
-        <p>Loading customers...</p>
+        <div>
+
+          <h3>
+            Loading customers
+          </h3>
+
+          <p>
+            Retrieving customer account information.
+          </p>
+
+        </div>
+
       </div>
-    } @else if (customers().length === 0) {
-      <div class="panel-message empty-message">
+
+    }
+
+
+    <!-- EMPTY -->
+    @else if (customers().length === 0) {
+
+      <div class="empty-state">
+
         <div class="empty-icon">
           CU
         </div>
 
-        <h3>No customers found</h3>
+        <h3>
+          No customers found
+        </h3>
 
         <p>
-          Try another search term or clear the
-          current search.
+          Try another search term or clear
+          the current search.
         </p>
 
         @if (searchControl.value) {
+
           <button
             type="button"
-            (click)="clearSearch()"
-          >
-            Clear search
+            (click)="clearSearch()">
+
+            Clear Search
+
           </button>
+
         }
+
       </div>
-    } @else {
+
+    }
+
+
+    <!-- CUSTOMER TABLE -->
+    @else {
+
       <div class="table-container">
-        <table>
+
+        <table class="customer-table">
+
           <thead>
+
             <tr>
-              <th scope="col">
+
+              <th>
                 Customer
               </th>
 
-              <th scope="col">
+              <th>
                 Contact
               </th>
 
-              <th scope="col">
+              <th>
                 Verification
               </th>
 
-              <th scope="col">
+              <th>
                 Status
               </th>
 
-              <th scope="col">
+              <th>
                 Registered
               </th>
 
-              <th
-                class="actions-heading"
-                scope="col"
-              >
+              <th class="actions-heading">
                 Actions
               </th>
+
             </tr>
+
           </thead>
 
+
           <tbody>
+
             @for (
               customer of customers();
               track customer.customerId
             ) {
+
               <tr>
+
+                <!-- CUSTOMER -->
                 <td>
+
                   <div class="customer-identity">
+
                     <span class="customer-avatar">
+
                       {{
                         getInitials(
                           customer.fullName
                         )
                       }}
+
                     </span>
 
-                    <div>
+
+                    <div class="customer-name">
+
                       <strong>
                         {{ customer.fullName }}
                       </strong>
 
                       <span>
-                        ID:
-                        {{ customer.customerId }}
+                        Customer #{{ customer.customerId }}
                       </span>
+
                     </div>
+
                   </div>
+
                 </td>
 
-                <td>
-                  <div class="contact-details">
-                    <span>
-                      {{ customer.email }}
-                    </span>
 
-                    <small>
+                <!-- CONTACT -->
+                <td>
+
+                  <div class="contact-details">
+
+                    <strong>
+                      {{ customer.email }}
+                    </strong>
+
+                    <span>
                       {{
                         customer.phoneNumber ||
-                          'No phone number'
+                        'No phone number'
                       }}
-                    </small>
+                    </span>
+
                   </div>
+
                 </td>
 
+
+                <!-- VERIFICATION -->
                 <td>
+
                   <span
                     class="verification-badge"
-                    [class.verified]="
-                      customer.emailVerified
-                    "
-                    [class.unverified]="
-                      !customer.emailVerified
-                    "
-                  >
+                    [class.verified]="customer.emailVerified"
+                    [class.unverified]="!customer.emailVerified">
+
+                    <span class="badge-dot"></span>
+
                     {{
                       customer.emailVerified
                         ? 'Verified'
                         : 'Not verified'
                     }}
+
                   </span>
+
                 </td>
 
+
+                <!-- STATUS -->
                 <td>
+
                   <span
                     class="status-badge"
                     [class.status-active]="
@@ -292,34 +478,59 @@
                     "
                     [class.status-deactivated]="
                       !isActive(customer)
-                    "
-                  >
+                    ">
+
+                    <span class="badge-dot"></span>
+
                     {{ customer.status }}
+
                   </span>
+
                 </td>
 
+
+                <!-- REGISTERED -->
                 <td>
-                  {{
-                    customer.createdAt |
-                      date: 'mediumDate'
-                  }}
+
+                  <div class="registered-date">
+
+                    <strong>
+                      {{
+                        customer.createdAt
+                          | date:'MMM d, y'
+                      }}
+                    </strong>
+
+                    <span>
+                      {{
+                        customer.createdAt
+                          | date:'shortTime'
+                      }}
+                    </span>
+
+                  </div>
+
                 </td>
 
+
+                <!-- ACTIONS -->
                 <td>
+
                   <div class="table-actions">
+
                     <button
-                      class="view-button"
                       type="button"
-                      (click)="
-                        viewCustomer(customer)
-                      "
-                    >
+                      class="view-button"
+                      (click)="viewCustomer(customer)">
+
                       View
+
                     </button>
 
+
                     <button
-                      class="status-action-button"
                       type="button"
+                      class="status-action-button"
                       [class.deactivate-button]="
                         isActive(customer)
                       "
@@ -330,99 +541,155 @@
                         requestStatusChange(
                           customer
                         )
-                      "
-                    >
+                      ">
+
                       {{
                         isActive(customer)
                           ? 'Deactivate'
                           : 'Reactivate'
                       }}
+
                     </button>
+
                   </div>
+
                 </td>
+
               </tr>
+
             }
+
           </tbody>
+
         </table>
+
       </div>
+
     }
+
   </section>
+
 </section>
 
+
+
+<!-- =====================================================
+     CUSTOMER DETAILS MODAL
+     ===================================================== -->
 @if (isDetailsOpen()) {
+
   <div
     class="modal-backdrop"
-    (click)="closeDetails()"
-  >
+    (click)="closeDetails()">
+
     <section
       class="modal-card details-modal"
       role="dialog"
       aria-modal="true"
       aria-labelledby="customer-details-title"
-      (click)="$event.stopPropagation()"
-    >
+      (click)="$event.stopPropagation()">
+
+
       <header class="modal-header">
+
         <div>
-          <p class="eyebrow">
+
+          <span class="eyebrow">
             CUSTOMER DETAILS
-          </p>
+          </span>
 
           <h2 id="customer-details-title">
-            Account information
+            Account Information
           </h2>
+
         </div>
 
+
         <button
-          class="modal-close-button"
           type="button"
+          class="modal-close-button"
           aria-label="Close customer details"
           [disabled]="isUpdatingStatus()"
-          (click)="closeDetails()"
-        >
+          (click)="closeDetails()">
+
           ×
+
         </button>
+
       </header>
 
+
+
+      <!-- DETAILS LOADING -->
       @if (isDetailsLoading()) {
-        <div
-          class="modal-state"
-          role="status"
-        >
+
+        <div class="modal-state">
+
           <span class="spinner"></span>
 
           <p>
             Loading customer details...
           </p>
+
         </div>
-      } @else if (detailsErrorMessage()) {
-        <div
-          class="modal-state modal-error"
-          role="alert"
-        >
+
+      }
+
+
+      <!-- DETAILS ERROR -->
+      @else if (detailsErrorMessage()) {
+
+        <div class="modal-state modal-error">
+
+          <div class="state-icon">
+            !
+          </div>
+
           <p>
             {{ detailsErrorMessage() }}
           </p>
 
           <button
             type="button"
-            (click)="closeDetails()"
-          >
+            (click)="closeDetails()">
+
             Close
+
           </button>
+
         </div>
-      } @else {
+
+      }
+
+
+      <!-- DETAILS -->
+      @else {
+
         @if (
           selectedCustomer();
           as customer
         ) {
+
+          <!-- PROFILE -->
           <div class="customer-profile-header">
+
             <span class="large-avatar">
+
               {{
-                getInitials(customer.fullName)
+                getInitials(
+                  customer.fullName
+                )
               }}
+
             </span>
 
-            <div>
+
+            <div class="profile-copy">
+
+              <span class="profile-label">
+                EVENTPARK CUSTOMER
+              </span>
+
               <h3>
                 {{ customer.fullName }}
               </h3>
@@ -431,100 +698,194 @@
                 {{ customer.email }}
               </p>
 
-              <span
-                class="status-badge"
-                [class.status-active]="
-                  isActive(customer)
-                "
-                [class.status-deactivated]="
-                  !isActive(customer)
-                "
-              >
-                {{ customer.status }}
-              </span>
+
+              <div class="profile-badges">
+
+                <span
+                  class="status-badge"
+                  [class.status-active]="
+                    isActive(customer)
+                  "
+                  [class.status-deactivated]="
+                    !isActive(customer)
+                  ">
+
+                  <span class="badge-dot"></span>
+
+                  {{ customer.status }}
+
+                </span>
+
+
+                <span
+                  class="verification-badge"
+                  [class.verified]="
+                    customer.emailVerified
+                  "
+                  [class.unverified]="
+                    !customer.emailVerified
+                  ">
+
+                  {{
+                    customer.emailVerified
+                      ? 'Email Verified'
+                      : 'Email Not Verified'
+                  }}
+
+                </span>
+
+              </div>
+
             </div>
+
           </div>
 
-          <div class="detail-grid">
-            <div class="detail-item">
-              <span>Customer ID</span>
 
-              <strong>
-                {{ customer.customerId }}
-              </strong>
-            </div>
 
-            <div class="detail-item">
-              <span>Phone Number</span>
+          <!-- DETAILS GRID -->
+          <section class="detail-section">
 
-              <strong>
-                {{
-                  customer.phoneNumber ||
-                    'Not provided'
-                }}
-              </strong>
-            </div>
+            <span class="section-label">
+              ACCOUNT DETAILS
+            </span>
 
-            <div class="detail-item">
-              <span>Role</span>
+            <div class="detail-grid">
 
-              <strong>
-                {{ customer.role }}
-              </strong>
-            </div>
+              <div class="detail-item">
 
-            <div class="detail-item">
-              <span>Email Verification</span>
+                <span>
+                  Customer ID
+                </span>
 
-              <strong>
-                {{
-                  customer.emailVerified
-                    ? 'Verified'
-                    : 'Not verified'
-                }}
-              </strong>
-            </div>
+                <strong>
+                  #{{ customer.customerId }}
+                </strong>
 
-            <div class="detail-item">
-              <span>Registered</span>
+              </div>
 
-              <strong>
-                {{
-                  customer.createdAt |
-                    date: 'medium'
-                }}
-              </strong>
-            </div>
 
-            <div class="detail-item">
-              <span>Last Updated</span>
+              <div class="detail-item">
 
-              @if (customer.updatedAt) {
+                <span>
+                  Phone Number
+                </span>
+
                 <strong>
                   {{
-                    customer.updatedAt |
-                      date: 'medium'
+                    customer.phoneNumber ||
+                    'Not provided'
                   }}
                 </strong>
-              } @else {
-                <strong>
-                  Not available
-                </strong>
-              }
-            </div>
-          </div>
 
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Role
+                </span>
+
+                <strong>
+                  {{ customer.role }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Email Verification
+                </span>
+
+                <strong
+                  [class.positive-text]="
+                    customer.emailVerified
+                  ">
+
+                  {{
+                    customer.emailVerified
+                      ? 'Verified'
+                      : 'Not verified'
+                  }}
+
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Registered
+                </span>
+
+                <strong>
+                  {{
+                    customer.createdAt
+                      | date:'medium'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Last Updated
+                </span>
+
+                <strong>
+
+                  @if (customer.updatedAt) {
+
+                    {{
+                      customer.updatedAt
+                        | date:'medium'
+                    }}
+
+                  } @else {
+
+                    Not available
+
+                  }
+
+                </strong>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+
+          <!-- BOOKING SUMMARY -->
           <section class="booking-summary">
+
             <div class="section-heading">
-              <h3>Booking Summary</h3>
+
+              <span class="section-label">
+                BOOKING ACTIVITY
+              </span>
+
+              <h3>
+                Booking Summary
+              </h3>
 
               <p>
-                Booking activity for this customer.
+                Reservation activity for this customer.
               </p>
+
             </div>
 
+
             <div class="booking-summary-grid">
+
               <article>
+
                 <span>Total</span>
 
                 <strong>
@@ -533,9 +894,12 @@
                       .totalBookings
                   }}
                 </strong>
+
               </article>
 
-              <article>
+
+              <article class="pending-summary">
+
                 <span>Pending</span>
 
                 <strong>
@@ -544,9 +908,12 @@
                       .pendingBookings
                   }}
                 </strong>
+
               </article>
 
-              <article>
+
+              <article class="confirmed-summary">
+
                 <span>Confirmed</span>
 
                 <strong>
@@ -555,9 +922,12 @@
                       .confirmedBookings
                   }}
                 </strong>
+
               </article>
 
-              <article>
+
+              <article class="cancelled-summary">
+
                 <span>Cancelled</span>
 
                 <strong>
@@ -566,9 +936,12 @@
                       .cancelledBookings
                   }}
                 </strong>
+
               </article>
 
+
               <article>
+
                 <span>Expired</span>
 
                 <strong>
@@ -577,9 +950,12 @@
                       .expiredBookings
                   }}
                 </strong>
+
               </article>
 
-              <article>
+
+              <article class="upcoming-summary">
+
                 <span>Active Upcoming</span>
 
                 <strong>
@@ -588,22 +964,30 @@
                       .activeUpcomingBookings
                   }}
                 </strong>
+
               </article>
+
             </div>
+
           </section>
 
+
+
           <footer class="modal-footer">
-            <button
-              class="secondary-button"
-              type="button"
-              (click)="closeDetails()"
-            >
-              Close
-            </button>
 
             <button
-              class="status-action-button"
               type="button"
+              class="secondary-button"
+              (click)="closeDetails()">
+
+              Close
+
+            </button>
+
+
+            <button
+              type="button"
+              class="status-action-button"
               [class.deactivate-button]="
                 isActive(customer)
               "
@@ -611,85 +995,123 @@
                 !isActive(customer)
               "
               (click)="
-                requestStatusChange(customer)
-              "
-            >
+                requestStatusChange(
+                  customer
+                )
+              ">
+
               {{
                 isActive(customer)
                   ? 'Deactivate Account'
                   : 'Reactivate Account'
               }}
+
             </button>
+
           </footer>
+
         }
+
       }
+
     </section>
+
   </div>
+
 }
 
+
+
+<!-- =====================================================
+     CONFIRMATION MODAL
+     ===================================================== -->
 @if (pendingCustomer(); as customer) {
+
   <div
     class="modal-backdrop confirmation-backdrop"
-    (click)="cancelStatusChange()"
-  >
+    (click)="cancelStatusChange()">
+
     <section
       class="modal-card confirmation-modal"
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="confirmation-title"
-      (click)="$event.stopPropagation()"
-    >
+      (click)="$event.stopPropagation()">
+
       <div
         class="confirmation-icon"
         [class.reactivate-icon]="
           !isActive(customer)
-        "
-      >
+        ">
+
         !
+
       </div>
+
+
+      <span class="confirmation-label">
+        ACCOUNT ACCESS
+      </span>
+
 
       <h2 id="confirmation-title">
         {{ confirmationTitle() }}
       </h2>
 
+
       <p>
+
         @if (isActive(customer)) {
+
           This will prevent
+
           <strong>
             {{ customer.fullName }}
           </strong>
-          from signing in and creating new
-          bookings.
+
+          from signing in and creating
+          new bookings.
+
         } @else {
-          This will restore account access for
+
+          This will restore EventPark access for
+
           <strong>
             {{ customer.fullName }}
           </strong>.
+
         }
+
       </p>
 
+
       @if (actionErrorMessage()) {
-        <div
-          class="confirmation-error"
-          role="alert"
-        >
+
+        <div class="confirmation-error">
+
           {{ actionErrorMessage() }}
+
         </div>
+
       }
 
+
       <div class="confirmation-actions">
-        <button
-          class="secondary-button"
-          type="button"
-          [disabled]="isUpdatingStatus()"
-          (click)="cancelStatusChange()"
-        >
-          Cancel
-        </button>
 
         <button
-          class="confirm-button"
           type="button"
+          class="secondary-button"
+          [disabled]="isUpdatingStatus()"
+          (click)="cancelStatusChange()">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="button"
+          class="confirm-button"
           [class.confirm-deactivate]="
             isActive(customer)
           "
@@ -697,19 +1119,28 @@
             !isActive(customer)
           "
           [disabled]="isUpdatingStatus()"
-          (click)="confirmStatusChange()"
-        >
+          (click)="confirmStatusChange()">
+
           @if (isUpdatingStatus()) {
+
             Updating...
+
           } @else {
+
             {{
               isActive(customer)
                 ? 'Deactivate'
                 : 'Reactivate'
             }}
+
           }
+
         </button>
+
       </div>
+
     </section>
+
   </div>
+
 }

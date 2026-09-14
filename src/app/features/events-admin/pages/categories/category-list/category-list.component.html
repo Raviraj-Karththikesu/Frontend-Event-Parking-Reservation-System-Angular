@@ -1,109 +1,611 @@
 <section class="category-page">
 
-  <div class="page-header">
-    <div>
-      <p class="eyebrow">Administration</p>
-      <h1>Category Management</h1>
-      <p class="subtitle">
-        Manage event categories used across the system.
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+
+    <div class="heading-copy">
+
+      <span class="eyebrow">
+        ADMINISTRATION
+      </span>
+
+      <h1>
+        Category Management
+      </h1>
+
+      <p>
+        Organize EventPark events into clear categories
+        for easier discovery and administration.
       </p>
+
     </div>
 
-    <button
-      type="button"
-      class="add-btn"
-      (click)="addCategory()">
-      Add Category
-    </button>
-  </div>
 
-  @if (isLoading) {
-    <div class="state-message">
-      Loading categories...
+    <div class="header-actions">
+
+      <button
+        type="button"
+        class="refresh-btn"
+        [disabled]="isLoading"
+        (click)="loadCategories()">
+
+        <span
+          class="refresh-icon"
+          [class.spinning]="isLoading">
+          ↻
+        </span>
+
+        Refresh
+
+      </button>
+
+
+      <button
+        type="button"
+        class="add-btn"
+        (click)="addCategory()">
+
+        <span class="plus-icon">
+          +
+        </span>
+
+        Add Category
+
+      </button>
+
     </div>
+
+  </header>
+
+
+
+  <!-- SUMMARY -->
+  @if (!isLoading && !errorMessage) {
+
+    <section class="summary-grid">
+
+      <article class="summary-card">
+
+        <div class="summary-icon blue">
+          CT
+        </div>
+
+        <div>
+
+          <span>
+            Total Categories
+          </span>
+
+          <strong>
+            {{ categories.length }}
+          </strong>
+
+          <small>
+            Categories available
+          </small>
+
+        </div>
+
+      </article>
+
+
+      <article class="summary-card">
+
+        <div class="summary-icon green">
+          DS
+        </div>
+
+        <div>
+
+          <span>
+            With Description
+          </span>
+
+          <strong>
+            {{ describedCount }}
+          </strong>
+
+          <small>
+            Categories documented
+          </small>
+
+        </div>
+
+      </article>
+
+
+      <article class="summary-card">
+
+        <div class="summary-icon orange">
+          NW
+        </div>
+
+        <div>
+
+          <span>
+            Added Recently
+          </span>
+
+          <strong>
+            {{ recentCount }}
+          </strong>
+
+          <small>
+            Created in last 30 days
+          </small>
+
+        </div>
+
+      </article>
+
+
+      <article class="summary-card">
+
+        <div class="summary-icon purple">
+          LT
+        </div>
+
+        <div>
+
+          <span>
+            Latest Category
+          </span>
+
+          <strong class="summary-text">
+            {{ latestCategory?.name || '—' }}
+          </strong>
+
+          <small>
+            Most recently created
+          </small>
+
+        </div>
+
+      </article>
+
+    </section>
+
   }
 
+
+
+  <!-- SUCCESS -->
+  @if (successMessage) {
+
+    <div
+      class="message success-message"
+      role="status">
+
+      <span class="message-icon">
+        ✓
+      </span>
+
+      <div>
+
+        <strong>
+          Success
+        </strong>
+
+        <p>
+          {{ successMessage }}
+        </p>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- ERROR -->
   @if (errorMessage) {
-    <div class="state-message error-message">
-      <p>{{ errorMessage }}</p>
+
+    <div
+      class="message error-message"
+      role="alert">
+
+      <span class="message-icon">
+        !
+      </span>
+
+      <div class="message-copy">
+
+        <strong>
+          Unable to complete request
+        </strong>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+
+      </div>
+
 
       <button
         type="button"
         class="retry-btn"
         (click)="loadCategories()">
-        Retry
+
+        Try Again
+
       </button>
+
     </div>
+
   }
 
-  @if (!isLoading && !errorMessage && categories.length === 0) {
-    <div class="state-message">
-      No categories found.
-    </div>
+
+
+  <!-- LOADING -->
+  @if (isLoading) {
+
+    <section class="loading-card">
+
+      <div class="spinner"></div>
+
+      <div>
+
+        <h2>
+          Loading categories
+        </h2>
+
+        <p>
+          Retrieving the latest category information.
+        </p>
+
+      </div>
+
+    </section>
+
   }
 
-  @if (!isLoading && !errorMessage && categories.length > 0) {
 
-    <div class="table-wrapper">
 
-      <table>
+  <!-- MANAGEMENT AREA -->
+  @if (!isLoading && !errorMessage) {
 
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Category Name</th>
-            <th>Description</th>
-            <th>Created</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+    <section class="management-card">
 
-        <tbody>
 
-          @for (category of categories; track category.id; let i = $index) {
+      <!-- TOOLBAR -->
+      <div class="toolbar">
 
-            <tr>
+        <div>
 
-              <td>{{ i + 1 }}</td>
+          <span class="section-label">
+            CATEGORY DIRECTORY
+          </span>
 
-              <td>
-                {{ category.name | titlecase }}
-              </td>
+          <h2>
+            Event Categories
+          </h2>
 
-              <td>
-                {{ category.description || 'No description' }}
-              </td>
+          <p>
+            Review and maintain the categories used
+            across EventPark events.
+          </p>
 
-              <td>
-                {{ category.createdAt | date:'mediumDate' }}
-              </td>
+        </div>
 
-              <td class="actions">
 
-                <button
-                  type="button"
-                  class="edit-btn"
-                  (click)="editCategory(category.id)">
-                  Edit
-                </button>
+        <div class="toolbar-actions">
 
-                <button
-                  type="button"
-                  class="delete-btn"
-                  (click)="deleteCategory(category.id)">
-                  Delete
-                </button>
+          <label
+            class="search-box"
+            for="categorySearch">
 
-              </td>
+            <span class="search-icon">
+              ⌕
+            </span>
 
-            </tr>
-          }
+            <input
+              id="categorySearch"
+              type="search"
+              [(ngModel)]="searchTerm"
+              placeholder="Search categories...">
 
-        </tbody>
+          </label>
 
-      </table>
 
-    </div>
+          <span class="result-count">
+
+            {{ filteredCategories.length }}
+
+            {{
+              filteredCategories.length === 1
+                ? 'category'
+                : 'categories'
+            }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- DATABASE EMPTY -->
+      @if (categories.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            CT
+          </div>
+
+          <h3>
+            No categories created yet
+          </h3>
+
+          <p>
+            Create your first event category to help
+            organize events across EventPark.
+          </p>
+
+          <button
+            type="button"
+            class="add-btn"
+            (click)="addCategory()">
+
+            + Create First Category
+
+          </button>
+
+        </div>
+
+      }
+
+
+
+      <!-- SEARCH EMPTY -->
+      @else if (filteredCategories.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            SR
+          </div>
+
+          <h3>
+            No matching categories
+          </h3>
+
+          <p>
+            No category matches "{{ searchTerm }}".
+            Try a different search.
+          </p>
+
+          <button
+            type="button"
+            class="clear-btn"
+            (click)="clearSearch()">
+
+            Clear Search
+
+          </button>
+
+        </div>
+
+      }
+
+
+
+      <!-- CATEGORY TABLE -->
+      @else {
+
+        <div class="table-wrapper">
+
+          <table class="category-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Category
+                </th>
+
+                <th>
+                  Description
+                </th>
+
+                <th>
+                  Created
+                </th>
+
+                <th>
+                  Information
+                </th>
+
+                <th class="actions-column">
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                category of filteredCategories;
+                track category.id
+              ) {
+
+                <tr>
+
+
+                  <!-- CATEGORY -->
+                  <td>
+
+                    <div class="category-cell">
+
+                      <div
+                        class="category-avatar"
+                        [ngClass]="
+                          getCategoryColorClass(
+                            category
+                          )
+                        ">
+
+                        {{ getCategoryInitial(category) }}
+
+                      </div>
+
+
+                      <div>
+
+                        <strong class="category-name">
+
+                          {{
+                            category.name
+                              | titlecase
+                          }}
+
+                        </strong>
+
+                        <span class="category-id">
+                          Category #{{ category.id }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- DESCRIPTION -->
+                  <td>
+
+                    <p class="description">
+
+                      {{
+                        category.description ||
+                        'No description provided.'
+                      }}
+
+                    </p>
+
+                  </td>
+
+
+
+                  <!-- CREATED -->
+                  <td>
+
+                    <div class="date-cell">
+
+                      <strong>
+
+                        {{
+                          category.createdAt
+                            | date:'MMM d, y'
+                        }}
+
+                      </strong>
+
+                      <span>
+
+                        {{
+                          category.createdAt
+                            | date:'shortTime'
+                        }}
+
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- INFORMATION -->
+                  <td>
+
+                    @if (
+                      category.description &&
+                      category.description.trim()
+                    ) {
+
+                      <span class="info-badge complete">
+
+                        <span class="badge-dot"></span>
+
+                        Documented
+
+                      </span>
+
+                    } @else {
+
+                      <span class="info-badge incomplete">
+
+                        <span class="badge-dot"></span>
+
+                        No Description
+
+                      </span>
+
+                    }
+
+                  </td>
+
+
+
+                  <!-- ACTIONS -->
+                  <td>
+
+                    <div class="actions">
+
+                      <button
+                        type="button"
+                        class="edit-btn"
+                        (click)="
+                          editCategory(
+                            category.id
+                          )
+                        ">
+
+                        Edit
+
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="delete-btn"
+                        (click)="
+                          deleteCategory(
+                            category
+                          )
+                        ">
+
+                        Delete
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </section>
+
   }
 
 </section>
