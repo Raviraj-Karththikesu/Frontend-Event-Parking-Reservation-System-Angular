@@ -4,8 +4,17 @@ import {
   Injectable,
   signal
 } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import {
+  Observable,
+  tap
+} from 'rxjs';
 
+import {
+  API_ENDPOINTS
+} from '../constants/api-endpoints';
+import {
+  APP_ROLES
+} from '../constants/app-roles';
 import {
   AuthResponse,
   CurrentUser,
@@ -16,14 +25,19 @@ import {
   ResetPasswordRequest,
   UpdateCustomerProfileRequest
 } from '../models/auth.model';
-import { ApiService } from './api.service';
+import {
+  ApiService
+} from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiService = inject(ApiService);
-  private readonly storageKey = 'eventParkingAuth';
+  private readonly apiService =
+    inject(ApiService);
+
+  private readonly storageKey =
+    'eventParkingAuth';
 
   private readonly currentUserState =
     signal<AuthResponse | null>(
@@ -44,12 +58,22 @@ export class AuthService {
       Date.now();
   });
 
+  readonly isAdmin = computed(() =>
+    this.currentUserState()?.role ===
+      APP_ROLES.admin
+  );
+
+  readonly isCustomer = computed(() =>
+    this.currentUserState()?.role ===
+      APP_ROLES.customer
+  );
+
   login(
     request: LoginRequest
   ): Observable<AuthResponse> {
     return this.apiService
       .post<AuthResponse, LoginRequest>(
-        'auth/login',
+        API_ENDPOINTS.auth.login,
         request
       )
       .pipe(
@@ -66,20 +90,20 @@ export class AuthService {
       CustomerResponse,
       RegisterCustomerRequest
     >(
-      'customers/register',
+      API_ENDPOINTS.customers.register,
       request
     );
   }
 
   getCurrentUser(): Observable<CurrentUser> {
     return this.apiService.get<CurrentUser>(
-      'auth/me'
+      API_ENDPOINTS.auth.currentUser
     );
   }
 
   getMyProfile(): Observable<CustomerResponse> {
     return this.apiService.get<CustomerResponse>(
-      'customers/me'
+      API_ENDPOINTS.customers.currentProfile
     );
   }
 
@@ -91,12 +115,13 @@ export class AuthService {
         CustomerResponse,
         UpdateCustomerProfileRequest
       >(
-        'customers/me',
+        API_ENDPOINTS.customers.currentProfile,
         request
       )
       .pipe(
         tap(profile => {
-          const session = this.currentUserState();
+          const session =
+            this.currentUserState();
 
           if (!session) {
             return;
@@ -108,7 +133,8 @@ export class AuthService {
             email: profile.email,
             role: profile.role,
             status: profile.status,
-            emailVerified: profile.emailVerified
+            emailVerified:
+              profile.emailVerified
           });
         })
       );
@@ -118,7 +144,7 @@ export class AuthService {
     token: string
   ): Observable<MessageResponse> {
     return this.apiService.get<MessageResponse>(
-      'auth/verify-email',
+      API_ENDPOINTS.auth.verifyEmail,
       { token }
     );
   }
@@ -130,7 +156,7 @@ export class AuthService {
       MessageResponse,
       { email: string }
     >(
-      'auth/resend-verification',
+      API_ENDPOINTS.auth.resendVerification,
       { email }
     );
   }
@@ -142,7 +168,7 @@ export class AuthService {
       MessageResponse,
       { email: string }
     >(
-      'auth/forgot-password',
+      API_ENDPOINTS.auth.forgotPassword,
       { email }
     );
   }
@@ -154,7 +180,7 @@ export class AuthService {
       MessageResponse,
       ResetPasswordRequest
     >(
-      'auth/reset-password',
+      API_ENDPOINTS.auth.resetPassword,
       request
     );
   }
@@ -165,8 +191,10 @@ export class AuthService {
       return null;
     }
 
-    return this.currentUserState()?.accessToken ??
-      null;
+    return (
+      this.currentUserState()?.accessToken ??
+      null
+    );
   }
 
   logout(): void {
@@ -197,17 +225,26 @@ export class AuthService {
       const user =
         JSON.parse(storedUser) as AuthResponse;
 
+      const expiresAt =
+        new Date(user.expiresAt).getTime();
+
       if (
-        new Date(user.expiresAt).getTime() <=
-        Date.now()
+        !Number.isFinite(expiresAt) ||
+        expiresAt <= Date.now()
       ) {
-        localStorage.removeItem(this.storageKey);
+        localStorage.removeItem(
+          this.storageKey
+        );
+
         return null;
       }
 
       return user;
     } catch {
-      localStorage.removeItem(this.storageKey);
+      localStorage.removeItem(
+        this.storageKey
+      );
+
       return null;
     }
   }

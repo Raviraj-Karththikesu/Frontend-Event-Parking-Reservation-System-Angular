@@ -1,0 +1,1146 @@
+<section class="customer-page">
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+
+    <div class="heading-copy">
+
+      <span class="eyebrow">
+        ADMINISTRATION
+      </span>
+
+      <h1>
+        Customer Management
+      </h1>
+
+      <p>
+        Search customer accounts, review booking activity
+        and manage customer access across EventPark.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="refresh-button"
+      [disabled]="isLoading()"
+      (click)="loadCustomers()">
+
+      <span
+        class="refresh-icon"
+        [class.spinning]="isLoading()">
+        ↻
+      </span>
+
+      {{
+        isLoading()
+          ? 'Refreshing...'
+          : 'Refresh'
+      }}
+
+    </button>
+
+  </header>
+
+
+  <!-- SUMMARY -->
+  <section
+    class="summary-grid"
+    aria-label="Customer account summary">
+
+    <article class="summary-card">
+
+      <div class="summary-icon blue">
+        CU
+      </div>
+
+      <div>
+        <span>Total Customers</span>
+
+        <strong>
+          {{ totalCustomers() }}
+        </strong>
+
+        <small>
+          Registered customer accounts
+        </small>
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon green">
+        AC
+      </div>
+
+      <div>
+        <span>Active Accounts</span>
+
+        <strong>
+          {{ activeCustomers() }}
+        </strong>
+
+        <small>
+          Customers with account access
+        </small>
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon red">
+        DA
+      </div>
+
+      <div>
+        <span>Deactivated</span>
+
+        <strong>
+          {{ deactivatedCustomers() }}
+        </strong>
+
+        <small>
+          Restricted customer accounts
+        </small>
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon cyan">
+        EM
+      </div>
+
+      <div>
+        <span>Email Verified</span>
+
+        <strong>
+          {{ verifiedCustomers() }}
+        </strong>
+
+        <small>
+          Verified email addresses
+        </small>
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- SUCCESS MESSAGE -->
+  @if (successMessage()) {
+
+    <div
+      class="message success-message"
+      role="status">
+
+      <span class="message-icon">
+        ✓
+      </span>
+
+      <div class="message-copy">
+
+        <strong>
+          Account updated
+        </strong>
+
+        <p>
+          {{ successMessage() }}
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="message-close"
+        aria-label="Dismiss success message"
+        (click)="dismissSuccessMessage()">
+
+        ×
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- CUSTOMER PANEL -->
+  <section class="customer-panel">
+
+    <!-- TOOLBAR -->
+    <div class="panel-header">
+
+      <div>
+
+        <span class="section-label">
+          CUSTOMER DIRECTORY
+        </span>
+
+        <h2>
+          Customer Accounts
+        </h2>
+
+        <p>
+          Review registered customers and manage
+          their EventPark account access.
+        </p>
+
+      </div>
+
+
+      <form
+        class="search-form"
+        role="search"
+        (ngSubmit)="submitSearch()">
+
+        <label
+          class="search-box"
+          for="customer-search">
+
+          <span class="search-icon">
+            ⌕
+          </span>
+
+          <input
+            id="customer-search"
+            type="search"
+            placeholder="Search name, email or phone..."
+            autocomplete="off"
+            [formControl]="searchControl">
+
+        </label>
+
+
+        @if (searchControl.value) {
+
+          <button
+            class="clear-search-button"
+            type="button"
+            (click)="clearSearch()">
+
+            Clear
+
+          </button>
+
+        }
+
+
+        <button
+          class="search-button"
+          type="submit"
+          [disabled]="isLoading()">
+
+          Search
+
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- ERROR -->
+    @if (errorMessage()) {
+
+      <div
+        class="panel-state error-state"
+        role="alert">
+
+        <span class="state-icon">
+          !
+        </span>
+
+        <div>
+
+          <h3>
+            Unable to load customers
+          </h3>
+
+          <p>
+            {{ errorMessage() }}
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          (click)="loadCustomers()">
+
+          Try Again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- LOADING -->
+    @else if (isLoading()) {
+
+      <div
+        class="panel-state loading-state"
+        role="status">
+
+        <span class="spinner"></span>
+
+        <div>
+
+          <h3>
+            Loading customers
+          </h3>
+
+          <p>
+            Retrieving customer account information.
+          </p>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- EMPTY -->
+    @else if (customers().length === 0) {
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          CU
+        </div>
+
+        <h3>
+          No customers found
+        </h3>
+
+        <p>
+          Try another search term or clear
+          the current search.
+        </p>
+
+        @if (searchControl.value) {
+
+          <button
+            type="button"
+            (click)="clearSearch()">
+
+            Clear Search
+
+          </button>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- CUSTOMER TABLE -->
+    @else {
+
+      <div class="table-container">
+
+        <table class="customer-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Customer
+              </th>
+
+              <th>
+                Contact
+              </th>
+
+              <th>
+                Verification
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Registered
+              </th>
+
+              <th class="actions-heading">
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              customer of customers();
+              track customer.customerId
+            ) {
+
+              <tr>
+
+                <!-- CUSTOMER -->
+                <td>
+
+                  <div class="customer-identity">
+
+                    <span class="customer-avatar">
+
+                      {{
+                        getInitials(
+                          customer.fullName
+                        )
+                      }}
+
+                    </span>
+
+
+                    <div class="customer-name">
+
+                      <strong>
+                        {{ customer.fullName }}
+                      </strong>
+
+                      <span>
+                        Customer #{{ customer.customerId }}
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- CONTACT -->
+                <td>
+
+                  <div class="contact-details">
+
+                    <strong>
+                      {{ customer.email }}
+                    </strong>
+
+                    <span>
+                      {{
+                        customer.phoneNumber ||
+                        'No phone number'
+                      }}
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- VERIFICATION -->
+                <td>
+
+                  <span
+                    class="verification-badge"
+                    [class.verified]="customer.emailVerified"
+                    [class.unverified]="!customer.emailVerified">
+
+                    <span class="badge-dot"></span>
+
+                    {{
+                      customer.emailVerified
+                        ? 'Verified'
+                        : 'Not verified'
+                    }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- STATUS -->
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [class.status-active]="
+                      isActive(customer)
+                    "
+                    [class.status-deactivated]="
+                      !isActive(customer)
+                    ">
+
+                    <span class="badge-dot"></span>
+
+                    {{ customer.status }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- REGISTERED -->
+                <td>
+
+                  <div class="registered-date">
+
+                    <strong>
+                      {{
+                        customer.createdAt
+                          | date:'MMM d, y'
+                      }}
+                    </strong>
+
+                    <span>
+                      {{
+                        customer.createdAt
+                          | date:'shortTime'
+                      }}
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- ACTIONS -->
+                <td>
+
+                  <div class="table-actions">
+
+                    <button
+                      type="button"
+                      class="view-button"
+                      (click)="viewCustomer(customer)">
+
+                      View
+
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="status-action-button"
+                      [class.deactivate-button]="
+                        isActive(customer)
+                      "
+                      [class.reactivate-button]="
+                        !isActive(customer)
+                      "
+                      (click)="
+                        requestStatusChange(
+                          customer
+                        )
+                      ">
+
+                      {{
+                        isActive(customer)
+                          ? 'Deactivate'
+                          : 'Reactivate'
+                      }}
+
+                    </button>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>
+
+
+
+<!-- =====================================================
+     CUSTOMER DETAILS MODAL
+     ===================================================== -->
+@if (isDetailsOpen()) {
+
+  <div
+    class="modal-backdrop"
+    (click)="closeDetails()">
+
+    <section
+      class="modal-card details-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="customer-details-title"
+      (click)="$event.stopPropagation()">
+
+
+      <header class="modal-header">
+
+        <div>
+
+          <span class="eyebrow">
+            CUSTOMER DETAILS
+          </span>
+
+          <h2 id="customer-details-title">
+            Account Information
+          </h2>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="modal-close-button"
+          aria-label="Close customer details"
+          [disabled]="isUpdatingStatus()"
+          (click)="closeDetails()">
+
+          ×
+
+        </button>
+
+      </header>
+
+
+
+      <!-- DETAILS LOADING -->
+      @if (isDetailsLoading()) {
+
+        <div class="modal-state">
+
+          <span class="spinner"></span>
+
+          <p>
+            Loading customer details...
+          </p>
+
+        </div>
+
+      }
+
+
+      <!-- DETAILS ERROR -->
+      @else if (detailsErrorMessage()) {
+
+        <div class="modal-state modal-error">
+
+          <div class="state-icon">
+            !
+          </div>
+
+          <p>
+            {{ detailsErrorMessage() }}
+          </p>
+
+          <button
+            type="button"
+            (click)="closeDetails()">
+
+            Close
+
+          </button>
+
+        </div>
+
+      }
+
+
+      <!-- DETAILS -->
+      @else {
+
+        @if (
+          selectedCustomer();
+          as customer
+        ) {
+
+          <!-- PROFILE -->
+          <div class="customer-profile-header">
+
+            <span class="large-avatar">
+
+              {{
+                getInitials(
+                  customer.fullName
+                )
+              }}
+
+            </span>
+
+
+            <div class="profile-copy">
+
+              <span class="profile-label">
+                EVENTPARK CUSTOMER
+              </span>
+
+              <h3>
+                {{ customer.fullName }}
+              </h3>
+
+              <p>
+                {{ customer.email }}
+              </p>
+
+
+              <div class="profile-badges">
+
+                <span
+                  class="status-badge"
+                  [class.status-active]="
+                    isActive(customer)
+                  "
+                  [class.status-deactivated]="
+                    !isActive(customer)
+                  ">
+
+                  <span class="badge-dot"></span>
+
+                  {{ customer.status }}
+
+                </span>
+
+
+                <span
+                  class="verification-badge"
+                  [class.verified]="
+                    customer.emailVerified
+                  "
+                  [class.unverified]="
+                    !customer.emailVerified
+                  ">
+
+                  {{
+                    customer.emailVerified
+                      ? 'Email Verified'
+                      : 'Email Not Verified'
+                  }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- DETAILS GRID -->
+          <section class="detail-section">
+
+            <span class="section-label">
+              ACCOUNT DETAILS
+            </span>
+
+            <div class="detail-grid">
+
+              <div class="detail-item">
+
+                <span>
+                  Customer ID
+                </span>
+
+                <strong>
+                  #{{ customer.customerId }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Phone Number
+                </span>
+
+                <strong>
+                  {{
+                    customer.phoneNumber ||
+                    'Not provided'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Role
+                </span>
+
+                <strong>
+                  {{ customer.role }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Email Verification
+                </span>
+
+                <strong
+                  [class.positive-text]="
+                    customer.emailVerified
+                  ">
+
+                  {{
+                    customer.emailVerified
+                      ? 'Verified'
+                      : 'Not verified'
+                  }}
+
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Registered
+                </span>
+
+                <strong>
+                  {{
+                    customer.createdAt
+                      | date:'medium'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="detail-item">
+
+                <span>
+                  Last Updated
+                </span>
+
+                <strong>
+
+                  @if (customer.updatedAt) {
+
+                    {{
+                      customer.updatedAt
+                        | date:'medium'
+                    }}
+
+                  } @else {
+
+                    Not available
+
+                  }
+
+                </strong>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+
+          <!-- BOOKING SUMMARY -->
+          <section class="booking-summary">
+
+            <div class="section-heading">
+
+              <span class="section-label">
+                BOOKING ACTIVITY
+              </span>
+
+              <h3>
+                Booking Summary
+              </h3>
+
+              <p>
+                Reservation activity for this customer.
+              </p>
+
+            </div>
+
+
+            <div class="booking-summary-grid">
+
+              <article>
+
+                <span>Total</span>
+
+                <strong>
+                  {{
+                    customer.bookingSummary
+                      .totalBookings
+                  }}
+                </strong>
+
+              </article>
+
+
+              <article class="pending-summary">
+
+                <span>Pending</span>
+
+                <strong>
+                  {{
+                    customer.bookingSummary
+                      .pendingBookings
+                  }}
+                </strong>
+
+              </article>
+
+
+              <article class="confirmed-summary">
+
+                <span>Confirmed</span>
+
+                <strong>
+                  {{
+                    customer.bookingSummary
+                      .confirmedBookings
+                  }}
+                </strong>
+
+              </article>
+
+
+              <article class="cancelled-summary">
+
+                <span>Cancelled</span>
+
+                <strong>
+                  {{
+                    customer.bookingSummary
+                      .cancelledBookings
+                  }}
+                </strong>
+
+              </article>
+
+
+              <article>
+
+                <span>Expired</span>
+
+                <strong>
+                  {{
+                    customer.bookingSummary
+                      .expiredBookings
+                  }}
+                </strong>
+
+              </article>
+
+
+              <article class="upcoming-summary">
+
+                <span>Active Upcoming</span>
+
+                <strong>
+                  {{
+                    customer.bookingSummary
+                      .activeUpcomingBookings
+                  }}
+                </strong>
+
+              </article>
+
+            </div>
+
+          </section>
+
+
+
+          <footer class="modal-footer">
+
+            <button
+              type="button"
+              class="secondary-button"
+              (click)="closeDetails()">
+
+              Close
+
+            </button>
+
+
+            <button
+              type="button"
+              class="status-action-button"
+              [class.deactivate-button]="
+                isActive(customer)
+              "
+              [class.reactivate-button]="
+                !isActive(customer)
+              "
+              (click)="
+                requestStatusChange(
+                  customer
+                )
+              ">
+
+              {{
+                isActive(customer)
+                  ? 'Deactivate Account'
+                  : 'Reactivate Account'
+              }}
+
+            </button>
+
+          </footer>
+
+        }
+
+      }
+
+    </section>
+
+  </div>
+
+}
+
+
+
+<!-- =====================================================
+     CONFIRMATION MODAL
+     ===================================================== -->
+@if (pendingCustomer(); as customer) {
+
+  <div
+    class="modal-backdrop confirmation-backdrop"
+    (click)="cancelStatusChange()">
+
+    <section
+      class="modal-card confirmation-modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="confirmation-title"
+      (click)="$event.stopPropagation()">
+
+      <div
+        class="confirmation-icon"
+        [class.reactivate-icon]="
+          !isActive(customer)
+        ">
+
+        !
+
+      </div>
+
+
+      <span class="confirmation-label">
+        ACCOUNT ACCESS
+      </span>
+
+
+      <h2 id="confirmation-title">
+        {{ confirmationTitle() }}
+      </h2>
+
+
+      <p>
+
+        @if (isActive(customer)) {
+
+          This will prevent
+
+          <strong>
+            {{ customer.fullName }}
+          </strong>
+
+          from signing in and creating
+          new bookings.
+
+        } @else {
+
+          This will restore EventPark access for
+
+          <strong>
+            {{ customer.fullName }}
+          </strong>.
+
+        }
+
+      </p>
+
+
+      @if (actionErrorMessage()) {
+
+        <div class="confirmation-error">
+
+          {{ actionErrorMessage() }}
+
+        </div>
+
+      }
+
+
+      <div class="confirmation-actions">
+
+        <button
+          type="button"
+          class="secondary-button"
+          [disabled]="isUpdatingStatus()"
+          (click)="cancelStatusChange()">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          type="button"
+          class="confirm-button"
+          [class.confirm-deactivate]="
+            isActive(customer)
+          "
+          [class.confirm-reactivate]="
+            !isActive(customer)
+          "
+          [disabled]="isUpdatingStatus()"
+          (click)="confirmStatusChange()">
+
+          @if (isUpdatingStatus()) {
+
+            Updating...
+
+          } @else {
+
+            {{
+              isActive(customer)
+                ? 'Deactivate'
+                : 'Reactivate'
+            }}
+
+          }
+
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+}

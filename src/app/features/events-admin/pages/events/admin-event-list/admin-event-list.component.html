@@ -1,0 +1,693 @@
+<section class="admin-events-page">
+
+  <!-- =====================================================
+       PAGE HEADER
+       ===================================================== -->
+  <header class="page-header">
+
+    <div class="page-heading">
+
+      <span class="eyebrow">
+        ADMINISTRATION
+      </span>
+
+      <h1>
+        Event Management
+      </h1>
+
+      <p>
+        Create, update and manage events, seating
+        and parking from one place.
+      </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        type="button"
+        class="refresh-btn"
+        [disabled]="isLoading"
+        (click)="loadEvents()">
+
+        <span
+          class="refresh-icon"
+          [class.spinning]="isLoading">
+          ↻
+        </span>
+
+        Refresh
+
+      </button>
+
+
+      <button
+        type="button"
+        class="add-btn"
+        (click)="addEvent()">
+
+        <span class="plus-icon">
+          +
+        </span>
+
+        Add Event
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =====================================================
+       SUMMARY CARDS
+       ===================================================== -->
+  <section
+    class="summary-grid"
+    *ngIf="!isLoading && !errorMessage">
+
+    <article class="summary-card">
+
+      <div class="summary-icon blue">
+        EV
+      </div>
+
+      <div>
+
+        <span>
+          Total Events
+        </span>
+
+        <strong>
+          {{ events.length }}
+        </strong>
+
+        <small>
+          Events in the system
+        </small>
+
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon green">
+        UP
+      </div>
+
+      <div>
+
+        <span>
+          Upcoming
+        </span>
+
+        <strong>
+          {{ upcomingCount }}
+        </strong>
+
+        <small>
+          Events yet to start
+        </small>
+
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon purple">
+        CP
+      </div>
+
+      <div>
+
+        <span>
+          Total Capacity
+        </span>
+
+        <strong>
+          {{ totalCapacity | number }}
+        </strong>
+
+        <small>
+          Combined event capacity
+        </small>
+
+      </div>
+
+    </article>
+
+
+    <article class="summary-card">
+
+      <div class="summary-icon orange">
+        Rs
+      </div>
+
+      <div>
+
+        <span>
+          Average Ticket
+        </span>
+
+        <strong class="ticket-stat">
+          LKR
+          {{ averageTicketPrice | number:'1.2-2' }}
+        </strong>
+
+        <small>
+          Average ticket price
+        </small>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       SUCCESS MESSAGE
+       ===================================================== -->
+  @if (successMessage) {
+
+    <div
+      class="message success-message"
+      role="status">
+
+      <span class="message-icon">
+        ✓
+      </span>
+
+      <div>
+
+        <strong>
+          Success
+        </strong>
+
+        <p>
+          {{ successMessage }}
+        </p>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- =====================================================
+       ERROR MESSAGE
+       ===================================================== -->
+  @if (errorMessage) {
+
+    <div
+      class="message error-message"
+      role="alert">
+
+      <span class="message-icon">
+        !
+      </span>
+
+      <div class="message-copy">
+
+        <strong>
+          Unable to complete request
+        </strong>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="retry-btn"
+        (click)="loadEvents()">
+
+        Try Again
+
+      </button>
+
+    </div>
+
+  }
+
+
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+  @if (isLoading) {
+
+    <section class="loading-card">
+
+      <div class="loading-spinner"></div>
+
+      <div>
+
+        <h2>
+          Loading events
+        </h2>
+
+        <p>
+          Retrieving the latest event information.
+        </p>
+
+      </div>
+
+    </section>
+
+  }
+
+
+
+  <!-- =====================================================
+       MAIN CONTENT
+       ===================================================== -->
+  @if (!isLoading && !errorMessage) {
+
+    <section class="management-card">
+
+
+      <!-- ===============================================
+           TOOLBAR
+           =============================================== -->
+      <div class="toolbar">
+
+        <div>
+
+          <span class="section-label">
+            EVENT CATALOGUE
+          </span>
+
+          <h2>
+            Manage Events
+          </h2>
+
+          <p>
+            Review all events and manage their
+            seats and parking configuration.
+          </p>
+
+        </div>
+
+
+        <div class="toolbar-right">
+
+          <label
+            class="search-box"
+            for="eventSearch">
+
+            <span class="search-icon">
+              ⌕
+            </span>
+
+            <input
+              id="eventSearch"
+              type="search"
+              [(ngModel)]="searchTerm"
+              placeholder="Search events...">
+
+          </label>
+
+
+          <span class="result-count">
+
+            {{ filteredEvents.length }}
+
+            {{
+              filteredEvents.length === 1
+                ? 'event'
+                : 'events'
+            }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ===============================================
+           EMPTY DATABASE
+           =============================================== -->
+      @if (events.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            EV
+          </div>
+
+          <h3>
+            No events created yet
+          </h3>
+
+          <p>
+            Create your first event to begin managing
+            seats and parking.
+          </p>
+
+          <button
+            type="button"
+            class="add-btn"
+            (click)="addEvent()">
+
+            + Create First Event
+
+          </button>
+
+        </div>
+
+      }
+
+
+
+      <!-- ===============================================
+           SEARCH EMPTY
+           =============================================== -->
+      @else if (filteredEvents.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            SR
+          </div>
+
+          <h3>
+            No matching events
+          </h3>
+
+          <p>
+            No events match "{{ searchTerm }}".
+            Try another search.
+          </p>
+
+          <button
+            type="button"
+            class="clear-btn"
+            (click)="clearSearch()">
+
+            Clear Search
+
+          </button>
+
+        </div>
+
+      }
+
+
+
+      <!-- ===============================================
+           EVENT TABLE
+           =============================================== -->
+      @else {
+
+        <div class="table-wrapper">
+
+          <table class="events-table">
+
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Event
+                </th>
+
+                <th>
+                  Venue
+                </th>
+
+                <th>
+                  Category
+                </th>
+
+                <th>
+                  Schedule
+                </th>
+
+                <th>
+                  Ticket
+                </th>
+
+                <th>
+                  Capacity
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th class="actions-heading">
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+
+            <tbody>
+
+              @for (
+                event of filteredEvents;
+                track event.id
+              ) {
+
+                <tr>
+
+
+                  <!-- EVENT -->
+                  <td>
+
+                    <div class="event-cell">
+
+                      <div class="event-avatar">
+                        {{ getEventInitial(event) }}
+                      </div>
+
+
+                      <div>
+
+                        <strong class="event-name">
+                          {{ event.name }}
+                        </strong>
+
+                        <span class="event-id">
+                          Event #{{ event.id }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- VENUE -->
+                  <td>
+
+                    <div class="venue-cell">
+
+                      <strong>
+                        {{ event.venueName }}
+                      </strong>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- CATEGORY -->
+                  <td>
+
+                    <span class="category-badge">
+
+                      {{
+                        event.categoryName
+                          | titlecase
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- SCHEDULE -->
+                  <td>
+
+                    <div class="schedule-cell">
+
+                      <strong>
+                        {{
+                          event.startDateTime
+                            | date:'MMM d, y'
+                        }}
+                      </strong>
+
+                      <span>
+                        {{
+                          event.startDateTime
+                            | date:'shortTime'
+                        }}
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- TICKET -->
+                  <td>
+
+                    <strong class="price">
+
+                      LKR
+                      {{
+                        event.ticketPrice
+                          | number:'1.2-2'
+                      }}
+
+                    </strong>
+
+                  </td>
+
+
+
+                  <!-- CAPACITY -->
+                  <td>
+
+                    <span class="capacity-value">
+
+                      {{
+                        event.capacity
+                          | number
+                      }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- STATUS -->
+                  <td>
+
+                    @if (isUpcoming(event)) {
+
+                      <span class="status-badge upcoming">
+
+                        <span class="status-dot"></span>
+
+                        Upcoming
+
+                      </span>
+
+                    } @else {
+
+                      <span class="status-badge completed">
+
+                        <span class="status-dot"></span>
+
+                        Past
+
+                      </span>
+
+                    }
+
+                  </td>
+
+
+
+                  <!-- ACTIONS -->
+                  <td>
+
+                    <div class="actions">
+
+
+                      <button
+                        type="button"
+                        class="action-btn edit-btn"
+                        (click)="editEvent(event.id)">
+
+                        Edit
+
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="action-btn manage-btn"
+                        [routerLink]="[
+                          '/admin/events',
+                          event.id,
+                          'seats'
+                        ]">
+
+                        Seats
+
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="action-btn manage-btn"
+                        [routerLink]="[
+                          '/admin/events',
+                          event.id,
+                          'parking'
+                        ]">
+
+                        Parking
+
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="action-btn delete-btn"
+                        (click)="deleteEvent(event)">
+
+                        Delete
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</section>

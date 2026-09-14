@@ -1,0 +1,566 @@
+<section class="venue-page">
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+
+    <div class="heading-copy">
+
+      <span class="eyebrow">
+        ADMINISTRATION
+      </span>
+
+      <h1>
+        Venue Management
+      </h1>
+
+      <p>
+        Manage event locations, venue capacities
+        and address information across EventPark.
+      </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        type="button"
+        class="refresh-btn"
+        [disabled]="isLoading"
+        (click)="loadVenues()">
+
+        <span
+          class="refresh-icon"
+          [class.spinning]="isLoading">
+          ↻
+        </span>
+
+        Refresh
+
+      </button>
+
+
+      <button
+        type="button"
+        class="add-btn"
+        (click)="addVenue()">
+
+        <span class="plus-icon">
+          +
+        </span>
+
+        Add Venue
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- SUMMARY -->
+  @if (!isLoading && !errorMessage) {
+
+    <section class="summary-grid">
+
+      <article class="summary-card">
+
+        <div class="summary-icon blue">
+          VN
+        </div>
+
+        <div>
+
+          <span>
+            Total Venues
+          </span>
+
+          <strong>
+            {{ venues.length }}
+          </strong>
+
+          <small>
+            Registered event locations
+          </small>
+
+        </div>
+
+      </article>
+
+
+      <article class="summary-card">
+
+        <div class="summary-icon green">
+          CP
+        </div>
+
+        <div>
+
+          <span>
+            Total Capacity
+          </span>
+
+          <strong>
+            {{ totalCapacity | number }}
+          </strong>
+
+          <small>
+            Combined venue capacity
+          </small>
+
+        </div>
+
+      </article>
+
+
+      <article class="summary-card">
+
+        <div class="summary-icon purple">
+          LG
+        </div>
+
+        <div>
+
+          <span>
+            Largest Venue
+          </span>
+
+          <strong class="summary-text">
+            {{ largestVenue?.name || '—' }}
+          </strong>
+
+          <small>
+            Highest venue capacity
+          </small>
+
+        </div>
+
+      </article>
+
+
+      <article class="summary-card">
+
+        <div class="summary-icon orange">
+          AV
+        </div>
+
+        <div>
+
+          <span>
+            Average Capacity
+          </span>
+
+          <strong>
+            {{ averageCapacity | number:'1.0-0' }}
+          </strong>
+
+          <small>
+            Average seats per venue
+          </small>
+
+        </div>
+
+      </article>
+
+    </section>
+
+  }
+
+
+
+  <!-- SUCCESS -->
+  @if (successMessage) {
+
+    <div
+      class="message success-message"
+      role="status">
+
+      <span class="message-icon">
+        ✓
+      </span>
+
+      <div>
+
+        <strong>
+          Success
+        </strong>
+
+        <p>
+          {{ successMessage }}
+        </p>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <!-- ERROR -->
+  @if (errorMessage) {
+
+    <div
+      class="message error-message"
+      role="alert">
+
+      <span class="message-icon">
+        !
+      </span>
+
+      <div class="message-copy">
+
+        <strong>
+          Unable to complete request
+        </strong>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="retry-btn"
+        (click)="loadVenues()">
+
+        Try Again
+
+      </button>
+
+    </div>
+
+  }
+
+
+
+  <!-- LOADING -->
+  @if (isLoading) {
+
+    <section class="loading-card">
+
+      <div class="spinner"></div>
+
+      <div>
+
+        <h2>
+          Loading venues
+        </h2>
+
+        <p>
+          Retrieving the latest venue information.
+        </p>
+
+      </div>
+
+    </section>
+
+  }
+
+
+
+  <!-- MAIN MANAGEMENT AREA -->
+  @if (!isLoading && !errorMessage) {
+
+    <section class="management-card">
+
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+
+        <div>
+
+          <span class="section-label">
+            VENUE DIRECTORY
+          </span>
+
+          <h2>
+            All Venues
+          </h2>
+
+          <p>
+            Review venue information and manage
+            locations available for events.
+          </p>
+
+        </div>
+
+
+        <div class="toolbar-actions">
+
+          <label
+            class="search-box"
+            for="venueSearch">
+
+            <span class="search-icon">
+              ⌕
+            </span>
+
+            <input
+              id="venueSearch"
+              type="search"
+              [(ngModel)]="searchTerm"
+              placeholder="Search venues...">
+
+          </label>
+
+
+          <span class="result-count">
+
+            {{ filteredVenues.length }}
+
+            {{
+              filteredVenues.length === 1
+                ? 'venue'
+                : 'venues'
+            }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- DATABASE EMPTY -->
+      @if (venues.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            VN
+          </div>
+
+          <h3>
+            No venues available
+          </h3>
+
+          <p>
+            Create your first venue before assigning
+            locations to events.
+          </p>
+
+          <button
+            type="button"
+            class="add-btn"
+            (click)="addVenue()">
+
+            + Create First Venue
+
+          </button>
+
+        </div>
+
+      }
+
+
+
+      <!-- SEARCH EMPTY -->
+      @else if (filteredVenues.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            SR
+          </div>
+
+          <h3>
+            No matching venues
+          </h3>
+
+          <p>
+            We couldn't find a venue matching
+            "{{ searchTerm }}".
+          </p>
+
+          <button
+            type="button"
+            class="clear-btn"
+            (click)="clearSearch()">
+
+            Clear Search
+
+          </button>
+
+        </div>
+
+      }
+
+
+
+      <!-- VENUE TABLE -->
+      @else {
+
+        <div class="table-container">
+
+          <table class="venue-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Venue
+                </th>
+
+                <th>
+                  Address
+                </th>
+
+                <th>
+                  Capacity
+                </th>
+
+                <th>
+                  Size
+                </th>
+
+                <th class="actions-column">
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                venue of filteredVenues;
+                track venue.id
+              ) {
+
+                <tr>
+
+
+                  <!-- VENUE -->
+                  <td>
+
+                    <div class="venue-cell">
+
+                      <div class="venue-avatar">
+                        {{ getVenueInitial(venue) }}
+                      </div>
+
+
+                      <div>
+
+                        <strong class="venue-name">
+                          {{ venue.name | titlecase }}
+                        </strong>
+
+                        <span class="venue-id">
+                          Venue #{{ venue.id }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- ADDRESS -->
+                  <td>
+
+                    <div class="address-cell">
+
+                      <span class="location-marker">
+                        •
+                      </span>
+
+                      <span>
+                        {{ venue.address }}
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- CAPACITY -->
+                  <td>
+
+                    <div class="capacity-cell">
+
+                      <strong>
+                        {{ venue.capacity | number }}
+                      </strong>
+
+                      <span>
+                        people
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+
+                  <!-- SIZE -->
+                  <td>
+
+                    <span
+                      class="size-badge"
+                      [ngClass]="getVenueSizeClass(venue)">
+
+                      {{ getVenueSizeLabel(venue) }}
+
+                    </span>
+
+                  </td>
+
+
+
+                  <!-- ACTIONS -->
+                  <td>
+
+                    <div class="actions">
+
+                      <button
+                        type="button"
+                        class="edit-btn"
+                        (click)="editVenue(venue.id)">
+
+                        Edit
+
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="delete-btn"
+                        (click)="deleteVenue(venue)">
+
+                        Delete
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</section>

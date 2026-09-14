@@ -1,0 +1,224 @@
+<section class="admin-seat-management">
+
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Admin Seat Management</p>
+      <h2>Manage Event Seats</h2>
+      <p class="subtitle">
+        Generate the seat map, edit seat details, and remove seats for this event.
+      </p>
+    </div>
+
+    @if (eventId !== null) {
+      <div class="event-badge">
+        Event ID: {{ eventId }}
+      </div>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <div class="message message--error" role="alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="message message--success" role="status">
+      {{ successMessage }}
+    </div>
+  }
+
+  <section class="panel">
+    <h3>Generate Seat Map</h3>
+
+    <form
+      class="form-grid"
+      [formGroup]="generateForm"
+      (ngSubmit)="generateSeatMap()"
+    >
+      <label>
+        Rows
+        <input
+          type="number"
+          formControlName="rows"
+          min="1"
+          max="100"
+        >
+      </label>
+
+      <label>
+        Columns
+        <input
+          type="number"
+          formControlName="columns"
+          min="1"
+          max="100"
+        >
+      </label>
+
+      <label>
+        Seat Type
+        <input
+          type="text"
+          formControlName="seatType"
+          placeholder="Standard"
+        >
+      </label>
+
+      <label>
+        Price
+        <input
+          type="number"
+          formControlName="price"
+          min="0"
+          step="0.01"
+        >
+      </label>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          [disabled]="isLoading"
+        >
+          Generate Seat Map
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Existing Seats</h3>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="loadSeats()"
+        [disabled]="isLoading"
+      >
+        Refresh
+      </button>
+    </div>
+
+    @if (isLoading) {
+      <div class="state-box">
+        Loading seats...
+      </div>
+    } @else if (seats.length === 0) {
+      <div class="state-box">
+        No seats available for this event.
+      </div>
+    } @else {
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Seat Number</th>
+              <th>Row</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (seat of seats; track seat.id) {
+              <tr>
+                <td>{{ seat.id }}</td>
+                <td>{{ seat.seatNumber }}</td>
+                <td>{{ seat.rowLabel }}</td>
+                <td>{{ seat.seatType }}</td>
+                <td>LKR {{ seat.price }}</td>
+                <td>{{ seat.status }}</td>
+                <td class="actions-cell">
+                  <button
+                    type="button"
+                    class="secondary-button"
+                    (click)="startEdit(seat)"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    class="danger-button"
+                    (click)="deleteSeat(seat)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  @if (editingSeatId !== null) {
+    <section class="panel">
+      <h3>Edit Seat</h3>
+
+      <form
+        class="form-grid"
+        [formGroup]="editForm"
+        (ngSubmit)="saveSeat()"
+      >
+        <label>
+          Seat Number
+          <input
+            type="text"
+            formControlName="seatNumber"
+          >
+        </label>
+
+        <label>
+          Row Label
+          <input
+            type="text"
+            formControlName="rowLabel"
+          >
+        </label>
+
+        <label>
+          Seat Type
+          <input
+            type="text"
+            formControlName="seatType"
+          >
+        </label>
+
+        <label>
+          Price
+          <input
+            type="number"
+            formControlName="price"
+            min="0"
+            step="0.01"
+          >
+        </label>
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            [disabled]="isLoading"
+          >
+            Save Changes
+          </button>
+
+          <button
+            type="button"
+            class="secondary-button"
+            (click)="cancelEdit()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+</section>

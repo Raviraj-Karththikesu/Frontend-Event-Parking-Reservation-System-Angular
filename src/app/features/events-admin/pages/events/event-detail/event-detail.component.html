@@ -1,0 +1,506 @@
+<div class="event-details-page">
+
+  <!-- LOADING -->
+  <div
+    class="state-wrapper"
+    *ngIf="isLoading">
+
+    <div class="loading-spinner"></div>
+
+    <h2>Loading event</h2>
+
+    <p>
+      Please wait while we retrieve the event information.
+    </p>
+
+  </div>
+
+
+  <!-- ERROR -->
+  <div
+    class="state-wrapper error-state"
+    *ngIf="!isLoading && errorMessage">
+
+    <div class="state-icon">
+      !
+    </div>
+
+    <h2>
+      Unable to load event
+    </h2>
+
+    <p>
+      {{ errorMessage }}
+    </p>
+
+    <button
+      type="button"
+      class="outline-button"
+      (click)="backToEvents()">
+
+      ← Back to Events
+
+    </button>
+
+  </div>
+
+
+  <!-- EVENT -->
+  <ng-container
+    *ngIf="!isLoading && !errorMessage && event">
+
+
+    <!-- ==============================
+         HERO
+         ============================== -->
+    <section
+      class="event-hero"
+      [style.backgroundImage]="
+        'linear-gradient(90deg, rgba(2,6,23,.92), rgba(2,6,23,.55), rgba(2,6,23,.25)), url('
+        + getEventImage()
+        + ')'
+      ">
+
+      <div class="hero-overlay"></div>
+
+
+      <div class="hero-container">
+
+        <button
+          type="button"
+          class="back-button"
+          (click)="backToEvents()">
+
+          <span>←</span>
+          Back to Events
+
+        </button>
+
+
+        <div class="hero-content">
+
+          <span class="category-badge">
+            {{ event.categoryName || 'EVENT' }}
+          </span>
+
+
+          <h1>
+            {{ event.name }}
+          </h1>
+
+
+          <p
+            class="hero-description"
+            *ngIf="event.description">
+
+            {{ event.description }}
+
+          </p>
+
+
+          <div class="hero-meta">
+
+            <div class="hero-meta-item">
+
+              <span class="meta-label">
+                VENUE
+              </span>
+
+              <strong>
+                {{ event.venueName }}
+              </strong>
+
+            </div>
+
+
+            <div class="hero-meta-item">
+
+              <span class="meta-label">
+                DATE
+              </span>
+
+              <strong>
+                {{ event.startDateTime | date:'MMM d, y' }}
+              </strong>
+
+            </div>
+
+
+            <div class="hero-meta-item">
+
+              <span class="meta-label">
+                START TIME
+              </span>
+
+              <strong>
+                {{ event.startDateTime | date:'shortTime' }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ==============================
+         PAGE CONTENT
+         ============================== -->
+    <main class="details-container">
+
+
+      <!-- LEFT -->
+      <div class="main-column">
+
+
+        <!-- ABOUT -->
+        <section class="content-card">
+
+          <span class="section-eyebrow">
+            ABOUT
+          </span>
+
+          <h2>
+            About this event
+          </h2>
+
+
+          <p class="about-text">
+
+            {{
+              event.description ||
+              'Join us for this exciting event. Reserve your seat and optional parking space securely through EventPark.'
+            }}
+
+          </p>
+
+        </section>
+
+
+
+        <!-- EVENT INFORMATION -->
+        <section class="content-card">
+
+          <div class="section-header">
+
+            <div>
+
+              <span class="section-eyebrow">
+                EVENT INFORMATION
+              </span>
+
+              <h2>
+                Event details
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <div class="information-grid">
+
+
+            <!-- START -->
+            <article class="info-box">
+
+              <div class="info-icon">
+                ST
+              </div>
+
+              <div>
+
+                <span>
+                  Start Date & Time
+                </span>
+
+                <strong>
+                  {{
+                    event.startDateTime
+                      | date:'medium'
+                  }}
+                </strong>
+
+              </div>
+
+            </article>
+
+
+            <!-- END -->
+            <article class="info-box">
+
+              <div class="info-icon">
+                EN
+              </div>
+
+              <div>
+
+                <span>
+                  End Date & Time
+                </span>
+
+                <strong>
+                  {{
+                    event.endDateTime
+                      | date:'medium'
+                  }}
+                </strong>
+
+              </div>
+
+            </article>
+
+
+            <!-- VENUE -->
+            <article class="info-box">
+
+              <div class="info-icon">
+                VN
+              </div>
+
+              <div>
+
+                <span>
+                  Venue
+                </span>
+
+                <strong>
+                  {{ event.venueName }}
+                </strong>
+
+              </div>
+
+            </article>
+
+
+            <!-- CAPACITY -->
+            <article class="info-box">
+
+              <div class="info-icon">
+                CP
+              </div>
+
+              <div>
+
+                <span>
+                  Event Capacity
+                </span>
+
+                <strong>
+                  {{ event.capacity }}
+                  guests
+                </strong>
+
+              </div>
+
+            </article>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- PRICING -->
+        <section class="content-card">
+
+          <span class="section-eyebrow">
+            PRICING
+          </span>
+
+          <h2>
+            Tickets & parking
+          </h2>
+
+
+          <div class="pricing-grid">
+
+
+            <article class="price-card">
+
+              <div>
+
+                <span class="price-type">
+                  EVENT TICKET
+                </span>
+
+                <h3>
+                  General admission
+                </h3>
+
+                <p>
+                  Seat reservation for this event.
+                </p>
+
+              </div>
+
+
+              <strong class="price-value">
+
+                LKR
+                {{
+                  event.ticketPrice
+                    | number:'1.2-2'
+                }}
+
+              </strong>
+
+            </article>
+
+
+            <article class="price-card">
+
+              <div>
+
+                <span class="price-type">
+                  PARKING
+                </span>
+
+                <h3>
+                  Parking reservation
+                </h3>
+
+                <p>
+                  Optional parking space reservation.
+                </p>
+
+              </div>
+
+
+              <strong class="price-value">
+
+                LKR
+                {{
+                  event.parkingFee
+                    | number:'1.2-2'
+                }}
+
+              </strong>
+
+            </article>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+
+      <!-- RIGHT BOOKING PANEL -->
+      <aside class="booking-column">
+
+        <div class="booking-card">
+
+
+          <span class="booking-label">
+            RESERVATION
+          </span>
+
+
+          <h2>
+            Book this event
+          </h2>
+
+
+          <p class="booking-description">
+            Select your seats and parking space
+            in the next steps.
+          </p>
+
+
+          <div class="booking-summary">
+
+
+            <div class="summary-row">
+
+              <span>
+                Event
+              </span>
+
+              <strong>
+                {{ event.name }}
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Ticket from
+              </span>
+
+              <strong>
+                LKR
+                {{
+                  event.ticketPrice
+                    | number:'1.2-2'
+                }}
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Parking
+              </span>
+
+              <strong>
+                LKR
+                {{
+                  event.parkingFee
+                    | number:'1.2-2'
+                }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="book-button"
+            (click)="bookEvent()">
+
+            <span>
+              Book This Event
+            </span>
+
+            <span class="arrow">
+              →
+            </span>
+
+          </button>
+
+
+          <div class="booking-note">
+
+            <div class="note-icon">
+              ✓
+            </div>
+
+            <p>
+              Seat availability will be confirmed
+              during the reservation process.
+            </p>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </main>
+
+  </ng-container>
+
+</div>

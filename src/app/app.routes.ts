@@ -1,81 +1,48 @@
-import { Routes } from '@angular/router';
+import {
+  Routes
+} from '@angular/router';
 
 import {
-  authGuard
-} from './core/guards/auth.guard';
+  authRoutes
+} from './routes/auth.routes';
+import {
+  bookingRoutes
+} from './routes/booking.routes';
+import {
+  customerRoutes
+} from './routes/customer.routes';
+import {
+  eventRoutes
+} from './routes/events.routes';
+import {
+  reservationRoutes
+} from './routes/reservations.routes';
+import {
+  systemRoutes
+} from './routes/system.routes';
 
 export const routes: Routes = [
-  {
-    path: 'login',
-    loadComponent: () =>
-      import(
-        './features/auth/pages/login/login.component'
-      ).then(
-        component => component.LoginComponent
-      ),
-    title: 'Login | Event Parking'
-  },
-  {
-    path: 'register',
-    loadComponent: () =>
-      import(
-        './features/auth/pages/register/register.component'
-      ).then(
-        component => component.RegisterComponent
-      ),
-    title: 'Register | Event Parking'
-  },
-  {
-    path: 'forgot-password',
-    loadComponent: () =>
-      import(
-        './features/auth/pages/forgot-password/forgot-password.component'
-      ).then(
-        component =>
-          component.ForgotPasswordComponent
-      ),
-    title: 'Forgot Password | Event Parking'
-  },
-  {
-    path: 'reset-password',
-    loadComponent: () =>
-      import(
-        './features/auth/pages/reset-password/reset-password.component'
-      ).then(
-        component =>
-          component.ResetPasswordComponent
-      ),
-    title: 'Reset Password | Event Parking'
-  },
-  {
-    path: 'verify-email',
-    loadComponent: () =>
-      import(
-        './features/auth/pages/verify-email/verify-email.component'
-      ).then(
-        component =>
-          component.VerifyEmailComponent
-      ),
-    title: 'Verify Email | Event Parking'
-  },
-  {
-    path: 'profile',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import(
-        './features/customer/pages/profile/profile.component'
-      ).then(
-        component => component.ProfileComponent
-      ),
-    title: 'My Profile | Event Parking'
-  },
+  // Authentication pages use their own
+  // full-screen layout.
+  ...authRoutes,
+
+  // All application pages use the shared
+  // Navbar, main content area and Footer.
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: 'login'
+    loadComponent: () =>
+      import(
+        './shared/layouts/app-shell/app-shell.component'
+      ).then(
+        component =>
+          component.AppShellComponent
+      ),
+    children: [
+      ...eventRoutes,
+      ...customerRoutes,
+      ...reservationRoutes,
+      ...bookingRoutes,
+      ...systemRoutes
+    ]
   }
 ];

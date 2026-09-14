@@ -1,0 +1,639 @@
+<section class="category-form-page">
+
+  <div class="page-container">
+
+
+    <!-- ==========================================
+         PAGE HEADER
+         ========================================== -->
+    <header class="page-header">
+
+      <div class="heading-copy">
+
+        <button
+          type="button"
+          class="back-link"
+          (click)="goBack()">
+
+          <span>←</span>
+          Categories
+
+        </button>
+
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+
+        <h1>
+          {{
+            isEditMode
+              ? 'Edit Category'
+              : 'Create Category'
+          }}
+        </h1>
+
+
+        <p>
+          {{
+            isEditMode
+              ? 'Update the event category information used across EventPark.'
+              : 'Create a category to organise events and improve event discovery.'
+          }}
+        </p>
+
+      </div>
+
+
+      <div class="header-status">
+
+        <span class="status-dot"></span>
+
+        {{
+          isEditMode
+            ? 'Editing Category'
+            : 'New Category'
+        }}
+
+      </div>
+
+    </header>
+
+
+
+    <!-- ==========================================
+         LOADING
+         ========================================== -->
+    @if (isLoading) {
+
+      <section class="loading-card">
+
+        <div class="spinner"></div>
+
+        <div>
+
+          <h2>
+            Loading category
+          </h2>
+
+          <p>
+            Retrieving the latest category details.
+          </p>
+
+        </div>
+
+      </section>
+
+    }
+
+
+
+    <!-- ==========================================
+         SUCCESS
+         ========================================== -->
+    @if (successMessage) {
+
+      <div
+        class="message success-message"
+        role="status">
+
+        <span class="message-icon">
+          ✓
+        </span>
+
+        <div>
+
+          <strong>
+            Success
+          </strong>
+
+          <p>
+            {{ successMessage }}
+          </p>
+
+        </div>
+
+      </div>
+
+    }
+
+
+
+    <!-- ==========================================
+         ERROR
+         ========================================== -->
+    @if (errorMessage) {
+
+      <div
+        class="message error-message"
+        role="alert">
+
+        <span class="message-icon">
+          !
+        </span>
+
+        <div>
+
+          <strong>
+            Unable to complete request
+          </strong>
+
+          <p>
+            {{ errorMessage }}
+          </p>
+
+        </div>
+
+      </div>
+
+    }
+
+
+
+    <!-- ==========================================
+         CONTENT
+         ========================================== -->
+    @if (!isLoading) {
+
+      <div class="content-grid">
+
+
+        <!-- ======================================
+             FORM
+             ====================================== -->
+        <section class="form-card">
+
+          <div class="card-heading">
+
+            <div class="heading-icon">
+              CT
+            </div>
+
+            <div>
+
+              <span class="section-label">
+                CATEGORY DETAILS
+              </span>
+
+              <h2>
+                {{
+                  isEditMode
+                    ? 'Update category information'
+                    : 'Category information'
+                }}
+              </h2>
+
+              <p>
+                Enter a clear category name and
+                an optional description.
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <form
+            #categoryForm="ngForm"
+            (ngSubmit)="submit(categoryForm)"
+            novalidate>
+
+
+            <!-- CATEGORY NAME -->
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label for="name">
+                  Category Name
+                </label>
+
+
+                <span class="required-label">
+                  Required
+                </span>
+
+              </div>
+
+
+              <div
+                class="input-shell"
+                [class.invalid-input]="
+                  name.invalid &&
+                  name.touched
+                ">
+
+                <span class="input-icon">
+                  C
+                </span>
+
+
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  [(ngModel)]="category.name"
+                  #name="ngModel"
+                  required
+                  maxlength="100"
+                  autocomplete="off"
+                  placeholder="Example: Music, Sports, Conference">
+
+              </div>
+
+
+              <div class="field-footer">
+
+                <div>
+
+                  @if (
+                    name.invalid &&
+                    name.touched
+                  ) {
+
+                    <div class="validation-message">
+
+                      @if (
+                        name.errors?.['required']
+                      ) {
+
+                        <span>
+                          Category name is required.
+                        </span>
+
+                      }
+
+
+                      @if (
+                        name.errors?.['maxlength']
+                      ) {
+
+                        <span>
+                          Category name must not exceed
+                          100 characters.
+                        </span>
+
+                      }
+
+                    </div>
+
+                  } @else {
+
+                    <span class="field-hint">
+                      Choose a short and meaningful
+                      event category name.
+                    </span>
+
+                  }
+
+                </div>
+
+
+                <span class="character-count">
+
+                {{ category.name.length }}/100
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label for="description">
+                  Description
+                </label>
+
+
+                <span class="optional-label">
+                  Optional
+                </span>
+
+              </div>
+
+
+              <div
+                class="textarea-shell"
+                [class.invalid-input]="
+                  description.invalid &&
+                  description.touched
+                ">
+
+                <textarea
+                  id="description"
+                  name="description"
+                  [(ngModel)]="category.description"
+                  #description="ngModel"
+                  maxlength="500"
+                  rows="7"
+                  placeholder="Describe what type of events belong to this category...">
+                </textarea>
+
+              </div>
+
+
+              <div class="field-footer">
+
+                <div>
+
+                  @if (
+                    description.invalid &&
+                    description.touched
+                  ) {
+
+                    <div class="validation-message">
+
+                      @if (
+                        description.errors?.['maxlength']
+                      ) {
+
+                        <span>
+                          Description must not exceed
+                          500 characters.
+                        </span>
+
+                      }
+
+                    </div>
+
+                  } @else {
+
+                    <span class="field-hint">
+                      Help administrators understand
+                      when this category should be used.
+                    </span>
+
+                  }
+
+                </div>
+
+
+                <span class="character-count">
+
+                  {{
+                    category.description?.length || 0
+                  }}/500
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- FORM ACTIONS -->
+            <div class="form-actions">
+
+              <button
+                type="button"
+                class="cancel-btn"
+                [disabled]="isSubmitting"
+                (click)="goBack()">
+
+                Cancel
+
+              </button>
+
+
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="
+                  isSubmitting ||
+                  isLoading
+                ">
+
+                @if (isSubmitting) {
+
+                  <span class="button-spinner"></span>
+
+                  <span>
+                    {{
+                      isEditMode
+                        ? 'Updating Category...'
+                        : 'Creating Category...'
+                    }}
+                  </span>
+
+                } @else {
+
+                  <span>
+                    {{
+                      isEditMode
+                        ? 'Update Category'
+                        : 'Create Category'
+                    }}
+                  </span>
+
+                  <span class="button-arrow">
+                    →
+                  </span>
+
+                }
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </section>
+
+
+
+        <!-- ======================================
+             RIGHT SIDE
+             ====================================== -->
+        <aside class="side-column">
+
+
+          <!-- PREVIEW -->
+          <section class="preview-card">
+
+            <span class="section-label">
+              LIVE PREVIEW
+            </span>
+
+            <h3>
+              Category Preview
+            </h3>
+
+            <p class="preview-intro">
+              This is how your category information
+              can be presented across EventPark.
+            </p>
+
+
+            <div class="category-preview">
+
+              <div class="preview-icon">
+
+                {{
+                  category.name
+                    ? category.name
+                        .trim()
+                        .charAt(0)
+                        .toUpperCase()
+                    : 'C'
+                }}
+
+              </div>
+
+
+              <div class="preview-content">
+
+                <span class="preview-tag">
+                  EVENT CATEGORY
+                </span>
+
+                <h4>
+
+                  {{
+                    category.name ||
+                    'Category Name'
+                  }}
+
+                </h4>
+
+                <p>
+
+                  {{
+                    category.description ||
+                    'Add a description to explain what events belong to this category.'
+                  }}
+
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+
+          <!-- TIPS -->
+          <section class="tips-card">
+
+            <div class="tips-heading">
+
+              <div class="tips-icon">
+                i
+              </div>
+
+              <div>
+
+                <span>
+                  CATEGORY GUIDELINES
+                </span>
+
+                <h3>
+                  Keep it clear
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <div class="tips-list">
+
+              <div>
+
+                <span class="tip-number">
+                  01
+                </span>
+
+                <p>
+                  Use short and recognizable
+                  category names.
+                </p>
+
+              </div>
+
+
+              <div>
+
+                <span class="tip-number">
+                  02
+                </span>
+
+                <p>
+                  Avoid creating duplicate
+                  categories.
+                </p>
+
+              </div>
+
+
+              <div>
+
+                <span class="tip-number">
+                  03
+                </span>
+
+                <p>
+                  Add a useful description when
+                  the category meaning is unclear.
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+
+          <!-- MODE CARD -->
+          <section class="mode-card">
+
+            <span class="mode-icon">
+              {{
+                isEditMode
+                  ? 'ED'
+                  : 'NW'
+              }}
+            </span>
+
+
+            <div>
+
+              <span>
+                {{
+                  isEditMode
+                    ? 'EDIT MODE'
+                    : 'CREATE MODE'
+                }}
+              </span>
+
+              <strong>
+                {{
+                  isEditMode
+                    ? 'Updating existing category'
+                    : 'Creating a new category'
+                }}
+              </strong>
+
+            </div>
+
+          </section>
+
+        </aside>
+
+      </div>
+
+    }
+
+  </div>
+
+</section>

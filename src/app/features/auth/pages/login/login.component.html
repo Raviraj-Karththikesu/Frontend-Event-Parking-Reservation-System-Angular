@@ -1,163 +1,355 @@
-<main
-  class="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100"
->
-  <div
-    class="absolute -left-28 top-10 h-80 w-80 rounded-full bg-cyan-500/20 blur-3xl"
-  ></div>
+<main class="login-page">
 
-  <div
-    class="absolute -bottom-32 right-0 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl"
-  ></div>
+  <!-- ============================
+       LEFT VISUAL PANEL
+       ============================ -->
+  <section class="visual-panel">
 
-  <div
-    class="relative grid min-h-screen lg:grid-cols-2"
-  >
-    <section
-      class="hidden flex-col justify-between border-r border-white/10 p-12 lg:flex"
-    >
+    <div class="visual-overlay"></div>
+    <div class="visual-glow visual-glow-one"></div>
+    <div class="visual-glow visual-glow-two"></div>
+
+
+    <!-- BRAND -->
+    <a
+      routerLink="/"
+      class="brand">
+
+      <span class="brand-mark">
+        EP
+      </span>
+
+      <div class="brand-copy">
+        <strong>
+          EventPark
+        </strong>
+
+        <span>
+          Events & Parking
+        </span>
+      </div>
+
+    </a>
+
+
+    <!-- HERO COPY -->
+    <div class="visual-content">
+
+      <span class="eyebrow">
+        EVENTS MADE EFFORTLESS
+      </span>
+
+      <h1>
+        Your next great
+        experience starts here.
+      </h1>
+
+      <p class="visual-description">
+        Discover events, reserve the seats you want
+        and arrange parking before you arrive.
+      </p>
+
+
+      @if (isContinuingReservation) {
+
+        <div class="reservation-notice">
+
+          <span class="notice-icon">
+            ✓
+          </span>
+
+          <div>
+            <strong>
+              Continue your reservation
+            </strong>
+
+            <p>
+              Sign in and we'll take you back to
+              your booking journey.
+            </p>
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- FEATURE POINTS -->
+      <div class="feature-grid">
+
+        <div class="feature-item">
+
+          <span class="feature-number">
+            01
+          </span>
+
+          <div>
+            <strong>
+              Discover
+            </strong>
+
+            <p>
+              Browse upcoming events.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="feature-item">
+
+          <span class="feature-number">
+            02
+          </span>
+
+          <div>
+            <strong>
+              Reserve
+            </strong>
+
+            <p>
+              Choose seats and parking.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="feature-item">
+
+          <span class="feature-number">
+            03
+          </span>
+
+          <div>
+            <strong>
+              Manage
+            </strong>
+
+            <p>
+              Track bookings and payments.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="visual-footer">
+
+      <span class="status-dot"></span>
+
+      EventPark reservation platform
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ============================
+       RIGHT LOGIN PANEL
+       ============================ -->
+  <section class="auth-panel">
+
+
+    <!-- MOBILE HEADER -->
+    <div class="mobile-header">
+
       <a
         routerLink="/"
-        class="flex items-center gap-3"
-      >
-        <span
-          class="grid h-12 w-12 place-items-center rounded-2xl bg-cyan-400 font-black text-slate-950 shadow-lg shadow-cyan-500/20"
-        >
+        class="mobile-brand">
+
+        <span class="brand-mark brand-mark-small">
           EP
         </span>
 
-        <span class="text-xl font-semibold">
+        <strong>
           EventPark
-        </span>
+        </strong>
+
       </a>
 
-      <div class="max-w-xl">
-        <p
-          class="mb-5 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400"
-        >
-          Events made effortless
-        </p>
 
-        <h1
-          class="text-5xl font-bold leading-tight xl:text-6xl"
-        >
-          Book memorable events and parking in one place.
-        </h1>
+      <a
+        routerLink="/events"
+        class="browse-link">
 
-        <p
-          class="mt-6 max-w-lg text-lg leading-8 text-slate-400"
-        >
-          Discover events, reserve your preferred
-          seats and secure parking before arriving.
-        </p>
-      </div>
+        Browse Events
 
-      <p class="text-sm text-slate-500">
-        Secure reservations powered by EventPark
-      </p>
-    </section>
+      </a>
 
-    <section
-      class="flex items-center justify-center px-5 py-12 sm:px-10"
-    >
-      <div class="w-full max-w-md">
-        <a
-          routerLink="/"
-          class="mb-10 flex items-center gap-3 lg:hidden"
-        >
-          <span
-            class="grid h-11 w-11 place-items-center rounded-xl bg-cyan-400 font-black text-slate-950"
-          >
-            EP
+    </div>
+
+
+    <div class="auth-wrapper">
+
+
+      <!-- LOGIN CARD -->
+      <div class="auth-card">
+
+        <div class="auth-heading">
+
+          <span class="auth-eyebrow">
+            SECURE ACCOUNT ACCESS
           </span>
 
-          <span class="text-xl font-semibold">
-            EventPark
-          </span>
-        </a>
+          <h2>
+            Welcome back
+          </h2>
 
-        <p
-          class="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-400"
-        >
-          Welcome back
-        </p>
+          <p>
+            Sign in with your registered email
+            address and password.
+          </p>
 
-        <h2 class="mt-3 text-4xl font-bold">
-          Sign in to your account
-        </h2>
+        </div>
 
-        <p class="mt-3 text-slate-400">
-          Enter your registered email and password.
-        </p>
 
-        @if (errorMessage()) {
-          <div
-            class="mt-6 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200"
-            role="alert"
-          >
-            {{ errorMessage() }}
+        @if (isContinuingReservation) {
+
+          <div class="return-message">
+
+            <span class="return-icon">
+              ↗
+            </span>
+
+            <p>
+              You're signing in to continue your
+              event reservation.
+            </p>
+
           </div>
+
         }
 
+
+        <!-- SERVER ERROR -->
+        @if (errorMessage()) {
+
+          <div
+            class="error-alert"
+            role="alert">
+
+            <span class="error-alert-icon">
+              !
+            </span>
+
+            <div>
+
+              <strong>
+                Sign in unsuccessful
+              </strong>
+
+              <p>
+                {{ errorMessage() }}
+              </p>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        <!-- LOGIN FORM -->
         <form
-          class="mt-8 space-y-6"
+          class="login-form"
           [formGroup]="loginForm"
           (ngSubmit)="submit()"
-          novalidate
-        >
-          <div>
-            <label
-              for="email"
-              class="mb-2 block text-sm font-medium text-slate-200"
-            >
+          novalidate>
+
+
+          <!-- EMAIL -->
+          <div class="form-field">
+
+            <label for="email">
               Email address
             </label>
 
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              autocomplete="email"
-              placeholder="you@example.com"
-              class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10"
-            />
+
+            <div
+              class="input-shell"
+              [class.input-shell-error]="
+                emailControl.touched &&
+                emailControl.invalid
+              ">
+
+              <span class="input-icon">
+                &#64;
+              </span>
+
+
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                autocomplete="email"
+                placeholder="you@example.com">
+
+            </div>
+
 
             @if (
               emailControl.touched &&
               emailControl.hasError('required')
             ) {
-              <p class="mt-2 text-sm text-red-300">
+
+              <p class="field-error">
                 Email address is required.
               </p>
+
             } @else if (
               emailControl.touched &&
               emailControl.hasError('email')
             ) {
-              <p class="mt-2 text-sm text-red-300">
+
+              <p class="field-error">
                 Enter a valid email address.
               </p>
+
             }
+
           </div>
 
-          <div>
-            <div
-              class="mb-2 flex items-center justify-between"
-            >
-              <label
-                for="password"
-                class="text-sm font-medium text-slate-200"
-              >
+
+
+          <!-- PASSWORD -->
+          <div class="form-field">
+
+            <div class="label-row">
+
+              <label for="password">
                 Password
               </label>
 
+
               <a
                 routerLink="/forgot-password"
-                class="text-sm font-medium text-cyan-400 transition hover:text-cyan-300"
-              >
+                class="forgot-link">
+
                 Forgot password?
+
               </a>
+
             </div>
 
-            <div class="relative">
+
+            <div
+              class="input-shell"
+              [class.input-shell-error]="
+                passwordControl.touched &&
+                passwordControl.invalid
+              ">
+
+              <span class="input-icon password-icon">
+                •
+              </span>
+
+
               <input
                 id="password"
                 [type]="
@@ -167,71 +359,127 @@
                 "
                 formControlName="password"
                 autocomplete="current-password"
-                placeholder="Enter your password"
-                class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 pr-20 text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/10"
-              />
+                placeholder="Enter your password">
+
 
               <button
                 type="button"
-                class="absolute inset-y-0 right-4 text-sm font-medium text-slate-400 transition hover:text-white"
-                (click)="togglePassword()"
-              >
+                class="password-toggle"
+                (click)="togglePassword()">
+
                 {{
                   showPassword()
                     ? 'Hide'
                     : 'Show'
                 }}
+
               </button>
+
             </div>
+
 
             @if (
               passwordControl.touched &&
               passwordControl.hasError('required')
             ) {
-              <p class="mt-2 text-sm text-red-300">
+
+              <p class="field-error">
                 Password is required.
               </p>
+
             } @else if (
               passwordControl.touched &&
               passwordControl.hasError('minlength')
             ) {
-              <p class="mt-2 text-sm text-red-300">
-                Password must contain at least 6
-                characters.
+
+              <p class="field-error">
+                Password must contain at least
+                6 characters.
               </p>
+
             }
+
           </div>
 
+
+
+          <!-- SUBMIT -->
           <button
             type="submit"
-            [disabled]="isSubmitting()"
-            class="flex w-full items-center justify-center rounded-xl bg-cyan-400 px-5 py-3.5 font-bold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            @if (isSubmitting()) {
-              <span
-                class="mr-3 h-5 w-5 animate-spin rounded-full border-2 border-slate-950/30 border-t-slate-950"
-              ></span>
+            class="submit-button"
+            [disabled]="isSubmitting()">
 
-              Signing in...
+            @if (isSubmitting()) {
+
+              <span class="button-spinner"></span>
+
+              <span>
+                Signing in...
+              </span>
+
             } @else {
-              Sign in
+
+              <span>
+                Sign in
+              </span>
+
+              <span class="button-arrow">
+                →
+              </span>
+
             }
+
           </button>
+
         </form>
 
-        <p
-          class="mt-8 text-center text-sm text-slate-400"
-        >
-          Don’t have an account?
 
-          <a
-            routerLink="/register"
-            class="font-semibold text-cyan-400 transition hover:text-cyan-300"
-          >
-            Create account
+        <!-- CREATE ACCOUNT -->
+        <div class="signup-section">
+
+          <span>
+            New to EventPark?
+          </span>
+
+          <a routerLink="/register">
+            Create an account
           </a>
-        </p>
+
+        </div>
+
+
+        <!-- SMALL INFO -->
+        <div class="account-note">
+
+          <span class="account-note-icon">
+            i
+          </span>
+
+          <p>
+            Customer and administrator accounts
+            use the same sign-in page.
+          </p>
+
+        </div>
+
       </div>
-    </section>
-  </div>
+
+    </div>
+
+
+    <!-- RIGHT FOOTER -->
+    <div class="auth-footer">
+
+      <a routerLink="/events">
+        Browse events
+      </a>
+
+      <span>
+        EventPark
+      </span>
+
+    </div>
+
+  </section>
+
 </main>

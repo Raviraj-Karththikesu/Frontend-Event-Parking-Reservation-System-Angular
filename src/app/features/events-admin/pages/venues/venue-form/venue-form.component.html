@@ -1,0 +1,735 @@
+<section class="venue-form-page">
+
+  <div class="page-container">
+
+    <!-- PAGE HEADER -->
+    <header class="page-header">
+
+      <div class="heading-copy">
+
+        <button
+          type="button"
+          class="back-link"
+          (click)="goBack()">
+
+          <span>←</span>
+          Venues
+
+        </button>
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          {{
+            isEditMode
+              ? 'Edit Venue'
+              : 'Create Venue'
+          }}
+        </h1>
+
+        <p>
+          {{
+            isEditMode
+              ? 'Update venue information and capacity used across EventPark events.'
+              : 'Add a new event location and make it available for future events.'
+          }}
+        </p>
+
+      </div>
+
+
+      <div class="header-status">
+
+        <span class="status-dot"></span>
+
+        {{
+          isEditMode
+            ? 'Editing Venue'
+            : 'New Venue'
+        }}
+
+      </div>
+
+    </header>
+
+
+
+    <!-- LOADING -->
+    @if (isLoading) {
+
+      <section class="loading-card">
+
+        <div class="spinner"></div>
+
+        <div>
+
+          <h2>
+            Loading venue
+          </h2>
+
+          <p>
+            Retrieving the latest venue details.
+          </p>
+
+        </div>
+
+      </section>
+
+    }
+
+
+
+    <!-- SUCCESS -->
+    @if (successMessage) {
+
+      <div
+        class="message success-message"
+        role="status">
+
+        <span class="message-icon">
+          ✓
+        </span>
+
+        <div>
+
+          <strong>
+            Success
+          </strong>
+
+          <p>
+            {{ successMessage }}
+          </p>
+
+        </div>
+
+      </div>
+
+    }
+
+
+
+    <!-- ERROR -->
+    @if (errorMessage) {
+
+      <div
+        class="message error-message"
+        role="alert">
+
+        <span class="message-icon">
+          !
+        </span>
+
+        <div>
+
+          <strong>
+            Unable to complete request
+          </strong>
+
+          <p>
+            {{ errorMessage }}
+          </p>
+
+        </div>
+
+      </div>
+
+    }
+
+
+
+    <!-- MAIN CONTENT -->
+    @if (!isLoading) {
+
+      <div class="content-grid">
+
+
+        <!-- FORM CARD -->
+        <section class="form-card">
+
+          <div class="card-heading">
+
+            <div class="heading-icon">
+              VN
+            </div>
+
+            <div>
+
+              <span class="section-label">
+                VENUE DETAILS
+              </span>
+
+              <h2>
+                {{
+                  isEditMode
+                    ? 'Update venue information'
+                    : 'Venue information'
+                }}
+              </h2>
+
+              <p>
+                Enter the venue name, location and
+                maximum event capacity.
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <form
+            #venueForm="ngForm"
+            (ngSubmit)="submit(venueForm)"
+            novalidate>
+
+
+            <!-- VENUE NAME -->
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label for="name">
+                  Venue Name
+                </label>
+
+                <span class="required-label">
+                  Required
+                </span>
+
+              </div>
+
+
+              <div
+                class="input-shell"
+                [class.invalid-input]="
+                  name.invalid &&
+                  name.touched
+                ">
+
+                <span class="input-icon">
+                  V
+                </span>
+
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  [(ngModel)]="venue.name"
+                  #name="ngModel"
+                  required
+                  minlength="2"
+                  maxlength="100"
+                  autocomplete="off"
+                  placeholder="Example: Jaffna Central Hall">
+
+              </div>
+
+
+              <div class="field-footer">
+
+                <div>
+
+                  @if (
+                    name.invalid &&
+                    name.touched
+                  ) {
+
+                    <div class="validation-message">
+
+                      @if (
+                        name.errors?.['required']
+                      ) {
+
+                        <span>
+                          Venue name is required.
+                        </span>
+
+                      }
+
+                      @if (
+                        name.errors?.['minlength']
+                      ) {
+
+                        <span>
+                          Venue name must contain at least
+                          2 characters.
+                        </span>
+
+                      }
+
+                    </div>
+
+                  } @else {
+
+                    <span class="field-hint">
+                      Use the official or recognizable
+                      venue name.
+                    </span>
+
+                  }
+
+                </div>
+
+
+                <span class="character-count">
+                  {{ venue.name.length }}/100
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- ADDRESS -->
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label for="address">
+                  Venue Address
+                </label>
+
+                <span class="required-label">
+                  Required
+                </span>
+
+              </div>
+
+
+              <div
+                class="textarea-shell"
+                [class.invalid-input]="
+                  address.invalid &&
+                  address.touched
+                ">
+
+                <textarea
+                  id="address"
+                  name="address"
+                  [(ngModel)]="venue.address"
+                  #address="ngModel"
+                  required
+                  minlength="5"
+                  maxlength="250"
+                  rows="5"
+                  placeholder="Enter the full venue address">
+                </textarea>
+
+              </div>
+
+
+              <div class="field-footer">
+
+                <div>
+
+                  @if (
+                    address.invalid &&
+                    address.touched
+                  ) {
+
+                    <div class="validation-message">
+
+                      @if (
+                        address.errors?.['required']
+                      ) {
+
+                        <span>
+                          Venue address is required.
+                        </span>
+
+                      }
+
+                      @if (
+                        address.errors?.['minlength']
+                      ) {
+
+                        <span>
+                          Address must contain at least
+                          5 characters.
+                        </span>
+
+                      }
+
+                    </div>
+
+                  } @else {
+
+                    <span class="field-hint">
+                      Enter enough location information
+                      for administrators to identify it.
+                    </span>
+
+                  }
+
+                </div>
+
+
+                <span class="character-count">
+                  {{ venue.address.length }}/250
+                </span>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- CAPACITY -->
+            <div class="form-group">
+
+              <div class="label-row">
+
+                <label for="capacity">
+                  Maximum Capacity
+                </label>
+
+                <span class="required-label">
+                  Required
+                </span>
+
+              </div>
+
+
+              <div
+                class="input-shell"
+                [class.invalid-input]="
+                  capacity.invalid &&
+                  capacity.touched
+                ">
+
+                <span class="input-icon">
+                  CP
+                </span>
+
+                <input
+                  id="capacity"
+                  type="number"
+                  name="capacity"
+                  [(ngModel)]="venue.capacity"
+                  #capacity="ngModel"
+                  required
+                  min="1"
+                  inputmode="numeric"
+                  placeholder="Example: 500">
+
+              </div>
+
+
+              <div class="field-footer">
+
+                <div>
+
+                  @if (
+                    capacity.invalid &&
+                    capacity.touched
+                  ) {
+
+                    <div class="validation-message">
+
+                      @if (
+                        capacity.errors?.['required']
+                      ) {
+
+                        <span>
+                          Venue capacity is required.
+                        </span>
+
+                      }
+
+                      @if (
+                        capacity.errors?.['min']
+                      ) {
+
+                        <span>
+                          Capacity must be at least 1.
+                        </span>
+
+                      }
+
+                    </div>
+
+                  } @else {
+
+                    <span class="field-hint">
+                      Enter the maximum number of people
+                      this venue can support.
+                    </span>
+
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+            <!-- ACTIONS -->
+            <div class="form-actions">
+
+              <button
+                type="button"
+                class="cancel-btn"
+                [disabled]="isSubmitting"
+                (click)="goBack()">
+
+                Cancel
+
+              </button>
+
+
+              <button
+                type="submit"
+                class="submit-btn"
+                [disabled]="
+                  isSubmitting ||
+                  isLoading
+                ">
+
+                @if (isSubmitting) {
+
+                  <span class="button-spinner"></span>
+
+                  <span>
+                    {{
+                      isEditMode
+                        ? 'Updating Venue...'
+                        : 'Creating Venue...'
+                    }}
+                  </span>
+
+                } @else {
+
+                  <span>
+                    {{
+                      isEditMode
+                        ? 'Update Venue'
+                        : 'Create Venue'
+                    }}
+                  </span>
+
+                  <span class="button-arrow">
+                    →
+                  </span>
+
+                }
+
+              </button>
+
+            </div>
+
+          </form>
+
+        </section>
+
+
+
+        <!-- RIGHT COLUMN -->
+        <aside class="side-column">
+
+
+          <!-- LIVE PREVIEW -->
+          <section class="preview-card">
+
+            <span class="section-label">
+              LIVE PREVIEW
+            </span>
+
+            <h3>
+              Venue Preview
+            </h3>
+
+            <p class="preview-intro">
+              Review the venue information before saving.
+            </p>
+
+
+            <div class="venue-preview">
+
+              <div class="preview-top">
+
+                <div class="preview-icon">
+                  {{ venueInitial }}
+                </div>
+
+                <span
+                  class="size-badge"
+                  [ngClass]="capacityClass">
+
+                  {{ capacityLabel }}
+
+                </span>
+
+              </div>
+
+
+              <span class="preview-tag">
+                EVENT VENUE
+              </span>
+
+
+              <h4>
+                {{
+                  venue.name ||
+                  'Venue Name'
+                }}
+              </h4>
+
+
+              <div class="preview-detail">
+
+                <span>
+                  LOCATION
+                </span>
+
+                <strong>
+                  {{
+                    venue.address ||
+                    'Venue address will appear here'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="preview-detail">
+
+                <span>
+                  CAPACITY
+                </span>
+
+                <strong>
+                  {{
+                    venue.capacity
+                      | number
+                  }}
+                  people
+                </strong>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+
+          <!-- GUIDELINES -->
+          <section class="tips-card">
+
+            <div class="tips-heading">
+
+              <div class="tips-icon">
+                i
+              </div>
+
+              <div>
+
+                <span>
+                  VENUE GUIDELINES
+                </span>
+
+                <h3>
+                  Before you save
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <div class="tips-list">
+
+              <div>
+
+                <span class="tip-number">
+                  01
+                </span>
+
+                <p>
+                  Use the venue's official or commonly
+                  recognized name.
+                </p>
+
+              </div>
+
+
+              <div>
+
+                <span class="tip-number">
+                  02
+                </span>
+
+                <p>
+                  Provide a clear address so the venue
+                  can be identified correctly.
+                </p>
+
+              </div>
+
+
+              <div>
+
+                <span class="tip-number">
+                  03
+                </span>
+
+                <p>
+                  Make sure the venue capacity matches
+                  the allowed event capacity.
+                </p>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+
+          <!-- MODE -->
+          <section class="mode-card">
+
+            <span class="mode-icon">
+              {{
+                isEditMode
+                  ? 'ED'
+                  : 'NW'
+              }}
+            </span>
+
+            <div>
+
+              <span>
+                {{
+                  isEditMode
+                    ? 'EDIT MODE'
+                    : 'CREATE MODE'
+                }}
+              </span>
+
+              <strong>
+                {{
+                  isEditMode
+                    ? 'Updating existing venue'
+                    : 'Creating a new venue'
+                }}
+              </strong>
+
+            </div>
+
+          </section>
+
+        </aside>
+
+      </div>
+
+    }
+
+  </div>
+
+</section>
