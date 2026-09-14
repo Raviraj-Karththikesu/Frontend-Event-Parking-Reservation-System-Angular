@@ -1,429 +1,779 @@
-<section
-  class="min-h-screen bg-slate-950 text-slate-100"
->
-  <header
-    class="border-b border-white/10 bg-slate-950/90
-           backdrop-blur"
-  >
-    <div
-      class="mx-auto flex max-w-7xl items-center
-             justify-between px-5 py-4 sm:px-8"
-    >
-      <div class="flex items-center gap-3">
-        <div
-          class="flex h-11 w-11 items-center justify-center
-                 rounded-2xl bg-gradient-to-br from-cyan-400
-                 to-blue-600 text-lg font-black text-slate-950"
-        >
-          EP
-        </div>
+<main class="profile-page">
 
-        <div>
-          <p class="font-bold text-white">
-            Event Parking
-          </p>
-          <p class="text-xs text-slate-400">
-            Customer account
-          </p>
-        </div>
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+  @if (isLoading) {
+
+    <section class="state-card">
+
+      <div class="loader"></div>
+
+      <h2>
+        Loading your profile
+      </h2>
+
+      <p>
+        Please wait while we retrieve your account information.
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       LOAD ERROR
+       ===================================================== -->
+  @else if (errorMessage && !profile) {
+
+    <section class="state-card error-state">
+
+      <div class="state-icon">
+        !
       </div>
+
+      <h2>
+        Profile unavailable
+      </h2>
+
+      <p>
+        {{ errorMessage }}
+      </p>
 
       <button
         type="button"
-        (click)="logout()"
-        class="rounded-xl border border-white/10 px-4 py-2
-               text-sm font-semibold text-slate-300
-               transition hover:border-red-400/50
-               hover:bg-red-500/10 hover:text-red-300"
-      >
-        Sign out
+        class="primary-button"
+        (click)="loadProfile()">
+
+        Try Again
+
       </button>
-    </div>
-  </header>
 
-  <main class="mx-auto max-w-7xl px-5 py-10 sm:px-8">
-    @if (isLoading) {
-      <div
-        class="flex min-h-[60vh] flex-col items-center
-               justify-center gap-5"
-      >
-        <div
-          class="h-12 w-12 animate-spin rounded-full
-                 border-4 border-slate-700
-                 border-t-cyan-400"
-        ></div>
+    </section>
 
-        <p class="text-slate-400">
-          Loading your profile...
-        </p>
-      </div>
-    } @else if (errorMessage && !profile) {
-      <div
-        class="mx-auto max-w-lg rounded-3xl border
-               border-red-400/20 bg-red-500/10 p-8
-               text-center"
-      >
-        <h1 class="text-2xl font-bold text-white">
-          Profile unavailable
-        </h1>
+  }
 
-        <p class="mt-3 text-red-200">
-          {{ errorMessage }}
-        </p>
+
+  <!-- =====================================================
+       PROFILE
+       ===================================================== -->
+  @else if (profile) {
+
+    <div class="page-container">
+
+
+      <!-- ===================================================
+           PAGE HEADING
+           =================================================== -->
+      <section class="page-heading">
+
+        <div>
+
+          <span class="eyebrow">
+            ACCOUNT SETTINGS
+          </span>
+
+          <h1>
+            My Profile
+          </h1>
+
+          <p>
+            Manage your personal information and review
+            your EventPark account details.
+          </p>
+
+        </div>
+
 
         <button
           type="button"
-          (click)="loadProfile()"
-          class="mt-6 rounded-xl bg-cyan-400 px-6 py-3
-                 font-bold text-slate-950 transition
-                 hover:bg-cyan-300"
-        >
-          Try again
+          class="refresh-button"
+          [disabled]="isLoading"
+          (click)="loadProfile()">
+
+          <span>
+            ↻
+          </span>
+
+          Refresh
+
         </button>
-      </div>
-    } @else if (profile) {
-      <section
-        class="overflow-hidden rounded-3xl border
-               border-white/10 bg-slate-900 shadow-2xl
-               shadow-cyan-950/20"
-      >
-        <div
-          class="h-36 bg-gradient-to-r from-cyan-500
-                 via-blue-600 to-violet-600"
-        ></div>
 
-        <div
-          class="-mt-16 flex flex-col gap-5 px-6 pb-8
-                 sm:flex-row sm:items-end
-                 sm:justify-between sm:px-10"
-        >
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
-            <div
-              class="flex h-32 w-32 items-center justify-center
-                     rounded-3xl border-4 border-slate-900
-                     bg-slate-800 text-4xl font-black
-                     text-cyan-300 shadow-xl"
-            >
-              {{ initials }}
-            </div>
-
-            <div class="pb-1">
-              <h1 class="text-3xl font-black text-white">
-                {{ profile.fullName }}
-              </h1>
-
-              <p class="mt-1 text-slate-400">
-                {{ profile.email }}
-              </p>
-
-              <div class="mt-3 flex flex-wrap gap-2">
-                <span
-                  class="rounded-full bg-blue-500/10
-                         px-3 py-1 text-xs font-bold
-                         text-blue-300"
-                >
-                  {{ profile.role }}
-                </span>
-
-                <span
-                  class="rounded-full bg-emerald-500/10
-                         px-3 py-1 text-xs font-bold
-                         text-emerald-300"
-                >
-                  {{ profile.status }}
-                </span>
-
-                @if (profile.emailVerified) {
-                  <span
-                    class="rounded-full bg-cyan-500/10
-                           px-3 py-1 text-xs font-bold
-                           text-cyan-300"
-                  >
-                    Email verified
-                  </span>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
-      @if (successMessage) {
-        <div
-          class="mt-6 rounded-2xl border
-                 border-emerald-400/20
-                 bg-emerald-500/10 px-5 py-4
-                 text-emerald-200"
-          role="status"
-        >
-          {{ successMessage }}
+
+
+      <!-- ===================================================
+           PROFILE HERO
+           =================================================== -->
+      <section class="profile-hero">
+
+        <div class="hero-pattern"></div>
+
+
+        <div class="profile-avatar">
+
+          {{ initials }}
+
+          <span class="online-indicator"></span>
+
         </div>
-      }
 
-      @if (errorMessage) {
-        <div
-          class="mt-6 rounded-2xl border border-red-400/20
-                 bg-red-500/10 px-5 py-4 text-red-200"
-          role="alert"
-        >
-          {{ errorMessage }}
-        </div>
-      }
 
-      <div class="mt-8 grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
-        <section
-          class="rounded-3xl border border-white/10
-                 bg-slate-900 p-6 sm:p-8"
-        >
-          <div>
-            <p
-              class="text-sm font-bold uppercase tracking-[0.2em]
-                     text-cyan-400"
-            >
-              Personal details
-            </p>
+        <div class="hero-details">
 
-            <h2 class="mt-2 text-2xl font-black text-white">
-              Edit your profile
-            </h2>
+          <span class="profile-label">
+            EVENTPARK MEMBER
+          </span>
 
-            <p class="mt-2 text-sm text-slate-400">
-              Keep your contact information accurate.
-            </p>
+          <h2>
+            {{ profile.fullName }}
+          </h2>
+
+          <p>
+            {{ profile.email }}
+          </p>
+
+
+          <div class="profile-badges">
+
+            <span class="badge role-badge">
+              {{ profile.role }}
+            </span>
+
+
+            <span class="badge status-badge">
+              <span class="badge-dot"></span>
+
+              {{ profile.status }}
+            </span>
+
+
+            @if (profile.emailVerified) {
+
+              <span class="badge verified-badge">
+                ✓ Email verified
+              </span>
+
+            } @else {
+
+              <span class="badge unverified-badge">
+                Email not verified
+              </span>
+
+            }
+
           </div>
 
+        </div>
+
+
+        <div class="member-since">
+
+          <span>
+            MEMBER SINCE
+          </span>
+
+          <strong>
+            {{ profile.createdAt | date:'mediumDate' }}
+          </strong>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ===================================================
+           ACCOUNT OVERVIEW
+           =================================================== -->
+      <section class="overview-grid">
+
+
+        <article class="overview-card">
+
+          <div class="overview-icon blue-icon">
+            ID
+          </div>
+
+          <div>
+
+            <span>
+              Customer ID
+            </span>
+
+            <strong>
+              #{{ profile.customerId }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+
+        <article class="overview-card">
+
+          <div class="overview-icon purple-icon">
+            RL
+          </div>
+
+          <div>
+
+            <span>
+              Account Role
+            </span>
+
+            <strong>
+              {{ profile.role }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+
+        <article class="overview-card">
+
+          <div class="overview-icon green-icon">
+            ST
+          </div>
+
+          <div>
+
+            <span>
+              Account Status
+            </span>
+
+            <strong class="green-text">
+              {{ profile.status }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+
+        <article class="overview-card">
+
+          <div class="overview-icon cyan-icon">
+            EM
+          </div>
+
+          <div>
+
+            <span>
+              Email Status
+            </span>
+
+            <strong
+              [class.green-text]="profile.emailVerified"
+              [class.orange-text]="!profile.emailVerified">
+
+              {{
+                profile.emailVerified
+                  ? 'Verified'
+                  : 'Not Verified'
+              }}
+
+            </strong>
+
+          </div>
+
+        </article>
+
+      </section>
+
+
+
+      <!-- ===================================================
+           SUCCESS MESSAGE
+           =================================================== -->
+      @if (successMessage) {
+
+        <div
+          class="message success-message"
+          role="status">
+
+          <span class="message-icon">
+            ✓
+          </span>
+
+          <div>
+
+            <strong>
+              Profile updated
+            </strong>
+
+            <p>
+              {{ successMessage }}
+            </p>
+
+          </div>
+
+        </div>
+
+      }
+
+
+
+      <!-- ===================================================
+           ERROR MESSAGE
+           =================================================== -->
+      @if (errorMessage) {
+
+        <div
+          class="message error-message"
+          role="alert">
+
+          <span class="message-icon">
+            !
+          </span>
+
+          <div>
+
+            <strong>
+              Something went wrong
+            </strong>
+
+            <p>
+              {{ errorMessage }}
+            </p>
+
+          </div>
+
+        </div>
+
+      }
+
+
+
+      <!-- ===================================================
+           MAIN CONTENT GRID
+           =================================================== -->
+      <section class="content-grid">
+
+
+        <!-- =================================================
+             EDIT PROFILE
+             ================================================= -->
+        <article class="form-card">
+
+
+          <div class="card-heading">
+
+            <div>
+
+              <span class="section-label">
+                PERSONAL DETAILS
+              </span>
+
+              <h2>
+                Edit your profile
+              </h2>
+
+              <p>
+                Keep your contact information accurate
+                and up to date.
+              </p>
+
+            </div>
+
+
+            @if (profileForm.dirty) {
+
+              <span class="unsaved-badge">
+                Unsaved changes
+              </span>
+
+            }
+
+          </div>
+
+
+
           <form
-            class="mt-8 space-y-6"
+            class="profile-form"
             [formGroup]="profileForm"
             (ngSubmit)="saveProfile()"
-            novalidate
-          >
-            <div>
-              <label
-                for="fullName"
-                class="mb-2 block text-sm font-semibold
-                       text-slate-300"
-              >
+            novalidate>
+
+
+            <!-- FULL NAME -->
+            <div class="form-field">
+
+              <label for="fullName">
                 Full name
               </label>
 
-              <input
-                id="fullName"
-                type="text"
-                formControlName="fullName"
-                autocomplete="name"
-                maxlength="100"
-                class="w-full rounded-2xl border
-                       border-white/10 bg-slate-950 px-4 py-3.5
-                       text-white outline-none transition
-                       placeholder:text-slate-600
-                       focus:border-cyan-400
-                       focus:ring-4 focus:ring-cyan-400/10"
-              >
+
+              <div
+                class="input-wrapper"
+                [class.input-error]="
+                  profileForm.controls.fullName.touched &&
+                  profileForm.controls.fullName.invalid
+                ">
+
+                <span class="input-icon">
+                  U
+                </span>
+
+
+                <input
+                  id="fullName"
+                  type="text"
+                  formControlName="fullName"
+                  autocomplete="name"
+                  maxlength="100"
+                  placeholder="Enter your full name">
+
+              </div>
+
 
               @if (
                 profileForm.controls.fullName.touched &&
                 profileForm.controls.fullName.invalid
               ) {
-                <p class="mt-2 text-sm text-red-300">
-                  Full name must contain between 2 and 100
-                  characters.
+
+                <p class="validation-error">
+                  Full name must contain between
+                  2 and 100 characters.
                 </p>
+
               }
+
             </div>
 
-            <div>
-              <label
-                for="email"
-                class="mb-2 block text-sm font-semibold
-                       text-slate-300"
-              >
+
+
+            <!-- EMAIL -->
+            <div class="form-field">
+
+              <label for="email">
                 Email address
               </label>
 
-              <input
-                id="email"
-                type="email"
-                [value]="profile.email"
-                readonly
-                class="w-full cursor-not-allowed rounded-2xl
-                       border border-white/5 bg-slate-800/60
-                       px-4 py-3.5 text-slate-400"
-              >
 
-              <p class="mt-2 text-xs text-slate-500">
-                Your verified email address cannot be changed
-                here.
+              <div class="input-wrapper readonly-input">
+
+                <span class="input-icon">
+                  &#64;
+                </span>
+
+
+                <input
+                  id="email"
+                  type="email"
+                  [value]="profile.email"
+                  readonly>
+
+              </div>
+
+
+              <p class="field-help">
+
+                <span>
+                  ✓
+                </span>
+
+                Your registered email address cannot
+                be changed from this page.
+
               </p>
+
             </div>
 
-            <div>
-              <label
-                for="phoneNumber"
-                class="mb-2 block text-sm font-semibold
-                       text-slate-300"
-              >
+
+
+            <!-- PHONE -->
+            <div class="form-field">
+
+              <label for="phoneNumber">
+
                 Phone number
-                <span class="font-normal text-slate-500">
-                  (optional)
+
+                <span class="optional-text">
+                  Optional
                 </span>
+
               </label>
 
-              <input
-                id="phoneNumber"
-                type="tel"
-                formControlName="phoneNumber"
-                autocomplete="tel"
-                maxlength="20"
-                placeholder="+94 77 123 4567"
-                class="w-full rounded-2xl border
-                       border-white/10 bg-slate-950 px-4 py-3.5
-                       text-white outline-none transition
-                       placeholder:text-slate-600
-                       focus:border-cyan-400
-                       focus:ring-4 focus:ring-cyan-400/10"
-              >
+
+              <div
+                class="input-wrapper"
+                [class.input-error]="
+                  profileForm.controls.phoneNumber.touched &&
+                  profileForm.controls.phoneNumber.invalid
+                ">
+
+                <span class="input-icon">
+                  PH
+                </span>
+
+
+                <input
+                  id="phoneNumber"
+                  type="tel"
+                  formControlName="phoneNumber"
+                  autocomplete="tel"
+                  maxlength="20"
+                  placeholder="+94 77 123 4567">
+
+              </div>
+
 
               @if (
                 profileForm.controls.phoneNumber.touched &&
                 profileForm.controls.phoneNumber.invalid
               ) {
-                <p class="mt-2 text-sm text-red-300">
-                  Enter a valid phone number with a maximum of
-                  20 characters.
+
+                <p class="validation-error">
+                  Enter a valid phone number with a
+                  maximum of 20 characters.
                 </p>
+
               }
+
             </div>
 
-            <div class="flex flex-wrap items-center gap-4 pt-2">
+
+
+            <!-- FORM ACTIONS -->
+            <div class="form-actions">
+
               <button
                 type="submit"
+                class="save-button"
                 [disabled]="
                   isSaving ||
                   profileForm.invalid ||
                   profileForm.pristine
-                "
-                class="rounded-2xl bg-gradient-to-r
-                       from-cyan-400 to-blue-500 px-7 py-3.5
-                       font-black text-slate-950 transition
-                       hover:from-cyan-300 hover:to-blue-400
-                       disabled:cursor-not-allowed
-                       disabled:opacity-50"
-              >
+                ">
+
                 @if (isSaving) {
-                  Saving changes...
+
+                  <span class="button-spinner"></span>
+
+                  Saving Changes...
+
                 } @else {
-                  Save changes
+
+                  Save Changes
+
+                  <span>
+                    →
+                  </span>
+
                 }
+
               </button>
 
+
               @if (profileForm.dirty) {
-                <span class="text-sm text-amber-300">
-                  You have unsaved changes
-                </span>
+
+                <button
+                  type="button"
+                  class="reset-button"
+                  (click)="loadProfile()">
+
+                  Cancel Changes
+
+                </button>
+
               }
+
             </div>
+
           </form>
-        </section>
 
-        <aside class="space-y-6">
-          <section
-            class="rounded-3xl border border-white/10
-                   bg-slate-900 p-6"
-          >
-            <h2 class="text-xl font-black text-white">
-              Account information
-            </h2>
+        </article>
 
-            <dl class="mt-6 space-y-5">
-              <div
-                class="flex items-center justify-between gap-4
-                       border-b border-white/5 pb-4"
-              >
-                <dt class="text-sm text-slate-400">
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+             ================================================= -->
+        <aside class="side-column">
+
+
+          <!-- ACCOUNT INFORMATION -->
+          <section class="side-card">
+
+            <div class="side-heading">
+
+              <div class="side-icon">
+                AC
+              </div>
+
+              <div>
+
+                <span>
+                  ACCOUNT
+                </span>
+
+                <h2>
+                  Account information
+                </h2>
+
+              </div>
+
+            </div>
+
+
+            <dl class="account-list">
+
+              <div>
+
+                <dt>
                   Customer ID
                 </dt>
-                <dd class="font-bold text-white">
+
+                <dd>
                   #{{ profile.customerId }}
                 </dd>
+
               </div>
 
-              <div
-                class="flex items-center justify-between gap-4
-                       border-b border-white/5 pb-4"
-              >
-                <dt class="text-sm text-slate-400">
+
+              <div>
+
+                <dt>
                   Role
                 </dt>
-                <dd class="font-bold text-white">
+
+                <dd>
                   {{ profile.role }}
                 </dd>
+
               </div>
 
-              <div
-                class="flex items-center justify-between gap-4
-                       border-b border-white/5 pb-4"
-              >
-                <dt class="text-sm text-slate-400">
+
+              <div>
+
+                <dt>
                   Account status
                 </dt>
-                <dd class="font-bold text-emerald-300">
+
+                <dd class="status-value">
                   {{ profile.status }}
                 </dd>
+
               </div>
 
-              <div
-                class="flex items-center justify-between gap-4
-                       border-b border-white/5 pb-4"
-              >
-                <dt class="text-sm text-slate-400">
+
+              <div>
+
+                <dt>
                   Email
                 </dt>
+
                 <dd
-                  class="font-bold"
-                  [class.text-emerald-300]="
+                  [class.verified-value]="
                     profile.emailVerified
                   "
-                  [class.text-amber-300]="
+                  [class.warning-value]="
                     !profile.emailVerified
-                  "
-                >
+                  ">
+
                   {{
                     profile.emailVerified
                       ? 'Verified'
                       : 'Not verified'
                   }}
+
                 </dd>
+
               </div>
 
-              <div
-                class="flex items-center justify-between gap-4"
-              >
-                <dt class="text-sm text-slate-400">
+
+              <div>
+
+                <dt>
                   Member since
                 </dt>
-                <dd class="font-bold text-white">
+
+                <dd>
                   {{ profile.createdAt | date:'mediumDate' }}
                 </dd>
+
               </div>
+
             </dl>
+
           </section>
 
-          <section
-            class="rounded-3xl border border-cyan-400/15
-                   bg-cyan-500/5 p-6"
-          >
-            <h2 class="font-black text-cyan-200">
-              Account security
-            </h2>
 
-            <p class="mt-2 text-sm leading-6 text-slate-400">
-              Your profile is protected using JWT
-              authentication and verified email access.
-            </p>
+
+          <!-- SECURITY -->
+          <section class="security-card">
+
+            <div class="security-icon">
+              ✓
+            </div>
+
+
+            <div>
+
+              <span class="security-label">
+                ACCOUNT SECURITY
+              </span>
+
+              <h2>
+                Protected account
+              </h2>
+
+              <p>
+                Your account uses authenticated access
+                and your email verification status is
+                recorded by EventPark.
+              </p>
+
+            </div>
+
           </section>
+
+
+
+          <!-- ACCOUNT ACTION -->
+          <section class="signout-card">
+
+            <div>
+
+              <span>
+                ACCOUNT SESSION
+              </span>
+
+              <h3>
+                Finished for now?
+              </h3>
+
+              <p>
+                Sign out securely from your current
+                EventPark session.
+              </p>
+
+            </div>
+
+
+            <button
+              type="button"
+              (click)="logout()">
+
+              Sign Out
+
+            </button>
+
+          </section>
+
         </aside>
-      </div>
-    }
-  </main>
-</section>
+
+      </section>
+
+    </div>
+
+  }
+
+</main>

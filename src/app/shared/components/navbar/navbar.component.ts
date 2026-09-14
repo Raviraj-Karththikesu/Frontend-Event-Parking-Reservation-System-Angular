@@ -4,6 +4,7 @@ import {
   inject,
   signal
 } from '@angular/core';
+
 import {
   Router,
   RouterLink,
@@ -14,21 +15,29 @@ import {
   AuthService
 } from '../../../core/services/auth.service';
 
+
 @Component({
   selector: 'app-navbar',
+
   imports: [
     RouterLink,
     RouterLinkActive
   ],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+
+  templateUrl:
+    './navbar.component.html',
+
+  styleUrl:
+    './navbar.component.scss'
 })
 export class NavbarComponent {
+
   private readonly authService =
     inject(AuthService);
 
   private readonly router =
     inject(Router);
+
 
   readonly currentUser =
     this.authService.currentUser;
@@ -42,32 +51,56 @@ export class NavbarComponent {
   readonly isCustomer =
     this.authService.isCustomer;
 
+
   readonly mobileMenuOpen =
     signal(false);
 
-  readonly userInitial = computed(() => {
-    const fullName =
-      this.currentUser()?.fullName?.trim();
 
-    return fullName
-      ? fullName.charAt(0).toUpperCase()
-      : 'U';
-  });
+  readonly userInitial =
+    computed(() => {
+
+      const fullName =
+        this.currentUser()
+          ?.fullName
+          ?.trim();
+
+
+      return fullName
+        ? fullName
+            .charAt(0)
+            .toUpperCase()
+        : 'U';
+
+    });
+
 
   toggleMobileMenu(): void {
+
     this.mobileMenuOpen.update(
       isOpen => !isOpen
     );
+
   }
+
 
   closeMobileMenu(): void {
+
     this.mobileMenuOpen.set(false);
+
   }
+
 
   async logout(): Promise<void> {
+
     this.authService.logout();
+
     this.closeMobileMenu();
 
-    await this.router.navigate(['/login']);
+
+    await this.router.navigate([
+      '/login'
+    ]);
+
   }
+
 }

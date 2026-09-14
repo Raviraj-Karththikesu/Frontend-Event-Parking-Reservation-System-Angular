@@ -1,193 +1,503 @@
-<section class="event-page">
+<div class="events-page">
 
-  <div class="page-header">
-    <div>
-      <p class="eyebrow">Events</p>
-      <h1>Event Catalogue</h1>
-      <p class="subtitle">
-        Browse and find events using the filters below.
-      </p>
-    </div>
-  </div>
+  <!-- HERO BANNER -->
+  <section class="hero-banner">
+    <div class="hero-overlay"></div>
 
-  <form
-    class="filters"
-    (ngSubmit)="applyFilters()">
+    <div class="hero-content">
 
-    <div class="filter-group">
-      <label for="search">Search</label>
-      <input
-        id="search"
-        type="text"
-        name="search"
-        [(ngModel)]="filter.search"
-        placeholder="Search by event name">
-    </div>
+      <span class="hero-tag">
+        EVENTPARK EVENTS
+      </span>
 
-    <div class="filter-group">
-      <label for="venue">Venue</label>
-
-      <select
-        id="venue"
-        name="venueId"
-        [(ngModel)]="filter.venueId">
-
-        <option [ngValue]="undefined">
-          All Venues
-        </option>
-
-        @for (venue of venues; track venue.id) {
-          <option [ngValue]="venue.id">
-            {{ venue.name }}
-          </option>
-        }
-
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <label for="category">Category</label>
-
-      <select
-        id="category"
-        name="eventCategoryId"
-        [(ngModel)]="filter.eventCategoryId">
-
-        <option [ngValue]="undefined">
-          All Categories
-        </option>
-
-        @for (category of categories; track category.id) {
-          <option [ngValue]="category.id">
-            {{ category.name }}
-          </option>
-        }
-
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <label for="date">Date</label>
-
-      <input
-        id="date"
-        type="date"
-        name="date"
-        [(ngModel)]="filter.date">
-    </div>
-
-    <div class="filter-actions">
-
-      <button
-        type="submit"
-        class="filter-btn">
-        Apply Filters
-      </button>
-
-      <button
-        type="button"
-        class="clear-btn"
-        (click)="clearFilters()">
-        Clear
-      </button>
-
-    </div>
-
-  </form>
-
-  @if (isLoading) {
-    <div class="state-message">
-      Loading events...
-    </div>
-  }
-
-  @if (errorMessage) {
-    <div class="state-message error-message">
+      <h1>
+        Discover Amazing Events
+      </h1>
 
       <p>
-        {{ errorMessage }}
+        Explore concerts, live experiences and exciting events.
+        Reserve your seats and parking easily in one place.
       </p>
+
+      <div class="hero-actions">
+
+        <button
+          type="button"
+          class="primary-btn"
+          (click)="scrollToEvents()">
+
+          Browse Events
+
+        </button>
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="scrollToFilters()">
+
+          Search Events
+
+        </button>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- PAGE INTRO -->
+  <section class="page-header">
+
+    <span class="section-tag">
+      EVENTS
+    </span>
+
+    <h2>
+      Find your next experience
+    </h2>
+
+    <p>
+      Search upcoming events by name, venue,
+      category or date.
+    </p>
+
+  </section>
+
+
+  <!-- FILTERS -->
+  <section
+    id="event-filters"
+    class="filter-card">
+
+    <div class="filter-header">
+
+      <h3>
+        Search Events
+      </h3>
+
+      <p>
+        Use the filters below to find the event
+        you're looking for.
+      </p>
+
+    </div>
+
+
+    <form (ngSubmit)="applyFilters()">
+
+      <div class="filter-grid">
+
+        <!-- SEARCH -->
+        <div class="form-group">
+
+          <label for="search">
+            Search
+          </label>
+
+          <input
+            id="search"
+            type="text"
+            name="search"
+            [(ngModel)]="filter.search"
+            placeholder="Search by event name">
+
+        </div>
+
+
+        <!-- VENUE -->
+        <div class="form-group">
+
+          <label for="venue">
+            Venue
+          </label>
+
+          <select
+            id="venue"
+            name="venueId"
+            [(ngModel)]="filter.venueId">
+
+            <option [ngValue]="undefined">
+              All Venues
+            </option>
+
+            <option
+              *ngFor="let venue of venues"
+              [ngValue]="venue.id">
+
+              {{ venue.name }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- CATEGORY -->
+        <div class="form-group">
+
+          <label for="category">
+            Category
+          </label>
+
+          <select
+            id="category"
+            name="eventCategoryId"
+            [(ngModel)]="filter.eventCategoryId">
+
+            <option [ngValue]="undefined">
+              All Categories
+            </option>
+
+            <option
+              *ngFor="let category of categories"
+              [ngValue]="category.id">
+
+              {{ category.name }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- DATE -->
+        <div class="form-group">
+
+          <label for="date">
+            Date
+          </label>
+
+          <input
+            id="date"
+            type="date"
+            name="date"
+            [(ngModel)]="filter.date">
+
+        </div>
+
+      </div>
+
+
+      <div class="filter-actions">
+
+        <button
+          type="submit"
+          class="primary-btn"
+          [disabled]="isLoading">
+
+          {{
+            isLoading
+              ? 'Searching...'
+              : 'Apply Filters'
+          }}
+
+        </button>
+
+
+        <button
+          type="button"
+          class="ghost-btn"
+          [disabled]="isLoading"
+          (click)="clearFilters()">
+
+          Clear Filters
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- EVENTS -->
+  <section
+    id="event-list"
+    class="events-section">
+
+    <div class="events-heading">
+
+      <div>
+
+        <span class="section-tag">
+          UPCOMING EVENTS
+        </span>
+
+        <h2>
+          Explore Events
+        </h2>
+
+      </div>
+
+
+      <span
+        class="event-count"
+        *ngIf="!isLoading && !errorMessage">
+
+        {{ events.length }}
+
+        {{
+          events.length === 1
+            ? 'event'
+            : 'events'
+        }}
+
+      </span>
+
+    </div>
+
+
+    <!-- LOADING -->
+    <div
+      class="loading-state"
+      *ngIf="isLoading">
+
+      <div class="loading-spinner"></div>
+
+      <div>
+
+        <h3>
+          Loading events
+        </h3>
+
+        <p>
+          Please wait while we find the latest events.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+    <div
+      class="error-state"
+      *ngIf="!isLoading && errorMessage">
+
+      <div class="error-icon">
+        !
+      </div>
+
+      <div>
+
+        <h3>
+          Unable to load events
+        </h3>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+
+      </div>
 
       <button
         type="button"
         class="retry-btn"
         (click)="loadEvents()">
-        Retry
+
+        Try Again
+
       </button>
 
     </div>
-  }
 
-  @if (!isLoading && !errorMessage && events.length === 0) {
-    <div class="state-message">
-      No events found for the selected filters.
-    </div>
-  }
 
-  @if (!isLoading && !errorMessage && events.length > 0) {
+    <!-- EVENT CARDS -->
+    <div
+      class="events-grid"
+      *ngIf="
+        !isLoading &&
+        !errorMessage &&
+        events.length > 0
+      ">
 
-    <div class="event-grid">
+      <article
+        class="event-card"
+        *ngFor="let event of events">
 
-      @for (event of events; track event.id) {
+        <!-- IMAGE -->
+        <div class="event-image-wrap">
 
-        <article class="event-card">
+          <img
+            [src]="getEventImage(event)"
+            [alt]="event.name"
+            (error)="useFallbackImage($event)">
 
-          <div class="event-card-header">
+          <div class="image-overlay"></div>
 
-            <span class="category">
-              {{ event.categoryName | titlecase }}
-            </span>
+          <span class="category-badge">
+            {{ event.categoryName || 'Event' }}
+          </span>
 
-            <h2>
+        </div>
+
+
+        <!-- CONTENT -->
+        <div class="event-body">
+
+          <div class="event-title-area">
+
+            <h3>
               {{ event.name }}
-            </h2>
+            </h3>
 
-          </div>
-
-          <p class="description">
-            {{ event.description || 'No description available.' }}
-          </p>
-
-          <div class="event-info">
-
-            <p>
-              <strong>Venue:</strong>
-              {{ event.venueName }}
-            </p>
-
-            <p>
-              <strong>Start:</strong>
-              {{ event.startDateTime | date:'medium' }}
-            </p>
-
-            <p>
-              <strong>Ticket:</strong>
+            <p class="desc">
               {{
-                event.ticketPrice |
-                currency:'LKR':'symbol':'1.2-2'
+                event.description ||
+                'Explore this event and reserve your seats and parking through EventPark.'
               }}
             </p>
 
-            <p>
-              <strong>Capacity:</strong>
-              {{ event.capacity | number }}
-            </p>
+          </div>
+
+
+          <div class="meta-list">
+
+            <!-- VENUE -->
+            <div class="meta-item">
+
+              <div class="meta-icon">
+                V
+              </div>
+
+              <div class="meta-content">
+
+                <span class="meta-label">
+                  Venue
+                </span>
+
+                <strong class="meta-value">
+                  {{
+                    event.venueName ||
+                    'Venue information unavailable'
+                  }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- DATE -->
+            <div class="meta-item">
+
+              <div class="meta-icon">
+                D
+              </div>
+
+              <div class="meta-content">
+
+                <span class="meta-label">
+                  Date & Time
+                </span>
+
+                <strong class="meta-value">
+                  {{
+                    event.startDateTime
+                      | date:'medium'
+                  }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- PRICE + CAPACITY -->
+            <div class="event-stats">
+
+              <div class="event-stat">
+
+                <span>
+                  Ticket Price
+                </span>
+
+                <strong>
+                  LKR
+                  {{
+                    event.ticketPrice
+                      | number:'1.2-2'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div class="event-stat">
+
+                <span>
+                  Capacity
+                </span>
+
+                <strong>
+                  {{ event.capacity }}
+                </strong>
+
+              </div>
+
+            </div>
 
           </div>
+
 
           <button
             type="button"
             class="details-btn"
             (click)="openEvent(event.id)">
-            View Details
+
+            <span>
+              View Event Details
+            </span>
+
+            <span class="button-arrow">
+              →
+            </span>
+
           </button>
 
-        </article>
+        </div>
 
-      }
+      </article>
 
     </div>
 
-  }
 
-</section>
+    <!-- EMPTY -->
+    <div
+      class="empty-state"
+      *ngIf="
+        !isLoading &&
+        !errorMessage &&
+        events.length === 0
+      ">
+
+      <div class="empty-icon">
+        E
+      </div>
+
+      <h3>
+        No events found
+      </h3>
+
+      <p>
+        We couldn't find any events matching
+        your current filters.
+      </p>
+
+      <button
+        type="button"
+        class="primary-btn"
+        (click)="clearFilters()">
+
+        Clear Filters
+
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
